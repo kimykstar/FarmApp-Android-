@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/purple_200"
+        app:titleTextColor="@color/white">
+
+        <ImageButton
+            android:id="@+id/home"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/purple_200"
+            android:scaleType="fitCenter"
+            android:src="@drawable/home" />
+
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:text="FARM"-->
+<!--            android:textColor="@color/white"-->
+<!--            android:textSize="35sp" />-->
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="-10dp"
+            android:id="@+id/logo"
+            android:layout_gravity="center"
+            android:src="@drawable/logo"/>
+
+        <ImageButton
+            android:id="@+id/login"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="@color/purple_200"
+            android:scaleType="fitCenter"
+            android:src="@drawable/login" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <TableLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="50dp">
+        <TableRow>
+            <ImageButton
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/camera"
+                android:scaleType="fitCenter"
+                android:id="@+id/camera"/>
+        </TableRow>
+    </TableLayout>
+
+
+</LinearLayout>
