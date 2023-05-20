@@ -1,7 +1,9 @@
 package com.example.farm;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,8 +18,6 @@ import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity {
     Button loginBtn;
-
-
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,12 +42,32 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 Log.i("main : ", result);
                 if(result.equals("true")){
+                    setSession(id);
                     startActivity(intent);
                 }else{
                     Toast.makeText(LoginActivity.this, "아이디 혹은 비밀번호를 확인하세요", Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
+
+    // 로그인 후 세션 만들기 메소드
+    public void setSession(String id){
+        SharedPreferences preference = getApplicationContext().getSharedPreferences("userSession", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = preference.edit();
+        // 세션이 없는 경우 세션을 만들어야 함
+        edit.putString("userSession", id);
+        edit.apply(); // 비동기 처리
+        Log.d("Session Result : ", preference.getString("userSession", null));
+    }
+
+    public void deleteSession(String id){
+        SharedPreferences preference = getApplicationContext().getSharedPreferences("userSession", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = preference.edit();
+        // 세션이 있다면
+        if(preference.getString("userSession", null) != null){
+            edit.clear(); // 세션 해제
+        }
     }
 
     public static class loginActivity extends AsyncTask<String, Void, String> {
