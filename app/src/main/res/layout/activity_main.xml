@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -37,6 +38,7 @@
             android:layout_gravity="right"
             android:background="@color/representColor"
             android:scaleType="fitCenter"
+            android:visibility="visible"
             android:src="@drawable/login" />
 
     </androidx.appcompat.widget.Toolbar>
@@ -51,6 +53,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:src="@drawable/camera"
+                android:background="@color/white"
                 android:scaleType="fitCenter"
                 android:id="@+id/camera"/>
         </TableRow>

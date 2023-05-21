@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity {
     Button loginBtn;
+    SharedPreferences pref;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
         EditText idText = findViewById(R.id.id);
         EditText pwText = findViewById(R.id.pw);
         Intent intent = new Intent(this, MainActivity.class);
+        // Create Session and get SharedPreferences
+        Session session = new Session(getApplicationContext());
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,34 +45,15 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 Log.i("main : ", result);
                 if(result.equals("true")){
-                    setSession(id);
+                    session.setSession(id);
                     startActivity(intent);
+                    Log.i("LoginSession", session.getSession());
                 }else{
                     Toast.makeText(LoginActivity.this, "아이디 혹은 비밀번호를 확인하세요", Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
-
-    // 로그인 후 세션 만들기 메소드
-    public void setSession(String id){
-        SharedPreferences preference = getApplicationContext().getSharedPreferences("userSession", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = preference.edit();
-        // 세션이 없는 경우 세션을 만들어야 함
-        edit.putString("userSession", id);
-        edit.apply(); // 비동기 처리
-        Log.d("Session Result : ", preference.getString("userSession", null));
-    }
-
-    public void deleteSession(String id){
-        SharedPreferences preference = getApplicationContext().getSharedPreferences("userSession", Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = preference.edit();
-        // 세션이 있다면
-        if(preference.getString("userSession", null) != null){
-            edit.clear(); // 세션 해제
-        }
-    }
-
     public static class loginActivity extends AsyncTask<String, Void, String> {
         String result;
         @Override

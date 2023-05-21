@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     ImageButton login;
     ImageButton camera;
+    Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +26,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         login = findViewById(R.id.login);
         camera = findViewById(R.id.camera);
+        session = new Session(getApplicationContext());
+        Log.i("Main Session : ", session.getSession());
+        if(session.getSession() != null){
+            login.setVisibility(View.INVISIBLE);
+        }
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
