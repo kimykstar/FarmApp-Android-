@@ -1,9 +1,6 @@
 package com.example.farm;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,7 +15,7 @@ import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity {
     Button loginBtn;
-    SharedPreferences pref;
+    Session session;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +24,7 @@ public class LoginActivity extends AppCompatActivity {
         EditText idText = findViewById(R.id.id);
         EditText pwText = findViewById(R.id.pw);
         Intent intent = new Intent(this, MainActivity.class);
-        // Create Session and get SharedPreferences
-        Session session = new Session(getApplicationContext());
+        session = (Session)getApplication();
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,9 +41,11 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 Log.i("main : ", result);
                 if(result.equals("true")){
-                    session.setSession(id);
+//                    session.setSession(id);
+                    session.setSessionId(id);
                     startActivity(intent);
-                    Log.i("LoginSession", session.getSession());
+//                    Log.i("LoginSession", session.getSession());
+                    Log.i("LoginSession2", session.getSessionId());
                 }else{
                     Toast.makeText(LoginActivity.this, "아이디 혹은 비밀번호를 확인하세요", Toast.LENGTH_LONG).show();
                 }
@@ -61,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
             try{
                 String id = arg[0];
                 String pw = arg[1];
-                HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/login");
+                HttpConnection conn = new HttpConnection("http://192.168.55.89:8081/login");
                 conn.setHeader(1000, "POST", true, true);
                 String message = String.format("%s %s", id, pw);
                 conn.writeData(message);

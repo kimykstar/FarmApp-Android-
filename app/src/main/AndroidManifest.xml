@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Farm"
         android:usesCleartextTraffic="true"
+        android:name=".Session"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"

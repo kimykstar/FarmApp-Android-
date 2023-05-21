@@ -30,16 +30,30 @@
             android:id="@+id/logo"
             android:layout_gravity="center"
             android:src="@drawable/logo"/>
-
-        <ImageButton
-            android:id="@+id/login"
+        <FrameLayout
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:background="@color/representColor"
-            android:scaleType="fitCenter"
-            android:visibility="visible"
-            android:src="@drawable/login" />
+            android:layout_gravity="right">
+            <ImageButton
+                android:id="@+id/login"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="@color/representColor"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                android:src="@drawable/login" />
+
+            <ImageButton
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/user"
+                android:scaleType="fitCenter"
+                android:background="@color/representColor"
+                android:id="@+id/userBtn"
+                android:visibility="invisible"/>
+
+        </FrameLayout>
+
 
     </androidx.appcompat.widget.Toolbar>
 
