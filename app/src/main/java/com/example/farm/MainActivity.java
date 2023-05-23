@@ -54,20 +54,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public static class MyActivity extends AsyncTask<String, Void, String>{
-        String message;
-        @Override
-        protected String doInBackground(String... strings){
-            try{
-                HttpConnection conn = new HttpConnection("http://10.0.2.2:8080/hello");
-                conn.setHeader(1000, "GET", true, true);
-                conn.writeData("hello I'm Client");
-                message = conn.readData();
-                Log.i("message", message);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-            return message;
-        }
-    }
 }

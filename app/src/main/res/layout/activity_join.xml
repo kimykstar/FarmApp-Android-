@@ -3,15 +3,151 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     android:gravity="center">
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/logo"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:stretchColumns="0"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@color/white"
+                android:src="@drawable/logo"/>
 
-    <EditText
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Farm 회원가입"
+                android:textSize="35sp"
+                android:gravity="center"
+                android:textColor="#000000"/>
+            <TableRow>
+                <EditText
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:hint="사용할 ID를 입력해주세요"
+                    android:layout_margin="20dp"
+                    android:layout_span="7"
+                    android:id="@+id/idEdit"/>
+            </TableRow>
+
+            <TableRow>
+                <EditText
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pwEdit"
+                    android:layout_margin="20dp"
+                    android:layout_span="7"
+                    android:hint="사용할 비밀번호를 입력해주세요"/>
+            </TableRow>
+
+            <TableRow>
+                <EditText
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pwCheckEdit"
+                    android:layout_margin="20dp"
+                    android:layout_span="7"
+                    android:hint="비밀번호를 다시 입력해주세요"/>
+            </TableRow>
+
+            <TableRow>
+                <EditText
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_span="4"
+                    android:id="@+id/name"
+                    android:hint="이름을 입력해주세요"/>
+            </TableRow>
+
+            <TableRow>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="전화번호"
+                    android:textColor="#000000"/>
+
+                <EditText
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:hint="010"
+                    android:id="@+id/phone1"/>
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text=" - "/>
+
+                <EditText
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:hint="0000"
+                    android:id="@+id/phone2"/>
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text=" - "/>
+
+                <EditText
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:hint="0000"
+                    android:id="@+id/phone3"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="                                       "/>
+
+            </TableRow>
+
+            <TableRow>
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:hint="나이"
+                    android:layout_margin="20dp"
+                    android:id="@+id/age"/>
+            </TableRow>
+
+            <TableRow>
+                <LinearLayout
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_span="7"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/farm_button"
+                        android:text="가입하기"
+                        android:layout_marginRight="40dp"
+                        android:id="@+id/joinBtn"/>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="취소"
+                        android:background="@drawable/farm_button"
+                        android:id="@+id/cancelBtn"/>
+                </LinearLayout>
+            </TableRow>
+
+
+        </TableLayout>
+
+    </ScrollView>
+
+
 
 </LinearLayout>

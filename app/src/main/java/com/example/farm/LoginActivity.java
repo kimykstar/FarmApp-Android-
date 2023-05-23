@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import java.util.concurrent.ExecutionException;
 public class LoginActivity extends AppCompatActivity {
     Button loginBtn;
     Session session;
+    Button join;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,13 +26,22 @@ public class LoginActivity extends AppCompatActivity {
         EditText idText = findViewById(R.id.id);
         EditText pwText = findViewById(R.id.pw);
         Intent intent = new Intent(this, MainActivity.class);
+        join = findViewById(R.id.join);
         session = (Session)getApplication();
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginActivity activity = new loginActivity();
+                LoginTask activity = new LoginTask();
                 String id = idText.getText().toString();
+                if(id.length() == 0) {
+                    Toast.makeText(getApplicationContext(), "아이디를 입력하세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String pw = pwText.getText().toString();
+                if(pw.length() == 0){
+                    Toast.makeText(getApplicationContext(), "비밀번호를 입력하세요", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String result = null;
                 try {
                     result = activity.execute(id, pw).get();
@@ -41,25 +52,30 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 Log.i("main : ", result);
                 if(result.equals("true")){
-//                    session.setSession(id);
                     session.setSessionId(id);
                     startActivity(intent);
-//                    Log.i("LoginSession", session.getSession());
                     Log.i("LoginSession2", session.getSessionId());
                 }else{
                     Toast.makeText(LoginActivity.this, "아이디 혹은 비밀번호를 확인하세요", Toast.LENGTH_LONG).show();
                 }
             }
         });
+        join.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent joinIntent = new Intent(getApplicationContext(), JoinActivity.class);
+                startActivity(joinIntent);
+            }
+        });
     }
-    public static class loginActivity extends AsyncTask<String, Void, String> {
+    public static class LoginTask extends AsyncTask<String, Void, String> {
         String result;
         @Override
         protected String doInBackground(String... arg){
             try{
                 String id = arg[0];
                 String pw = arg[1];
-                HttpConnection conn = new HttpConnection("http://192.168.55.89:8081/login");
+                HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/login");
                 conn.setHeader(1000, "POST", true, true);
                 String message = String.format("%s %s", id, pw);
                 conn.writeData(message);
@@ -71,4 +87,5 @@ public class LoginActivity extends AppCompatActivity {
             return result;
         }
     }
+
 }
