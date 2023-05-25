@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ExecutionException;
 
 public class LoginActivity extends AppCompatActivity {
@@ -76,13 +77,17 @@ public class LoginActivity extends AppCompatActivity {
     // server와 http통신을 위한 백그라운드 환경 구현
     public static class LoginTask extends AsyncTask<String, Void, String> {
         String result;
+        PasswordHash hash = new PasswordHash("SHA-256");
+
         @Override
         protected String doInBackground(String... arg){
             try{
                 String id = arg[0];
                 String pw = arg[1];
-                HttpConnection conn = new HttpConnection("http://192.168.55.89:8081/login");
+                HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/login");
                 conn.setHeader(1000, "POST", true, true);
+                pw = hash.passwordHashing(pw);
+                Log.i("hashPw : ", pw);
                 String message = String.format("%s %s", id, pw);
                 conn.writeData(message);
                 result = conn.readData();

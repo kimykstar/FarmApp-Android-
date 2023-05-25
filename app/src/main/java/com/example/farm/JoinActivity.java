@@ -83,6 +83,7 @@ public class JoinActivity extends AppCompatActivity {
     }
 
     public static class JoinTask extends AsyncTask<String, Void, String> {
+        PasswordHash hash = new PasswordHash("SHA-256");
         @Override
         protected String doInBackground(String... arg){ // 백그라운드 작업
             String id = arg[0];
@@ -93,6 +94,7 @@ public class JoinActivity extends AppCompatActivity {
 
             HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/join"); // server의 url설정
             conn.setHeader(1000, "POST", true, true); // http헤더 설정(초과시간, 전달방식, 출력허용, 입력허용)
+            pw = hash.passwordHashing(pw);
             String message = String.format("%s %s %s %s %s", id, pw, name, phone, age); // server에 보낼 메시지 생성
             conn.writeData(message); // server에 메시지를 전달
             String result = conn.readData(); // server로부터 결과를 받아온다.
