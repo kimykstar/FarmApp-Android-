@@ -25,18 +25,20 @@ public class MainActivity extends AppCompatActivity {
         login = findViewById(R.id.login);
         camera = findViewById(R.id.camera);
         session = new Session();
+        // Session을 받아온다.
         Session se = (Session)getApplication();
         user = findViewById(R.id.userBtn);
         Log.i("session : ", se.getSessionId());
-        if(se.getSessionId().equals("default")){
+
+        if(se.getSessionId().equals("default")){ // Session이 존재하지 않는경우(default) login버튼을 보이고 profile버튼을 없앤다.
             login.setVisibility(View.VISIBLE);
             user.setVisibility(View.INVISIBLE);
-        }else{
+        }else{ // Session이 존재하는 경우 login버튼을 없애고 profile버튼을 생성한다.
             user.setVisibility(View.VISIBLE);
             login.setVisibility(View.INVISIBLE);
         }
 
-        login.setOnClickListener(new View.OnClickListener() {
+        login.setOnClickListener(new View.OnClickListener() { // login버튼을 누를 시 loginActivity로 넘어감
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        camera.setOnClickListener(new View.OnClickListener() {
+        camera.setOnClickListener(new View.OnClickListener() { // cameraButton을 누를 시 카메라를 킴
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

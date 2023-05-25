@@ -9,6 +9,13 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 
+// Server와 HTTP통신을 위한 클래스
+// 이거는 AsyncTask상속받아서 doInBackground메소드 오버라이드 해서 HTTP통신 해야 함
+// 무조건 백그라운드로 실행해야 오류 안남
+// 이 클래스 사용법
+// 1. 생성자로 Server url설정
+// 2. setHeader를 통해 Header설정
+// 3. readData or writeData메소드를 통해 서버와 데이터 주고받음
 public class HttpConnection {
 
     private String link;
@@ -25,7 +32,7 @@ public class HttpConnection {
         }
     }
 
-    // 헤더 설정
+    // HTTP 헤더 설정
     public void setHeader(int time, String method, boolean output, boolean input){
         conn.setConnectTimeout(time);
         conn.setRequestProperty("Content-Type", "UTF-8");
@@ -38,7 +45,7 @@ public class HttpConnection {
         conn.setDoOutput(output);
     }
 
-    // inputStream
+    // Header를 설정한 Connection을 통해 Server로부터 데이터를 읽어온다.
     public String readData(){
         String result = "";
         BufferedReader reader = null;
@@ -54,7 +61,7 @@ public class HttpConnection {
         return result;
     }
 
-    // outputStream
+    // Header를 설정한 Connection을 통해 Server로 데이터를 보낸다.
     public boolean writeData(String data){
         try{
             OutputStream outputStream = conn.getOutputStream();
