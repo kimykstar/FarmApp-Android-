@@ -54,14 +54,26 @@
 
         </FrameLayout>
 
-
     </androidx.appcompat.widget.Toolbar>
+
+    <androidx.appcompat.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchFruit"
+        app:iconifiedByDefault="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        app:queryHint="검색어를 입력하시오"
+        android:background="@drawable/search">
+
+    </androidx.appcompat.widget.SearchView>
 
     <TableLayout
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="50dp">
+        android:layout_marginTop="30dp">
         <TableRow>
             <ImageButton
                 android:layout_width="100dp"
@@ -72,6 +84,4 @@
                 android:id="@+id/camera"/>
         </TableRow>
     </TableLayout>
-
-
 </LinearLayout>

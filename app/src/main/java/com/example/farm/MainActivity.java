@@ -9,14 +9,17 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.SearchView;
+
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
     ImageButton login;
     ImageButton camera;
     Session session;
-    String session2;
     ImageButton user;
+    SearchView search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         login = findViewById(R.id.login);
         camera = findViewById(R.id.camera);
         session = new Session();
+        search = findViewById(R.id.searchFruit);
         // Session을 받아온다.
         Session se = (Session)getApplication();
         user = findViewById(R.id.userBtn);
@@ -51,9 +55,50 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivity(intent);
-
             }
         });
+
+        // 검색바 listener설정
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+
+            // 검색버튼 눌렀을때 작동하는 메소드
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                SearchTask task = new SearchTask();
+                boolean result = false;
+                try {
+                    Object info = task.execute(query).get();
+                    // info정보를 fruitinfo인스턴스에 넣는다.
+                    FruitInfo fruit = new FruitInfo();
+                    // intent로 정보 제공 layout으로 넘어감
+                    Intent intent = new Intent(getApplication(), FruitActivity.class);
+                    intent.putExtra("info", fruit);
+                } catch (ExecutionException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                return false;
+            }
+
+            // 검색내용이 변할때 작동되는 메소드
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+    }
+    public static class SearchTask extends AsyncTask<String, Void, Object>{
+        @Override
+        protected Object doInBackground(String ... fruit) {
+            HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/search?fruit=" + fruit[0]);
+            conn.setHeader(1000, "GET", false, true);
+            // 과일 정보 받기 String형태를 object로 받기?
+            Object info = conn.readData();
+
+            return info;
+        }
     }
 
 }
