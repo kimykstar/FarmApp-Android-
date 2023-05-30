@@ -2,7 +2,7 @@ package com.example.farm;
 
 import java.io.Serializable;
 
-public class FruitInfo implements Serializable {
+public class Fruit implements Serializable {
     private String fruit_name;
     private String calories;
     private String carbohydrate;
@@ -12,8 +12,8 @@ public class FruitInfo implements Serializable {
 
     // constructor ----------------------------
 
-    public FruitInfo(){}
-    public FruitInfo(String fruit_name, String calories, String carbohydrate, String protein, String fat, String sugar){
+    public Fruit(){}
+    public Fruit(String fruit_name, String calories, String carbohydrate, String protein, String fat, String sugar){
         this.fruit_name = fruit_name;
         this.calories = calories;
         this.carbohydrate = carbohydrate;

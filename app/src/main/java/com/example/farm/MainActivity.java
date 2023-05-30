@@ -9,7 +9,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.SearchView;
+import androidx.appcompat.widget.SearchView;
 
 import java.util.concurrent.ExecutionException;
 
@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
         login = findViewById(R.id.login);
         camera = findViewById(R.id.camera);
         session = new Session();
-        search = findViewById(R.id.searchFruit);
+        // SearchView위젯 가져오기
+        search = (SearchView) findViewById(R.id.searchFruit);
         // Session을 받아온다.
         Session se = (Session)getApplication();
         user = findViewById(R.id.userBtn);
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 검색바 listener설정
+        // SearchView위젯 Listener설정
         search.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
 
             // 검색버튼 눌렀을때 작동하는 메소드
@@ -67,12 +69,11 @@ public class MainActivity extends AppCompatActivity {
                 SearchTask task = new SearchTask();
                 boolean result = false;
                 try {
-                    Object info = task.execute(query).get();
-                    // info정보를 fruitinfo인스턴스에 넣는다.
-                    FruitInfo fruit = new FruitInfo();
+                    Fruit fruit = task.execute(query).get();
                     // intent로 정보 제공 layout으로 넘어감
                     Intent intent = new Intent(getApplication(), FruitActivity.class);
                     intent.putExtra("info", fruit);
+                    startActivity(intent);
                 } catch (ExecutionException e) {
                     throw new RuntimeException(e);
                 } catch (InterruptedException e) {
@@ -89,15 +90,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public static class SearchTask extends AsyncTask<String, Void, Object>{
+    public static class SearchTask extends AsyncTask<String, Void, Fruit>{
         @Override
-        protected Object doInBackground(String ... fruit) {
+        protected Fruit doInBackground(String ... fruit) {
             HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/search?fruit=" + fruit[0]);
             conn.setHeader(1000, "GET", false, true);
             // 과일 정보 받기 String형태를 object로 받기?
-            Object info = conn.readData();
+            String info = conn.readData();
+            Fruit f_info = conn.parseStringToFruit(info);
 
-            return info;
+            return f_info;
         }
     }
 

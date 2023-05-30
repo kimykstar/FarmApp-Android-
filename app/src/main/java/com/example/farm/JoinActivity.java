@@ -75,6 +75,7 @@ public class JoinActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         startActivity(loginIntent);
                     }
+
                 });
                 builder.show();
 

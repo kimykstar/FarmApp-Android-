@@ -61,6 +61,21 @@ public class HttpConnection {
         return result;
     }
 
+    // 서버로부터 받은 String형태를 Fruit객체의 필드에 맞게 변환하여 Fruit자료형으로 반환해주는 메소드
+    public Fruit parseStringToFruit(String st){
+        Fruit fruit = new Fruit();
+        String[] elements = st.split(",");
+
+        fruit.setFruit_name(elements[0].split(":")[1]);
+        fruit.setCalories(elements[1].split(":")[1]);
+        fruit.setCarbohydrate(elements[2].split(":")[1]);
+        fruit.setProtein(elements[3].split(":")[1]);
+        fruit.setFat(elements[4].split(":")[1]);
+        fruit.setSugar(elements[5].split(":")[1]);
+
+        return fruit;
+    }
+
     // Header를 설정한 Connection을 통해 Server로 데이터를 보낸다.
     public boolean writeData(String data){
         try{
