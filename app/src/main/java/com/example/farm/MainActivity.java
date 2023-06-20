@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         login = findViewById(R.id.login);
-        camera = findViewById(R.id.camera);
+        camera = findViewById(R.id.Camera_Button);
         session = new Session();
         // SearchView위젯 가져오기
         search = (SearchView) findViewById(R.id.searchFruit);

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/purple_200"
+        app:titleTextColor="@color/white">
+
+        <ImageButton
+            android:id="@+id/home"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@color/purple_200"
+            android:scaleType="fitCenter"
+            android:src="@drawable/home" />
+
+        <!--        <TextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="center"-->
+        <!--            android:text="FARM"-->
+        <!--            android:textColor="@color/white"-->
+        <!--            android:textSize="35sp" />-->
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="-10dp"
+            android:src="@drawable/logo" />
+
+        <ImageButton
+            android:id="@+id/login"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="@color/purple_200"
+            android:scaleType="fitCenter"
+            android:src="@drawable/login" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/editTextText2"
+            android:layout_width="180dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="과일이름: "
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+        <EditText
+            android:id="@+id/editTextText3"
+            android:layout_width="180dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="효능: "
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/editTextText4"
+            app:layout_constraintStart_toStartOf="@+id/editTextText4"
+            app:layout_constraintTop_toBottomOf="@+id/editTextText4" />
+
+        <EditText
+            android:id="@+id/editTextText4"
+            android:layout_width="180dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="성분: "
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/editTextText2"
+            app:layout_constraintStart_toStartOf="@+id/editTextText2"
+            app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="359dp"
+            android:layout_height="290dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:text="추천과일 보기"
+            android:background="@drawable/round_button1"
+
+            app:layout_constraintEnd_toEndOf="@+id/button2"
+            app:layout_constraintStart_toStartOf="@+id/button2"
+            app:layout_constraintTop_toBottomOf="@+id/button2" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:text="자세히보기"
+            android:background="@drawable/round_button1"
+            app:layout_constraintEnd_toEndOf="@+id/editTextText3"
+            app:layout_constraintStart_toStartOf="@+id/editTextText3"
+            app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</LinearLayout>
+

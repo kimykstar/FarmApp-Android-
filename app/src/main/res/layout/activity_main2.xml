@@ -2,16 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/representColor"
+        android:background="@color/purple_200"
         app:titleTextColor="@color/white">
 
         <ImageButton
@@ -19,55 +19,37 @@
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="@color/representColor"
+            android:background="@color/purple_200"
             android:scaleType="fitCenter"
             android:src="@drawable/home" />
 
+        <!--        <TextView-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="center"-->
+        <!--            android:text="FARM"-->
+        <!--            android:textColor="@color/white"-->
+        <!--            android:textSize="35sp" />-->
         <ImageView
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="-10dp"
             android:id="@+id/logo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_gravity="center"
-            android:src="@drawable/logo"/>
-        <FrameLayout
+            android:layout_marginTop="-10dp"
+            android:src="@drawable/logo" />
+
+        <ImageButton
+            android:id="@+id/login"
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:layout_gravity="right">
-            <ImageButton
-                android:id="@+id/login"
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                android:background="@color/representColor"
-                android:scaleType="fitCenter"
-                android:visibility="visible"
-                android:src="@drawable/login" />
-
-            <ImageButton
-                android:layout_width="70dp"
-                android:layout_height="match_parent"
-                android:src="@drawable/user"
-                android:scaleType="fitCenter"
-                android:background="@color/representColor"
-                android:id="@+id/userBtn"
-                android:visibility="invisible"/>
-
-        </FrameLayout>
+            android:layout_gravity="right"
+            android:background="@color/purple_200"
+            android:scaleType="fitCenter"
+            android:src="@drawable/login" />
 
     </androidx.appcompat.widget.Toolbar>
 
-    <androidx.appcompat.widget.SearchView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/searchFruit"
-        app:iconifiedByDefault="true"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        app:queryHint="검색어를 입력하시오"
-        android:background="@drawable/search">
 
-    </androidx.appcompat.widget.SearchView>
 
     <ScrollView
         android:id="@+id/Main_Scroll"
@@ -162,4 +144,6 @@
         </LinearLayout>
     </ScrollView>
 
+
 </LinearLayout>
+
