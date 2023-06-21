@@ -9,17 +9,18 @@ public class Fruit implements Serializable {
     private String protein;
     private String fat;
     private String sugar;
-
+    private FruitInfo fruitInfo;
     // constructor ----------------------------
 
     public Fruit(){}
-    public Fruit(String fruit_name, String calories, String carbohydrate, String protein, String fat, String sugar){
+    public Fruit(String fruit_name, String calories, String carbohydrate, String protein, String fat, String sugar, FruitInfo fruitInfo){
         this.fruit_name = fruit_name;
         this.calories = calories;
         this.carbohydrate = carbohydrate;
         this.protein = protein;
         this.fat = fat;
         this.sugar = sugar;
+        this.fruitInfo = fruitInfo;
     }
 
     // getter and setter-------------------
@@ -66,6 +67,14 @@ public class Fruit implements Serializable {
 
     public String getFat() {
         return fat;
+    }
+
+    public FruitInfo getFruitInfo() {
+        return fruitInfo;
+    }
+
+    public void setFruitInfo(FruitInfo fruitInfo) {
+        this.fruitInfo = fruitInfo;
     }
 
     public String getSugar() {

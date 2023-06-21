@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".MainActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -23,13 +24,6 @@
             android:scaleType="fitCenter"
             android:src="@drawable/home" />
 
-        <!--        <TextView-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_gravity="center"-->
-        <!--            android:text="FARM"-->
-        <!--            android:textColor="@color/white"-->
-        <!--            android:textSize="35sp" />-->
         <ImageView
             android:id="@+id/logo"
             android:layout_width="70dp"
@@ -49,49 +43,11 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <EditText
-            android:id="@+id/editTextText2"
-            android:layout_width="180dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="20dp"
-            android:ems="10"
-            android:inputType="text"
-            android:text="과일이름: "
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
-
-        <EditText
-            android:id="@+id/editTextText3"
-            android:layout_width="180dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:inputType="text"
-            android:text="효능: "
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/editTextText4"
-            app:layout_constraintStart_toStartOf="@+id/editTextText4"
-            app:layout_constraintTop_toBottomOf="@+id/editTextText4" />
-
-        <EditText
-            android:id="@+id/editTextText4"
-            android:layout_width="180dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:inputType="text"
-            android:text="성분: "
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/editTextText2"
-            app:layout_constraintStart_toStartOf="@+id/editTextText2"
-            app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
 
         <ImageView
             android:id="@+id/imageView4"
@@ -105,17 +61,76 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="150dp"
-            android:layout_height="45dp"
+        <TextView
+            android:id="@+id/fruit_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="추천과일 보기"
-            android:background="@drawable/round_button1"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@color/black"/>
 
-            app:layout_constraintEnd_toEndOf="@+id/button2"
-            app:layout_constraintStart_toStartOf="@+id/button2"
-            app:layout_constraintTop_toBottomOf="@+id/button2" />
+<!--        <EditText-->
+<!--            android:id="@+id/editTextText3"-->
+<!--            android:layout_width="180dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:ems="10"-->
+<!--            android:inputType="text"-->
+<!--            android:text="효능: "-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/editTextText4"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/editTextText4"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/editTextText4" />-->
+
+        <TextView
+            android:id="@+id/editTextText4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:textColor="@color/black"
+            android:inputType="text"
+            android:text="함유 영양소: "
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:layout_width="350dp"
+            android:layout_height="130dp"
+            android:background="@drawable/round_button1">
+            <TableLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_margin="10dp">
+                <TableRow>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="* 탄수화물"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="* 탄수화물"/>
+
+
+                </TableRow>
+
+
+            </TableLayout>
+        </ScrollView>
+
+<!--        <Button-->
+<!--            android:id="@+id/button"-->
+<!--            android:layout_width="150dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:text="추천과일 보기"-->
+<!--            android:background="@drawable/round_button1"-->
+
+<!--            app:layout_constraintEnd_toEndOf="@+id/button2"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/button2"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/button2" />-->
 
         <Button
             android:id="@+id/button2"
@@ -129,7 +144,7 @@
             app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 
 </LinearLayout>

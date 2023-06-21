@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import androidx.appcompat.widget.SearchView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.ExecutionException;
 
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Fruit fruit = task.execute(query).get();
                     // intent로 정보 제공 layout으로 넘어감
-                    Intent intent = new Intent(getApplication(), FruitActivity.class);
+                    Intent intent = new Intent(getApplication(), FruitInfoActivity.class);
                     intent.putExtra("info", fruit);
                     startActivity(intent);
                 } catch (ExecutionException e) {
@@ -97,8 +99,12 @@ public class MainActivity extends AppCompatActivity {
             conn.setHeader(1000, "GET", false, true);
             // 과일 정보 받기 String형태를 object로 받기?
             String info = conn.readData();
-            Fruit f_info = conn.parseStringToFruit(info);
+            Gson gson = new Gson();
+            Fruit f_info = gson.fromJson(info, Fruit.class);
+            gson = new GsonBuilder().setPrettyPrinting().create();
 
+            String temp = gson.toJson(f_info);
+            Log.i("fruit : ", temp);
             return f_info;
         }
     }
