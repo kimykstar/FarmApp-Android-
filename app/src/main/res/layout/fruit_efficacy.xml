@@ -102,7 +102,6 @@
                 android:id="@+id/nutrition"
                 android:orientation="vertical">
 
-
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

@@ -9,6 +9,8 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.SearchView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -72,10 +74,14 @@ public class MainActivity extends AppCompatActivity {
                 boolean result = false;
                 try {
                     Fruit fruit = task.execute(query).get();
-                    // intent로 정보 제공 layout으로 넘어감
-                    Intent intent = new Intent(getApplication(), FruitInfoActivity.class);
-                    intent.putExtra("info", fruit);
-                    startActivity(intent);
+                    if(fruit != null) {
+                        // intent로 정보 제공 layout으로 넘어감
+                        Intent intent = new Intent(getApplication(), FruitInfoActivity.class);
+                        intent.putExtra("info", fruit);
+                        startActivity(intent);
+                    }else{
+                        Toast.makeText(getApplicationContext(), "검색 결과가 없습니다", Toast.LENGTH_LONG).show();
+                    }
                 } catch (ExecutionException e) {
                     throw new RuntimeException(e);
                 } catch (InterruptedException e) {

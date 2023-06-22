@@ -26,6 +26,7 @@
         <activity android:name=".LoginActivity"/>
         <activity android:name=".JoinActivity"/>
         <activity android:name=".FruitInfoActivity"/>
+        <activity android:name=".FruitDetailInfoActivity"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-feature android:name="android.hardware.camera"/>

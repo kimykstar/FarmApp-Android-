@@ -71,18 +71,7 @@
             android:textSize="20sp"
             android:textColor="@color/black"/>
 
-<!--        <EditText-->
-<!--            android:id="@+id/editTextText3"-->
-<!--            android:layout_width="180dp"-->
-<!--            android:layout_height="48dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:ems="10"-->
-<!--            android:inputType="text"-->
-<!--            android:text="효능: "-->
-<!--            android:textStyle="bold"-->
-<!--            app:layout_constraintEnd_toEndOf="@+id/editTextText4"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/editTextText4"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/editTextText4" />-->
+
 
         <TextView
             android:id="@+id/editTextText4"
@@ -92,35 +81,10 @@
             android:textSize="15sp"
             android:textColor="@color/black"
             android:inputType="text"
-            android:text="함유 영양소: "
+            android:text="함유 영양소(100g 당) "
             android:textStyle="bold" />
 
-        <ScrollView
-            android:layout_width="350dp"
-            android:layout_height="130dp"
-            android:background="@drawable/round_button1">
-            <TableLayout
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:layout_margin="10dp">
-                <TableRow>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="* 탄수화물"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="* 탄수화물"/>
-
-
-                </TableRow>
-
-
-            </TableLayout>
-        </ScrollView>
-
-<!--        <Button-->
+        <!--        <Button-->
 <!--            android:id="@+id/button"-->
 <!--            android:layout_width="150dp"-->
 <!--            android:layout_height="45dp"-->
@@ -132,12 +96,65 @@
 <!--            app:layout_constraintStart_toStartOf="@+id/button2"-->
 <!--            app:layout_constraintTop_toBottomOf="@+id/button2" />-->
 
+        <ScrollView
+            android:layout_width="350dp"
+            android:layout_height="180dp"
+            android:background="@drawable/round_button1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/calories"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/carbohydrate"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/protein"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/fat"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sugar"
+                    android:textColor="@color/black"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"/>
+
+            </LinearLayout>
+        </ScrollView>
+
         <Button
-            android:id="@+id/button2"
-            android:layout_width="150dp"
+            android:id="@+id/detail"
+            android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_marginTop="20dp"
-            android:text="자세히보기"
+            android:text="효능 및 성분보기"
             android:background="@drawable/round_button1"
             app:layout_constraintEnd_toEndOf="@+id/editTextText3"
             app:layout_constraintStart_toStartOf="@+id/editTextText3"
