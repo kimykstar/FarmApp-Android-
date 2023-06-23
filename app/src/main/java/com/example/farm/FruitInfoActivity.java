@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -46,14 +47,18 @@ public class FruitInfoActivity extends AppCompatActivity {
         protein.setText("단백질 : " + info.getProtein() + " g");
         fat.setText("지방 : " + info.getFat() + " g");
         sugar.setText("당 : " + info.getSugar() + " g");
-        detail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent detailIntent = new Intent(getApplicationContext(), FruitDetailInfoActivity.class);
-                detailIntent.putExtra("Fruit", info);
-                startActivity(detailIntent);
-            }
-        });
+        if(info != null) {
+            detail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent detailIntent = new Intent(getApplicationContext(), FruitDetailInfoActivity.class);
+                    detailIntent.putExtra("info", info);
+                    startActivity(detailIntent);
+                }
+            });
+        }else{
+            Toast.makeText(getApplicationContext(), "제공할 정보가 없습니다.", Toast.LENGTH_LONG).show();
+        }
 
 //        NutritionAdapter adapter = new NutritionAdapter();
 //        ArrayList<Nutrition> infos = info.getFruitInfo().getInfoList(); // FruitInfo클래스의 영양소 배열을 반환

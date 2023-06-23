@@ -42,18 +42,20 @@
             android:src="@drawable/login" />
 
     </androidx.appcompat.widget.Toolbar>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/fruit_name"
-        android:textSize="30sp"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:orientation="vertical">
+        <TextView
+            android:id="@+id/fruit_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="30sp" />
+
 
         <TextView
             android:id="@+id/text1"
@@ -67,45 +69,101 @@
             android:textSize="25sp"
             android:textColor="@color/black"/>
 
-        <ScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/effeciency"
                 android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/effeciency1"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="20dp"/>
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/effeciency2"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginTop="20dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/effeciency3"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginTop="20dp"/>
             </LinearLayout>
-        </ScrollView>
-
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
         <TextView
             android:id="@+id/text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="text"
-            android:text="성분"
+            android:text="함유 성분(100g당)"
             android:layout_marginStart="16dp"
             android:textSize="25sp"
             android:textColor="@color/black"
             android:textStyle="bold" />
-
-        <ScrollView
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5">
+            android:textColor="@color/black"
+            android:text="비타민류"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:textSize="15sp"
+            android:gravity="center"/>
+
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/nutrition"
+                android:gravity="center"
                 android:orientation="vertical">
 
+                <GridView
+                    android:id="@+id/vitamin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:numColumns="2">
+                </GridView>
             </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
 
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="20dp"
+            android:text="그 외 영양소"
+            android:gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <GridView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/etc"
+                    android:gravity="center"
+                    android:numColumns="2">
+
+                </GridView>
+            </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
 
