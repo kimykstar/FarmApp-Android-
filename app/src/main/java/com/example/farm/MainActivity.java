@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.AsyncQueryHandler;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.GridLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     Session session;
     ImageButton user;
     SearchView search;
+    GridLayout recommend;
     Gson gson = new Gson();
 
     @Override
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         login = findViewById(R.id.login);
         camera = findViewById(R.id.Camera_Button);
+        recommend = findViewById(R.id.fruit_list);
         session = new Session();
         // SearchView위젯 가져오기
         search = (SearchView) findViewById(R.id.searchFruit);
@@ -54,8 +59,15 @@ public class MainActivity extends AppCompatActivity {
         try {
             ArrayList<String> fruit_list = recommendTask.execute(month).get();
             Iterator<String> it = fruit_list.iterator();
-            while(it.hasNext())
-                Log.i("name --> ", it.next());
+            if(fruit_list != null){ // 과일이 있다면
+                while(it.hasNext()){
+                    TextView fruit = new TextView(this);
+                    fruit.setText("* " + it.next());
+                    fruit.setTextSize(17);
+                    fruit.setTextColor(Color.BLACK);
+                    recommend.addView(fruit);
+                }
+            }
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
