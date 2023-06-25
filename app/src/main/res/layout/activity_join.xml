@@ -140,7 +140,7 @@
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/farm_button"
+                        android:background="@drawable/round_button1"
                         android:text="가입하기"
                         android:layout_marginRight="40dp"
                         android:id="@+id/joinBtn"/>
@@ -148,7 +148,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="취소"
-                        android:background="@drawable/farm_button"
+                        android:background="@drawable/round_button1"
                         android:id="@+id/cancelBtn"/>
                 </LinearLayout>
             </TableRow>

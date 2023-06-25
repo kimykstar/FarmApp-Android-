@@ -2,6 +2,7 @@ package com.example.farm;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.AsyncQueryHandler;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,6 +16,10 @@ import androidx.appcompat.widget.SearchView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     Session session;
     ImageButton user;
     SearchView search;
+    Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,23 @@ public class MainActivity extends AppCompatActivity {
         Session se = (Session)getApplication();
         user = findViewById(R.id.userBtn);
         Log.i("session : ", se.getSessionId());
+
+        // 현재 날짜(월) 정보를 받아와 제철과일 이름을 가져온다.
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat format = new SimpleDateFormat("M");
+        String month = format.format(calendar.getTime());
+        Log.i("month : ", month);
+        RecommendTask recommendTask = new RecommendTask();
+        try {
+            ArrayList<String> fruit_list = recommendTask.execute(month).get();
+            Iterator<String> it = fruit_list.iterator();
+            while(it.hasNext())
+                Log.i("name --> ", it.next());
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         if(se.getSessionId().equals("default")){ // Session이 존재하지 않는경우(default) login버튼을 보이고 profile버튼을 없앤다.
             login.setVisibility(View.VISIBLE);
@@ -112,6 +135,23 @@ public class MainActivity extends AppCompatActivity {
             String temp = gson.toJson(f_info);
             Log.i("fruit : ", temp);
             return f_info;
+        }
+    }
+
+    public static class RecommendTask extends AsyncTask<String, Void, ArrayList<String>>{
+
+        @Override
+        protected ArrayList<String> doInBackground(String... strings) {
+            HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/period?month=" + strings[0]);
+            conn.setHeader(1000, "GET", false, true);
+            String fruit_list = conn.readData();
+
+            Log.i("fruit_list", fruit_list);
+
+            Gson gson = new Gson();
+            ArrayList<String> result = gson.fromJson(fruit_list, ArrayList.class);
+
+            return result;
         }
     }
 
