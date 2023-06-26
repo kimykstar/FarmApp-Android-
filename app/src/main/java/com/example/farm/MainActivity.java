@@ -56,13 +56,15 @@ public class MainActivity extends AppCompatActivity {
         String month = format.format(calendar.getTime());
         Log.i("month : ", month);
         RecommendTask recommendTask = new RecommendTask();
+        // 서버와 통신하여 제철과일 정보를 받아온다.
         try {
             ArrayList<String> fruit_list = recommendTask.execute(month).get();
             Iterator<String> it = fruit_list.iterator();
             if(fruit_list != null){ // 과일이 있다면
                 while(it.hasNext()){
+                    String[] temp = it.next().split(",");
                     TextView fruit = new TextView(this);
-                    fruit.setText("* " + it.next());
+                    fruit.setText("* " + temp[0]);
                     fruit.setTextSize(17);
                     fruit.setTextColor(Color.BLACK);
                     recommend.addView(fruit);
@@ -136,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     public static class SearchTask extends AsyncTask<String, Void, Fruit>{
         @Override
         protected Fruit doInBackground(String ... fruit) {
-            HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/search?fruit=" + fruit[0]);
+            HttpConnection conn = new HttpConnection("http://192.168.219.107:8081/search?fruit=" + fruit[0]);
             conn.setHeader(1000, "GET", false, true);
             // 과일 정보 받기 String형태를 object로 받기?
             String info = conn.readData();
@@ -154,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected ArrayList<String> doInBackground(String... strings) {
-            HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/period?month=" + strings[0]);
+            HttpConnection conn = new HttpConnection("http://192.168.219.107:8081/period?month=" + strings[0]);
             conn.setHeader(1000, "GET", false, true);
             String fruit_list = conn.readData();
 

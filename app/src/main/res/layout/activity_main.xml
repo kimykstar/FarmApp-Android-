@@ -26,11 +26,11 @@
 
         <ImageView
             android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="-10dp"
+            android:layout_height="50dp"
             android:id="@+id/logo"
             android:layout_gravity="center"
             android:src="@drawable/logo"/>
+
         <FrameLayout
             android:layout_width="70dp"
             android:layout_height="match_parent"
@@ -80,11 +80,12 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <ImageButton
                     android:id="@+id/Camera_Button"
@@ -110,12 +111,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_columnSpan="2"
+                android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:text="오늘의 추천과일"
                 android:textColor="@color/black"
                 android:textSize="25sp" />
 
-<!--            GridView로 바꿔볼까-->
+            <!--            GridView로 바꿔볼까-->
             <GridLayout
                 android:id="@+id/fruit_list"
                 android:layout_width="match_parent"
@@ -126,10 +128,8 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/basic_border"
                 android:columnCount="2"
-                android:padding="20dp">
+                android:padding="20dp"></GridLayout>
 
-
-            </GridLayout>
 
         </LinearLayout>
 

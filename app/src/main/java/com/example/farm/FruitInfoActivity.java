@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ public class FruitInfoActivity extends AppCompatActivity {
     GridView nutritions;
     Button detail;
     TextView calories, carbohydrate, protein, fat, sugar;
+    ImageView fruit_img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,8 +40,7 @@ public class FruitInfoActivity extends AppCompatActivity {
         protein = findViewById(R.id.protein);
         fat = findViewById(R.id.fat);
         sugar = findViewById(R.id.sugar);
-
-//        nutritions = findViewById(R.id.nutritions);
+        fruit_img = findViewById(R.id.fruit_img);
 
         fruit_name.setText(info.getFruit_name());
         calories.setText("칼로리 : " + info.getCalories() + " Kcal");
@@ -47,6 +48,9 @@ public class FruitInfoActivity extends AppCompatActivity {
         protein.setText("단백질 : " + info.getProtein() + " g");
         fat.setText("지방 : " + info.getFat() + " g");
         sugar.setText("당 : " + info.getSugar() + " g");
+
+        int img_resource = getResources().getIdentifier(info.getFile_name().toLowerCase(), "drawable", getPackageName());
+        fruit_img.setImageResource(img_resource);
         if(info != null) {
             detail.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -60,51 +64,6 @@ public class FruitInfoActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "제공할 정보가 없습니다.", Toast.LENGTH_LONG).show();
         }
 
-//        NutritionAdapter adapter = new NutritionAdapter();
-//        ArrayList<Nutrition> infos = info.getFruitInfo().getInfoList(); // FruitInfo클래스의 영양소 배열을 반환
-//        adapter = new NutritionAdapter(this, infos);
-//
-//        nutritions.setAdapter(adapter);
-
-    }
-
-    public class NutritionAdapter extends BaseAdapter {
-        ArrayList<Nutrition> infos = new ArrayList<Nutrition>();
-        Context context;
-
-        public NutritionAdapter(){}
-        public NutritionAdapter(Context context, ArrayList<Nutrition> infos) {
-            this.context = context;
-            this.infos = infos;
-        }
-        @Override
-        public int getCount() {
-            return infos.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return infos.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            TextView text = new TextView(context);
-
-            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams( ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            text.setLayoutParams(lp);
-
-            text.setText(infos.get(position).getNutrition());
-            text.setTextColor(Color.BLACK);
-            text.setTextSize(12f);
-
-            return text;
-        }
     }
 
 }

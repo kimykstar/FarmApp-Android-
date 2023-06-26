@@ -12,7 +12,7 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/purple_200"
+        android:background="@color/representColor"
         app:titleTextColor="@color/white">
 
         <ImageButton
@@ -20,26 +20,40 @@
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="@color/purple_200"
+            android:background="@color/representColor"
             android:scaleType="fitCenter"
             android:src="@drawable/home" />
 
         <ImageView
-            android:id="@+id/logo"
             android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
+            android:id="@+id/logo"
             android:layout_gravity="center"
-            android:layout_marginTop="-10dp"
-            android:src="@drawable/logo" />
+            android:src="@drawable/logo"/>
 
-        <ImageButton
-            android:id="@+id/login"
+        <FrameLayout
             android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:background="@color/purple_200"
-            android:scaleType="fitCenter"
-            android:src="@drawable/login" />
+            android:layout_gravity="right">
+            <ImageButton
+                android:id="@+id/login"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:background="@color/representColor"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                android:src="@drawable/login" />
+
+            <ImageButton
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/user"
+                android:scaleType="fitCenter"
+                android:background="@color/representColor"
+                android:id="@+id/userBtn"
+                android:visibility="invisible"/>
+
+        </FrameLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -50,16 +64,16 @@
         android:gravity="center">
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/fruit_img"
             android:layout_width="359dp"
+            android:src="@drawable/koreamelon"
             android:layout_height="290dp"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/fruit_name"
@@ -70,7 +84,6 @@
             android:textStyle="bold"
             android:textSize="20sp"
             android:textColor="@color/black"/>
-
 
 
         <TextView

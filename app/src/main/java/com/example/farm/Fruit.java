@@ -10,11 +10,22 @@ public class Fruit implements Serializable {
     private String fat;
     private String sugar;
     private FruitInfo fruitInfo;
+    private String file_name;
     // constructor ----------------------------
 
     public Fruit(){}
-    public Fruit(String fruit_name, String calories, String carbohydrate, String protein, String fat, String sugar, FruitInfo fruitInfo){
+
+    public String getFile_name() {
+        return file_name;
+    }
+
+    public void setFile_name(String file_name) {
+        this.file_name = file_name;
+    }
+
+    public Fruit(String fruit_name, String file_name, String calories, String carbohydrate, String protein, String fat, String sugar, FruitInfo fruitInfo){
         this.fruit_name = fruit_name;
+        this.file_name = file_name;
         this.calories = calories;
         this.carbohydrate = carbohydrate;
         this.protein = protein;
@@ -80,6 +91,5 @@ public class Fruit implements Serializable {
     public String getSugar() {
         return sugar;
     }
-
 
 }
