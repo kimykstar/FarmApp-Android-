@@ -31,26 +31,12 @@
                 android:textColor="@color/black"
                 android:textSize="25sp" />
 
-            <!--            GridView로 바꿔볼까-->
-            <GridLayout
-                android:id="@+id/fruit_list"
+
+            <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_columnSpan="2"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/basic_border"
-                android:columnCount="2"
-                android:padding="20dp"></GridLayout>
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:id="@+id/fruit_pager"/>
-
-
-
+                android:layout_height="600dp"
+                android:orientation="horizontal"
+                android:id="@+id/fruit_list"/>
 
 
         </LinearLayout>

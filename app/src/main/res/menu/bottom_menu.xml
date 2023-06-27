@@ -16,6 +16,7 @@
     <item
         android:id="@+id/search"
         android:title="검색"
+        android:icon="@drawable/searching"
         android:enabled="true"/>
 
     <item
