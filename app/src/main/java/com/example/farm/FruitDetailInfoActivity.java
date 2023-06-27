@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -71,6 +72,7 @@ public class FruitDetailInfoActivity extends AppCompatActivity {
     }
     TextView fruit_name, effective1, effective2, effective3;
     GridView vitaminView, etcView;
+    ImageButton back_btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +86,7 @@ public class FruitDetailInfoActivity extends AppCompatActivity {
         effective1 = findViewById(R.id.effeciency1);
         effective2 = findViewById(R.id.effeciency2);
         effective3 = findViewById(R.id.effeciency3);
+        back_btn = findViewById(R.id.backBtn);
 
         fruit_name.setText(fruit.getFruit_name());
         // 효능 : type을 분류하고 그 안에서 가장 많은 3개를 분별하여 사용
@@ -113,6 +116,14 @@ public class FruitDetailInfoActivity extends AppCompatActivity {
         effective1.setText(result.get(0).getNutrition() + " 성분에 의해 " + result.get(0).getEffect());
         effective2.setText(result.get(1).getNutrition() + " 성분에 의해 " + result.get(1).getEffect());
         effective3.setText(result.get(2).getNutrition() + " 성분에 의해 " + result.get(2).getEffect());
+
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
     // 함유 영양소에 포함된 비타민류, 그외 카테고리를 위한 GridView Adapter클래스 선언
@@ -154,6 +165,8 @@ public class FruitDetailInfoActivity extends AppCompatActivity {
 
             return text;
         }
+
+
     }
 
 

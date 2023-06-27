@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ public class FruitInfoActivity extends AppCompatActivity {
     Button detail;
     TextView calories, carbohydrate, protein, fat, sugar;
     ImageView fruit_img;
+    ImageButton back_btn;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +43,7 @@ public class FruitInfoActivity extends AppCompatActivity {
         fat = findViewById(R.id.fat);
         sugar = findViewById(R.id.sugar);
         fruit_img = findViewById(R.id.fruit_img);
+        back_btn = findViewById(R.id.backBtn);
 
         fruit_name.setText(info.getFruit_name());
         calories.setText("칼로리 : " + info.getCalories() + " Kcal");
@@ -63,6 +66,13 @@ public class FruitInfoActivity extends AppCompatActivity {
         }else{
             Toast.makeText(getApplicationContext(), "제공할 정보가 없습니다.", Toast.LENGTH_LONG).show();
         }
+
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
     }
 
