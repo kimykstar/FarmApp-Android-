@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.farm.Fragment.CameraFragment;
 import com.example.farm.Fragment.HomeFragment;
+import com.example.farm.Fragment.HomeFragment2;
 import com.example.farm.Fragment.MyInfoFragment;
 import com.example.farm.Fragment.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -23,9 +24,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main4);
 
-        fragment_home = new HomeFragment();
+        fragment_home = new HomeFragment2();
         fragment_camera = new CameraFragment();
         fragment_search = new SearchFragment();
         fragment_myInfo = new MyInfoFragment();
