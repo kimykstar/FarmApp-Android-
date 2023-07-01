@@ -79,7 +79,7 @@ public class SearchFragment extends Fragment {
     public static class SearchTask extends AsyncTask<String, Void, Fruit> {
         @Override
         protected Fruit doInBackground(String ... fruit) {
-            HttpConnection conn = new HttpConnection("http://10.0.2.2:8081/search?fruit=" + fruit[0]);
+            HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/search?fruit=" + fruit[0]);
             conn.setHeader(1000, "GET", false, true);
             // 과일 정보 받기 String형태를 object로 받기?
             String info = conn.readData();

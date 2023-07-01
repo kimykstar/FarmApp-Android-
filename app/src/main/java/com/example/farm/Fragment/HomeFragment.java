@@ -13,8 +13,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.farm.HttpConnection;
 import com.example.farm.PeriodFruit;
@@ -26,96 +26,91 @@ import com.google.gson.reflect.TypeToken;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
 public class HomeFragment extends Fragment {
 
     private View view;
+    private ViewPager2 viewPager;
+    private TextView hashTag;
 
-    private String TAG = "프래그먼트";
-    RecyclerView fruit_list;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.home_fragment, container, false);
-
-        fruit_list = view.findViewById(R.id.fruit_list);
+        view = inflater.inflate(R.layout.layout_content, container, false);
+        viewPager = view.findViewById(R.id.viewPager);
+        hashTag = view.findViewById(R.id.tv_tag1);
 
         RecommendTask task = new RecommendTask();
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("M");
         String month = format.format(calendar.getTime());
         try {
-            Log.i("success ", "true");
             ArrayList<PeriodFruit> fruits = task.execute(month).get();
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            Log.i("period : ", gson.toJson(fruits));
+            ViewPagerAdapter adapter = new ViewPagerAdapter(fruits);
 
-            FruitAdapter adapter = new FruitAdapter(fruits, getActivity());
-            RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false);
+            viewPager.setAdapter(adapter);
+            Iterator<PeriodFruit> it = fruits.iterator();
+            while(it.hasNext()){
+                 String text = "#" + it.next().getFruit_name() + "  ";
+                 hashTag.append(text);
+            }
 
-            fruit_list.setLayoutManager(manager);
-            fruit_list.setAdapter(adapter);
         } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         return view;
     }
 
-    public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder>{
+    public class ViewPagerAdapter extends RecyclerView.Adapter<FruitViewHolder>{
         ArrayList<PeriodFruit> fruits;
-        Context context;
-        public FruitAdapter(ArrayList<PeriodFruit> fruits, Context context){
+
+        public ViewPagerAdapter(ArrayList<PeriodFruit> fruits){
             this.fruits = fruits;
-            this.context = context;
+//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//            Log.i("period : ", gson.toJson(fruits));
         }
         @NonNull
         @Override
-        public FruitAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            // inflater로 부모 Context의 컨텍스트를 받아오고 fruit_image레이아웃을 요소로 받아와 View객체로 객체화시킨다.
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fruit_image, parent, false);
-            // ViewHolder로 객체를 생성한다.
-            return new ViewHolder(view);
+        public FruitViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) { // ViewHolder를 생성한다.
+            Context context = parent.getContext();
+            View view = LayoutInflater.from(context).inflate(R.layout.fruit_img, parent, false);
+            return new FruitViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull FruitAdapter.ViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull FruitViewHolder holder, int position) { // ViewHolder와 Bind한다.
             holder.onBind(fruits.get(position));
         }
 
         @Override
-        public long getItemId(int position) {
-            return 0;
-        }
-
-        @Override
-        public int getItemCount() {
+        public int getItemCount() { // 총 Item갯수를 리턴
             return fruits.size();
+
+        }
+    }
+
+    public class FruitViewHolder extends RecyclerView.ViewHolder{
+
+        private ImageView fruit_img;
+        private TextView tv_tag;
+
+        public FruitViewHolder(@NonNull View itemView) {
+            super(itemView);
+            fruit_img = itemView.findViewById(R.id.fruit_img);
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder{
-            ImageView fruit_image;
-            TextView fruit_name;
-            TextView fruit_period;
-
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
-
-                fruit_image = (ImageView) itemView.findViewById(R.id.fruit_img);
-                fruit_name = (TextView) itemView.findViewById(R.id.fruit_name);
-                fruit_period = (TextView) itemView.findViewById(R.id.period);
-            }
-
-            public void onBind(PeriodFruit fruit){
+        public void onBind(PeriodFruit fruit){
+            if(fruit != null){
                 int imageResource = getResources().getIdentifier(fruit.getFile_name().toLowerCase(), "drawable", requireContext().getPackageName());
-                fruit_image.setImageResource(imageResource);
-                fruit_name.setText(fruit.getFruit_name());
-                fruit_period.setText("제철시기 : " + fruit.getStart() + " ~ " + fruit.getEnd() + "월");
+                fruit_img.setImageResource(imageResource);
             }
+
         }
     }
 
@@ -135,4 +130,5 @@ public class HomeFragment extends Fragment {
             return result;
         }
     }
+
 }
