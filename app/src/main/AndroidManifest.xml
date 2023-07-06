@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:name="android.hardware.camera" />
+
 
     <application
+        android:name=".Session"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,22 +17,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Farm"
         android:usesCleartextTraffic="true"
-        android:name=".Session"
-        tools:targetApi="31">
+        tools:targetApi="31" >
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/filepaths" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.farm.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".JoinActivity"/>
-        <activity android:name=".FruitInfoActivity"/>
-        <activity android:name=".FruitDetailInfoActivity"/>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".JoinActivity" />
+        <activity android:name=".FruitInfoActivity" />
+        <activity android:name=".FruitDetailInfoActivity" />
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-feature android:name="android.hardware.camera"/>
+
 </manifest>

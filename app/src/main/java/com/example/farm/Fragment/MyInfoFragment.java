@@ -1,15 +1,20 @@
 package com.example.farm.Fragment;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.AbsSavedState;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -17,8 +22,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.farm.CustomDialog;
 import com.example.farm.DialogBox;
 import com.example.farm.HttpConnection;
+import com.example.farm.HttpUrl;
 import com.example.farm.LoginActivity;
 import com.example.farm.MainActivity;
 import com.example.farm.R;
@@ -54,9 +61,16 @@ public class MyInfoFragment extends Fragment {
         logout_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                session.setSessionId("default");
-                Intent intent = new Intent(getContext(), MainActivity.class);
-                startActivity(intent);
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                dialog.setTitle("로그아웃").setMessage("로그아웃 하시겠습니까?").setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        session.setSessionId("default");
+                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        startActivity(intent);
+                    }
+                }).setNegativeButton("취소", null).show();
+
             }
         });
 
@@ -74,6 +88,10 @@ public class MyInfoFragment extends Fragment {
                             if (result.equals("true")) {
                                 Toast.makeText(getContext(), "회원탈퇴 완료!", Toast.LENGTH_LONG).show();
                                 session.setSessionId("default");
+                                SharedPreferences preferences = getContext().getSharedPreferences(sessionId, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.clear();
+                                editor.commit();
                                 Intent intent = new Intent(getContext(), MainActivity.class);
                                 startActivity(intent);
                             }else{
@@ -86,6 +104,22 @@ public class MyInfoFragment extends Fragment {
                 });
                 dialog.setMessage("Farm 회원을 탈퇴하시겠습니까?");
                 dialog.setNegativeButton("취소", null);
+                dialog.show();
+            }
+        });
+
+        category_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomDialog dialog = new  CustomDialog(getContext(), sessionId);
+                // WindowManager의 Layoutparameter변수를 생성하여 copyFrom을 통해 CustomDialog의 Window속성을 가져온다.
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                // layout Parameter의 height와 width를 설정하고 dialog의 Window를 불러와 속성을 재 설정한다.
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                Window window = dialog.getWindow();
+                window.setAttributes(lp);
                 dialog.show();
             }
         });
@@ -110,7 +144,8 @@ public class MyInfoFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... strings) {
-            HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/delete?id=" + strings[0]);
+            HttpUrl url = new HttpUrl();
+            HttpConnection conn = new HttpConnection(url.getUrl() + "delete?id=" + strings[0]);
             conn.setHeader(1000, "GET", false,  true);
             String result = conn.readData();
             Log.i("delete Result : ", result);

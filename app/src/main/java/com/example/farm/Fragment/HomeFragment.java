@@ -3,6 +3,7 @@ package com.example.farm.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +14,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.farm.HttpConnection;
+import com.example.farm.HttpUrl;
+import com.example.farm.MainActivity;
 import com.example.farm.PeriodFruit;
 import com.example.farm.R;
+import com.example.farm.RecommendFruit;
+import com.example.farm.Session;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -33,8 +39,8 @@ public class HomeFragment extends Fragment {
 
     private View view;
     private ViewPager2 viewPager;
-    private TextView hashTag;
-
+    private TextView hashTag, recommend_tv;
+    private RecyclerView recommend;
 
     @Nullable
     @Override
@@ -42,14 +48,20 @@ public class HomeFragment extends Fragment {
         view = inflater.inflate(R.layout.layout_content, container, false);
         viewPager = view.findViewById(R.id.viewPager);
         hashTag = view.findViewById(R.id.tv_tag1);
+        recommend_tv = view.findViewById(R.id.recommend_tv);
+        recommend = view.findViewById(R.id.fruit_list);
+
+        Session session = (Session)((MainActivity)getActivity()).getApplication();
+        recommend_tv.setText(session.getSessionId() + "님에게 추천하는 과일");
 
         RecommendTask task = new RecommendTask();
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("M");
+
         String month = format.format(calendar.getTime());
         try {
             ArrayList<PeriodFruit> fruits = task.execute(month).get();
-            ViewPagerAdapter adapter = new ViewPagerAdapter(fruits);
+            ViewPagerAdapter adapter = new ViewPagerAdapter(fruits, R.layout.fruit_img);
 
             viewPager.setAdapter(adapter);
             Iterator<PeriodFruit> it = fruits.iterator();
@@ -63,24 +75,32 @@ public class HomeFragment extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+//        ArrayList<RecommendFruit> rFruits = new ArrayList<RecommendFruit>();
+//        RecommendRecyclerView adapter = new RecommendRecyclerView(rFruits);
+//        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+//
+//        recommend.setLayoutManager(manager);
+//        recommend.setAdapter(adapter);
         return view;
     }
 
     public class ViewPagerAdapter extends RecyclerView.Adapter<FruitViewHolder>{
         ArrayList<PeriodFruit> fruits;
 
-        public ViewPagerAdapter(ArrayList<PeriodFruit> fruits){
+        int id;
+
+        public ViewPagerAdapter(ArrayList<PeriodFruit> fruits, int id){
             this.fruits = fruits;
-//            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//            Log.i("period : ", gson.toJson(fruits));
+            this.id = id;
         }
+
         @NonNull
         @Override
         public FruitViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) { // ViewHolder를 생성한다.
             Context context = parent.getContext();
             View view = LayoutInflater.from(context).inflate(R.layout.fruit_img, parent, false);
             return new FruitViewHolder(view);
+
         }
 
         @Override
@@ -90,8 +110,9 @@ public class HomeFragment extends Fragment {
 
         @Override
         public int getItemCount() { // 총 Item갯수를 리턴
-            return fruits.size();
-
+            if(fruits != null)
+                return fruits.size();
+            return -1;
         }
     }
 
@@ -114,11 +135,53 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    public class RecommendRecyclerView extends RecyclerView.Adapter<RecommendViewHolder>{
+        ArrayList<RecommendFruit> fruits;
+
+        public RecommendRecyclerView(ArrayList<RecommendFruit>fruits){
+            this.fruits = fruits;
+        }
+        @NonNull
+        @Override
+        public RecommendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fruit_image, parent, false);
+            return new RecommendViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecommendViewHolder holder, int position) {
+            holder.onBind(fruits.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return fruits.size();
+        }
+    }
+
+    public class RecommendViewHolder extends RecyclerView.ViewHolder{
+        ImageView fruit_img;
+        TextView fruit_name;
+        public RecommendViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            fruit_img = itemView.findViewById(R.id.fruit_img);
+            fruit_name = itemView.findViewById(R.id.fruit_name);
+        }
+
+        public void onBind(RecommendFruit fruit){
+            int imageResource = getResources().getIdentifier(fruit.getFruit_img().toLowerCase(), "drawable", requireContext().getPackageName());
+            fruit_img.setImageResource(imageResource);
+            fruit_name.setText(fruit.getFruit_name());
+        }
+    }
+
     public static class RecommendTask extends AsyncTask<String, Void, ArrayList<PeriodFruit>> {
 
         @Override
         protected ArrayList<PeriodFruit> doInBackground(String... strings) {
-            HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/period?month=" + strings[0]);
+            HttpUrl url = new HttpUrl();
+            HttpConnection conn = new HttpConnection(url.getUrl() + "period?month=" + strings[0]);
             conn.setHeader(1000, "GET", false, true);
             String fruit_list = conn.readData();
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -129,6 +192,21 @@ public class HomeFragment extends Fragment {
 
             return result;
         }
+    }
+
+    public static class RecommendUserTask extends AsyncTask<String[], Void, ArrayList<RecommendFruit>>{
+
+        @Override
+        protected ArrayList<RecommendFruit> doInBackground(String[]... nutritions) {
+            HttpUrl url = new HttpUrl();
+            HttpConnection conn = new HttpConnection(url.getUrl() + "recommend?nutrition=" + nutritions[0] + "&nutirition=" + nutritions[1] + "&nutirition=" + nutritions[2]);
+            conn.setHeader(1000, "GET", false, true);
+            String result = conn.readData();
+            Gson gson = new Gson();
+            ArrayList<RecommendFruit> fruits = gson.fromJson(result, new TypeToken<ArrayList<RecommendFruit>>() {}.getType());
+            return fruits;
+        }
+
     }
 
 }

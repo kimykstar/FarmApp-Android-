@@ -84,7 +84,8 @@ public class LoginActivity extends AppCompatActivity {
             try{
                 String id = arg[0];
                 String pw = arg[1];
-                HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/login");
+                HttpUrl url = new HttpUrl();
+                HttpConnection conn = new HttpConnection(url.getUrl() + "login");
                 conn.setHeader(1000, "POST", true, true);
                 pw = hash.passwordHashing(pw);
                 Log.i("hashPw : ", pw);

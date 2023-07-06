@@ -92,8 +92,8 @@ public class JoinActivity extends AppCompatActivity {
             String name = arg[2];
             String phone = arg[3];
             String age = arg[4];
-
-            HttpConnection conn = new HttpConnection("http://192.168.35.73:8081/join"); // server의 url설정
+            HttpUrl url = new HttpUrl();
+            HttpConnection conn = new HttpConnection(url.getUrl() + "join"); // server의 url설정
             conn.setHeader(1000, "POST", true, true); // http헤더 설정(초과시간, 전달방식, 출력허용, 입력허용)
             pw = hash.passwordHashing(pw);
             String message = String.format("%s %s %s %s %s", id, pw, name, phone, age); // server에 보낼 메시지 생성

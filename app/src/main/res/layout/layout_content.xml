@@ -9,269 +9,280 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="60dp">
-
-<!--            <de.hdodenhof.circleimageview.CircleImageView-->
-<!--                xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                android:id="@+id/img_pro1"-->
-<!--                android:layout_marginLeft="7dp"-->
-<!--                android:layout_centerVertical="true"-->
-<!--                android:layout_width="40dp"-->
-<!--                android:layout_height="40dp"-->
-<!--                android:src="@drawable/logo" />-->
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/logo"
-            android:id="@+id/img_pro1"
-            android:scaleType="fitXY"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="7dp"/>
-
-        <TextView
-            android:id="@+id/tv_username"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/img_pro1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="17sp"
-            android:textColor="@android:color/black"
-            android:text="Farm"/>
-
-        <ImageView
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/more_dot"/>
-
-    </RelativeLayout>
-
-
-
-<!--                <ImageView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="300dp"-->
-<!--                    android:scaleType="centerCrop"-->
-<!--                    android:src="@drawable/strawberry" />-->
-
-
-    <!--사진 여러장 넣기/사용할거면 위에 딸기 사진 빼고 이거 주석 빼야함-->
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:scaleType="centerCrop"
-        app:layoutManager="androidx.viewpager2.widget.LinearLayoutManager" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp">
-
-        <ImageView
-            android:id="@+id/ic_like"
-            android:layout_marginLeft="7dp"
-            android:layout_centerVertical="true"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/like"/>
-
-        <ImageView
-            android:id="@+id/ic_chat"
-            android:layout_toRightOf="@+id/ic_like"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/chat_bubble"/>
-
-        <ImageView
-            android:id="@+id/ic_send"
-            android:layout_toRightOf="@+id/ic_chat"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/send"/>
-
-        <ImageView
-            android:id="@+id/ic_bookmark"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_centerVertical="true"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/bookmark"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-
-<!--            <de.hdodenhof.circleimageview.CircleImageView-->
-<!--                xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                android:id="@+id/img_like_profile"-->
-<!--                android:layout_marginLeft="7dp"-->
-<!--                android:layout_centerVertical="true"-->
-<!--                android:layout_width="40dp"-->
-<!--                android:layout_height="40dp"-->
-<!--                android:src="@drawable/logo" />-->
-        <ImageView
-            android:id="@+id/img_like_profile"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="7dp"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginEnd="7dp"
-            android:layout_marginBottom="7dp"
-            android:src="@drawable/logo" />
-
-        <TextView
-            android:id="@+id/tv_comment1"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/img_like_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:text="Liked by"/>
-
-        <TextView
-            android:id="@+id/tv_comment2"
-            android:layout_marginLeft="5dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/tv_comment1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:text="kimyugon"/>
-
-        <TextView
-            android:id="@+id/tv_comment3"
-            android:layout_marginLeft="5dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/tv_comment2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:text="and"/>
-
-        <TextView
-            android:id="@+id/tv_comment4"
-            android:layout_marginLeft="5dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/tv_comment3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:text="64 others"/>
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_tag1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/tv_tag"
-            android:text="#추천과일  #제철과일  "
-            android:textColor="#1D2285" />
-
-        <TextView
-            android:id="@+id/tv_tag2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/tv_tag"
-            android:text="#Farm"
-            android:textColor="#1D2285" />
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/tv_tag"
-            android:layout_marginLeft="7dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:text="Farm"/>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp">
-
-<!--            <de.hdodenhof.circleimageview.CircleImageView-->
-<!--                xmlns:app="http://schemas.android.com/apk/res-auto"-->
-<!--                android:id="@+id/img_principal"-->
-<!--                android:layout_marginLeft="7dp"-->
-<!--                android:layout_centerVertical="true"-->
-<!--                android:layout_width="40dp"-->
-<!--                android:layout_height="40dp"-->
-<!--                android:src="@drawable/logo" />-->
-
-        <ImageView
-            android:id="@+id/img_principal"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="7dp"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginEnd="7dp"
-            android:layout_marginBottom="7dp"
-            android:src="@drawable/logo" />
-        <EditText
-            android:id="@+id/et_comment"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/img_principal"
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:ems="10"
-            android:hint="Add a comment....."
-            android:background="@null"
-            android:inputType="text" />
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/logo"
+                    android:id="@+id/img_pro1"
+                    android:scaleType="fitXY"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginTop="7dp"/>
+
+                <TextView
+                    android:id="@+id/tv_username"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/img_pro1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="17sp"
+                    android:textColor="@android:color/black"
+                    android:text="Farm"/>
+
+                <ImageView
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/more_dot"/>
+
+            </RelativeLayout>
 
 
-    </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <!--                <ImageView-->
+        <!--                    android:layout_width="match_parent"-->
+        <!--                    android:layout_height="300dp"-->
+        <!--                    android:scaleType="centerCrop"-->
+        <!--                    android:src="@drawable/strawberry" />-->
 
-        <TextView
-            android:id="@+id/tv_time"
-            android:layout_marginLeft="7dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="8 HOURS AGO"/>
 
-    </RelativeLayout>
+            <!--사진 여러장 넣기/사용할거면 위에 딸기 사진 빼고 이거 주석 빼야함-->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="centerCrop"
+                app:layoutManager="androidx.viewpager2.widget.LinearLayoutManager" />
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp">
+
+                <ImageView
+                    android:id="@+id/ic_like"
+                    android:layout_marginLeft="7dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/like"/>
+
+                <ImageView
+                    android:id="@+id/ic_chat"
+                    android:layout_toRightOf="@+id/ic_like"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/chat_bubble"/>
+
+                <ImageView
+                    android:id="@+id/ic_send"
+                    android:layout_toRightOf="@+id/ic_chat"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/send"/>
+
+                <ImageView
+                    android:id="@+id/ic_bookmark"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/bookmark"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <ImageView
+                    android:id="@+id/img_like_profile"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginBottom="7dp"
+                    android:src="@drawable/logo" />
+
+                <TextView
+                    android:id="@+id/tv_comment1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/img_like_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text="Liked by"/>
+
+                <TextView
+                    android:id="@+id/tv_comment2"
+                    android:layout_marginLeft="5dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/tv_comment1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:text="kimyugon"/>
+
+                <TextView
+                    android:id="@+id/tv_comment3"
+                    android:layout_marginLeft="5dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/tv_comment2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:text="and"/>
+
+                <TextView
+                    android:id="@+id/tv_comment4"
+                    android:layout_marginLeft="5dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/tv_comment3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:text="64 others"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_tag1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/tv_tag"
+                    android:text="#추천과일  #제철과일  "
+                    android:textColor="#1D2285" />
+
+                <TextView
+                    android:id="@+id/tv_tag2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@id/tv_tag"
+                    android:text="#Farm"
+                    android:textColor="#1D2285" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_tag"
+                    android:layout_marginLeft="7dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold"
+                    android:text="Farm"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp">
+
+                <ImageView
+                    android:id="@+id/img_principal"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_marginLeft="7dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginBottom="7dp"
+                    android:src="@drawable/logo" />
+                <EditText
+                    android:id="@+id/et_comment"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/img_principal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="Add a comment....."
+                    android:background="@null"
+                    android:inputType="text" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_marginLeft="7dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="8 HOURS AGO"/>
+
+            </RelativeLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/recommend_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="25sp" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:id="@+id/set_btn"
+                    android:text="카테고리 설정"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="600dp"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="50dp"
+                    android:id="@+id/fruit_list"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
 
 

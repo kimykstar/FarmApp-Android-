@@ -44,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     case R.id.camera:
                         //getSupportFragmentManager().beginTransaction().replace(R.id.main_layout, fragment_camera).commitAllowingStateLoss();
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivity(intent);
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_layout, fragment_camera).commitAllowingStateLoss();
                         return true;
                     case R.id.search:
                         getSupportFragmentManager().beginTransaction().replace(R.id.main_layout, fragment_search).commitAllowingStateLoss();

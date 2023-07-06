@@ -1,0 +1,6 @@
+0 straw fresh
+1 straw normal
+2 straw rotten
+3 melon fresh
+4 melon normal
+5 melon rotten
