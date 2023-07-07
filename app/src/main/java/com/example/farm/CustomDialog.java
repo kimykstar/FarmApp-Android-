@@ -33,7 +33,6 @@ public class CustomDialog extends Dialog {
 
         for(CheckBox box : list){
             SharedPreferences preferences = getContext().getSharedPreferences(sessionId, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
             // true로 설정되어있는 경우
             if(preferences.getString(box.getText().toString(), "").equals("true")){
                 box.setChecked(true);

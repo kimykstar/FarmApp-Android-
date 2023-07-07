@@ -5,9 +5,12 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 // Server와 HTTP통신을 위한 클래스
 // 이거는 AsyncTask상속받아서 doInBackground메소드 오버라이드 해서 HTTP통신 해야 함
@@ -89,5 +92,7 @@ public class HttpConnection {
 
         return true;
     }
+
+
 
 }

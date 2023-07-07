@@ -1,6 +1,7 @@
 package com.example.farm.Fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -33,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class HomeFragment extends Fragment {
@@ -60,9 +62,10 @@ public class HomeFragment extends Fragment {
 
         String month = format.format(calendar.getTime());
         try {
+            // 제철과일 정보 받아오기
             ArrayList<PeriodFruit> fruits = task.execute(month).get();
+            // 제철과일 정보를 띄우기 위한 Adapter생성 및 설정
             ViewPagerAdapter adapter = new ViewPagerAdapter(fruits, R.layout.fruit_img);
-
             viewPager.setAdapter(adapter);
             Iterator<PeriodFruit> it = fruits.iterator();
             while(it.hasNext()){
@@ -75,12 +78,50 @@ public class HomeFragment extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        ArrayList<RecommendFruit> rFruits = new ArrayList<RecommendFruit>();
-//        RecommendRecyclerView adapter = new RecommendRecyclerView(rFruits);
-//        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        SharedPreferences preferences = getContext().getSharedPreferences(session.getSessionId(), Context.MODE_PRIVATE);
+        Map<String, String> nu = (Map<String, String>) preferences.getAll();
+        ArrayList<String> temp = new ArrayList<>();
+        Iterator<String> iterator = nu.keySet().iterator();
+        while(iterator.hasNext()){
+            String nutrition = iterator.next();
+            if(preferences.getString(nutrition, "").equals("true")) // SharedPreferences에 저장된 영양소 정보가 true인 경우
+                temp.add(nutrition);
+
+        }
+        String[] nutritions = temp.toArray(new String[0]);
+//        if(temp.size() > 0){
+//            ArrayList<RecommendFruit> rFruits;
+//            RecommendUserTask recommendTask = new RecommendUserTask();
+//            MyThread th = new MyThread(nutritions);
+//            th.start();
+//            rFruits = th.getFruits();
 //
-//        recommend.setLayoutManager(manager);
-//        recommend.setAdapter(adapter);
+//            RecommendRecyclerView adapter = new RecommendRecyclerView(rFruits);
+//            RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+//
+//            recommend.setLayoutManager(manager);
+//            recommend.setAdapter(adapter);
+//        }
+        ArrayList<RecommendFruit> rFruits = new ArrayList<>();
+        if(temp.size() > 0){
+            RecommendUserTask recommendTask = new RecommendUserTask();
+            try {
+                rFruits = recommendTask.execute(nutritions).get();
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
+        RecommendRecyclerView adapter = new RecommendRecyclerView(rFruits);
+        RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        recommend.setLayoutManager(manager);
+        recommend.setAdapter(adapter);
+
         return view;
     }
 
@@ -194,15 +235,18 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public static class RecommendUserTask extends AsyncTask<String[], Void, ArrayList<RecommendFruit>>{
+    public static class RecommendUserTask extends AsyncTask<String, Void, ArrayList<RecommendFruit>>{
 
         @Override
-        protected ArrayList<RecommendFruit> doInBackground(String[]... nutritions) {
+        protected ArrayList<RecommendFruit> doInBackground(String... nutritions) {
             HttpUrl url = new HttpUrl();
-            HttpConnection conn = new HttpConnection(url.getUrl() + "recommend?nutrition=" + nutritions[0] + "&nutirition=" + nutritions[1] + "&nutirition=" + nutritions[2]);
+//            nutritions = url.getEncodeingURLParam(nutritions);
+            HttpConnection conn = new HttpConnection(url.getUrl() + "recommend?nutrition=" + nutritions[0] + "&nutrition=" + nutritions[1] + "&nutrition=" + nutritions[2]);
+            Log.i("Recommend URL : ", url.getUrl() + "recommend?nutrition=" + nutritions[0] + "&nutirition=" + nutritions[1] + "&nutirition=" + nutritions[2]);
             conn.setHeader(1000, "GET", false, true);
             String result = conn.readData();
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            Log.i("recommend Fruits : ", gson.toJson(result));
             ArrayList<RecommendFruit> fruits = gson.fromJson(result, new TypeToken<ArrayList<RecommendFruit>>() {}.getType());
             return fruits;
         }

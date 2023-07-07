@@ -65,7 +65,7 @@
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="비타민 A"
+                android:text="비타민A"
                 android:id="@+id/vitaminA"/>
             <CheckBox
                 android:layout_width="match_parent"
@@ -75,22 +75,22 @@
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="비타민 B1 (티아민)"
+                android:text="비타민B1(티아민)"
                 android:id="@+id/vitaminB1"/>
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="비타민 B2 (리보플라빈)"
+                android:text="비타민B2(리보플라빈)"
                 android:id="@+id/vitaminB2"/>
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="비타민 B3(나이아신, 니코틴산)"
+                android:text="비타민B3(나이아신,니코틴산)"
                 android:id="@+id/vitaminB3"/>
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="비타민 B6"
+                android:text="비타민B6"
                 android:id="@+id/vitaminB6"/>
             <CheckBox
                 android:layout_width="match_parent"
@@ -105,17 +105,17 @@
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="비타민 C"
+                android:text="비타민C"
                 android:id="@+id/vitaminC"/>
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="비타민 E"
+                android:text="비타민E"
                 android:id="@+id/vitaminE"/>
             <CheckBox
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="비타민 K"
+                android:text="비타민K"
                 android:id="@+id/vitaminK"/>
             <CheckBox
                 android:layout_width="match_parent"
