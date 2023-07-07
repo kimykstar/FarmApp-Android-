@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -52,17 +53,26 @@ public class CustomDialog extends Dialog {
         set_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 파일이름, 모드
-                SharedPreferences preferences = getContext().getSharedPreferences(sessionId, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                for(CheckBox box : list){
-                    if(box.isChecked()){
-                        editor.putString(box.getText().toString(), "true");
-                    }else
-                        editor.putString(box.getText().toString(), "false");
+                int cnt = 0;
+                for(CheckBox ch : list){
+                    if(ch.isChecked() == true)
+                        cnt++;
                 }
-                editor.commit();
-                dismiss();
+                if(cnt > 3)
+                    Toast.makeText(getContext(), "3개까지만 선택할 수 있습니다", Toast.LENGTH_LONG).show();
+                else {
+                    // 파일이름, 모드
+                    SharedPreferences preferences = getContext().getSharedPreferences(sessionId, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    for (CheckBox box : list) {
+                        if (box.isChecked()) {
+                            editor.putString(box.getText().toString(), "true");
+                        } else
+                            editor.putString(box.getText().toString(), "false");
+                    }
+                    editor.commit();
+                    dismiss();
+                }
             }
         });
 

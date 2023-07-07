@@ -5,11 +5,15 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.farm.HttpConnection;
@@ -43,6 +48,8 @@ public class HomeFragment extends Fragment {
     private ViewPager2 viewPager;
     private TextView hashTag, recommend_tv;
     private RecyclerView recommend;
+    private LinearLayout recommend_ll;
+    private LinearLayout view_ll;
 
     @Nullable
     @Override
@@ -52,9 +59,24 @@ public class HomeFragment extends Fragment {
         hashTag = view.findViewById(R.id.tv_tag1);
         recommend_tv = view.findViewById(R.id.recommend_tv);
         recommend = view.findViewById(R.id.fruit_list);
+        recommend_ll = view.findViewById(R.id.recommend_fl);
+        view_ll = view.findViewById(R.id.view_ll);
+
+        // ViewPager 화면 크기에 맞게 크기 조절
+        DisplayMetrics metrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager)getActivity().getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        windowManager.getDefaultDisplay().getMetrics(metrics);
+
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view_ll.getLayoutParams();
+        params.width = (int) (metrics.widthPixels * 0.8);
+        params.height = (int)(metrics.widthPixels * 0.8);
+        view_ll.setLayoutParams(params);
+
 
         Session session = (Session)((MainActivity)getActivity()).getApplication();
-        recommend_tv.setText(session.getSessionId() + "님에게 추천하는 과일");
+        if(session.getSessionId().equals("default"))
+            recommend_ll.setVisibility(View.INVISIBLE);
+        recommend_tv.setText(session.getSessionId() + "님을 위한 과일");
 
         RecommendTask task = new RecommendTask();
         Calendar calendar = Calendar.getInstance();
@@ -90,19 +112,6 @@ public class HomeFragment extends Fragment {
 
         }
         String[] nutritions = temp.toArray(new String[0]);
-//        if(temp.size() > 0){
-//            ArrayList<RecommendFruit> rFruits;
-//            RecommendUserTask recommendTask = new RecommendUserTask();
-//            MyThread th = new MyThread(nutritions);
-//            th.start();
-//            rFruits = th.getFruits();
-//
-//            RecommendRecyclerView adapter = new RecommendRecyclerView(rFruits);
-//            RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-//
-//            recommend.setLayoutManager(manager);
-//            recommend.setAdapter(adapter);
-//        }
         ArrayList<RecommendFruit> rFruits = new ArrayList<>();
         if(temp.size() > 0){
             RecommendUserTask recommendTask = new RecommendUserTask();
@@ -125,6 +134,8 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    // 제철과일 추천을 위한 ViewPager Adapter클래스 선언
+    // RecyclerView.Adapter를 사용
     public class ViewPagerAdapter extends RecyclerView.Adapter<FruitViewHolder>{
         ArrayList<PeriodFruit> fruits;
 
@@ -176,6 +187,8 @@ public class HomeFragment extends Fragment {
         }
     }
 
+
+    // 사용자 맞춤 과일을 추천하기 위한 RecyclerView의 Adapter선언
     public class RecommendRecyclerView extends RecyclerView.Adapter<RecommendViewHolder>{
         ArrayList<RecommendFruit> fruits;
 
@@ -184,13 +197,13 @@ public class HomeFragment extends Fragment {
         }
         @NonNull
         @Override
-        public RecommendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        public RecommendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) { // ViewHolder를 생성하여 반환하는 메소드
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fruit_image, parent, false);
             return new RecommendViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull RecommendViewHolder holder, int position) {
+        public void onBindViewHolder(@NonNull RecommendViewHolder holder, int position) { // fruits(과일 목록)을 참조하여 요소 하나당 ViewHolder메소드를 통하여 레이아웃 생성
             holder.onBind(fruits.get(position));
         }
 
@@ -203,17 +216,20 @@ public class HomeFragment extends Fragment {
     public class RecommendViewHolder extends RecyclerView.ViewHolder{
         ImageView fruit_img;
         TextView fruit_name;
+        TextView nutrition_name;
         public RecommendViewHolder(@NonNull View itemView) {
             super(itemView);
 
             fruit_img = itemView.findViewById(R.id.fruit_img);
             fruit_name = itemView.findViewById(R.id.fruit_name);
+            nutrition_name = itemView.findViewById(R.id.nutritiion_tv);
         }
 
         public void onBind(RecommendFruit fruit){
             int imageResource = getResources().getIdentifier(fruit.getFruit_img().toLowerCase(), "drawable", requireContext().getPackageName());
             fruit_img.setImageResource(imageResource);
             fruit_name.setText(fruit.getFruit_name());
+            nutrition_name.setText(fruit.getNutrition_name());
         }
     }
 

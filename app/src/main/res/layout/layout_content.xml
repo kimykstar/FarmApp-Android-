@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -52,18 +53,19 @@
 
             </RelativeLayout>
 
-
-
-
-
-
-            <!--사진 여러장 넣기/사용할거면 위에 딸기 사진 빼고 이거 주석 빼야함-->
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPager"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:scaleType="centerCrop"
-                app:layoutManager="androidx.viewpager2.widget.LinearLayoutManager" />
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:id="@+id/view_ll">
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:layoutManager="androidx.viewpager2.widget.LinearLayoutManager" />
+            </LinearLayout>
 
 
             <LinearLayout
@@ -91,15 +93,17 @@
             </LinearLayout>
 
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/recommend_fl">
                 <TextView
                     android:id="@+id/recommend_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="20dp"
-                    android:gravity="center"
+                    android:layout_marginTop="80dp"
                     android:textColor="@color/black"
                     android:textSize="25sp" />
 
@@ -107,10 +111,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="600dp"
                     android:orientation="horizontal"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="30dp"
                     android:id="@+id/fruit_list"/>
 
-            </FrameLayout>
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

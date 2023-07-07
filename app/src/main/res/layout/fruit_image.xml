@@ -4,27 +4,34 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="260dp"
-        android:layout_height="300dp"
-        android:layout_weight="1"
-        android:src="@drawable/koreamelon"
-        android:id="@+id/fruit_img"/>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="260dp"
+            android:layout_height="260dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/strawberry"
+            android:id="@+id/fruit_img"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/fruit_name"
-        android:gravity="center"
-        android:textSize="30sp"
-        android:textColor="@color/black"
-        android:text="사과"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fruit_name"
+            android:layout_gravity="center|bottom"
+            android:textSize="30sp"
+            android:layout_marginBottom="20dp"
+            android:textColor="@color/black"
+            android:text="사과"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:id="@+id/period"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비타민A"
+            android:textColor="@color/black"
+            android:layout_gravity="center|bottom"
+            android:id="@+id/nutritiion_tv"/>
+    </FrameLayout>
 
 
 

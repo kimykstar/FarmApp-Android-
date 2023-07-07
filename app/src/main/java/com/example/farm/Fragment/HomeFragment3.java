@@ -107,14 +107,14 @@ public class HomeFragment3 extends Fragment {
 
                 fruit_image = (ImageView) itemView.findViewById(R.id.fruit_img);
                 fruit_name = (TextView) itemView.findViewById(R.id.fruit_name);
-                fruit_period = (TextView) itemView.findViewById(R.id.period);
+//                fruit_period = (TextView) itemView.findViewById(R.id.period);
             }
 
             public void onBind(PeriodFruit fruit){
                 int imageResource = getResources().getIdentifier(fruit.getFile_name().toLowerCase(), "drawable", requireContext().getPackageName());
                 fruit_image.setImageResource(imageResource);
                 fruit_name.setText(fruit.getFruit_name());
-                fruit_period.setText("제철시기 : " + fruit.getStart() + " ~ " + fruit.getEnd() + "월");
+//                fruit_period.setText("제철시기 : " + fruit.getStart() + " ~ " + fruit.getEnd() + "월");
             }
         }
     }
