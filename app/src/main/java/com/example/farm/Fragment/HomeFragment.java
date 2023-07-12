@@ -296,9 +296,10 @@ public class HomeFragment extends Fragment {
         @Override
         protected ArrayList<RecommendFruit> doInBackground(String... nutritions) {
             HttpUrl url = new HttpUrl();
+
             HttpConnection conn = new HttpConnection(url.getUrl() + "recommend?nutrition=" + nutritions[0] + "&nutrition=" + nutritions[1] + "&nutrition=" + nutritions[2]);
-            Log.i("Recommend URL : ", url.getUrl() + "recommend?nutrition=" + nutritions[0] + "&nutirition=" + nutritions[1] + "&nutirition=" + nutritions[2]);
             conn.setHeader(1000, "GET", false, true);
+            Log.i("Recommend URL : ", url.getUrl() + "recommend?nutrition=" + nutritions[0] + "&nutirition=" + nutritions[1] + "&nutirition=" + nutritions[2]);
             String result = conn.readData();
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             Log.i("recommend Fruits : ", gson.toJson(result));

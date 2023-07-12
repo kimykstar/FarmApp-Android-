@@ -40,26 +40,34 @@ public class HttpConnection {
         }
     }
 
-    // HTTP 헤더 설정
-    public void setHeader(int time, String method, boolean output, boolean input){
-        conn.setConnectTimeout(time);
-        conn.setRequestProperty("Content-Type", "UTF-8");
-        try{
+    public void setHeader(int time, String method, boolean output, boolean input) {
+        try {
+            if (conn == null) {
+                throw new IllegalStateException("Connection is not initialized. Make sure to provide a valid URL in the constructor.");
+            }
+
+            // 기존 연결 끊기
+            conn.disconnect();
+
+            conn.setConnectTimeout(time);
+            conn.setRequestProperty("Content-Type", "UTF-8");
             conn.setRequestMethod(method);
-            if(output == true) {
-                outputStream = conn.getOutputStream();
-                conn.setDoOutput(true);
-            }
-            if(input == true) {
-                reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            if (input) {
                 conn.setDoInput(true);
+                conn.connect();
+                reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             }
-        }catch(ProtocolException e){
+
+            if (output) {
+                conn.setDoOutput(true);
+                outputStream = conn.getOutputStream();
+            }
+        } catch (ProtocolException e) {
             e.printStackTrace();
-        }catch(IOException e){
+        } catch (IOException e) {
             Log.e("Set Header Error", null);
         }
-
     }
 
     // Header를 설정한 Connection을 통해 Server로부터 데이터를 읽어온다.
