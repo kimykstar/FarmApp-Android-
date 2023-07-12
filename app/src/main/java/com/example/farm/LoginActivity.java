@@ -91,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i("hashPw : ", pw);
                 String message = String.format("%s %s", id, pw);
                 conn.writeData(message);
+                Log.i("Login Info : ", id + pw);
                 result = conn.readData();
                 Log.i("message", result);
                 conn.close_All();

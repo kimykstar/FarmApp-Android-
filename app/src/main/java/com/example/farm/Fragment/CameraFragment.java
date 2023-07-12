@@ -126,15 +126,16 @@ public class CameraFragment extends Fragment {
                                     rotatedBitmap = rotateImage(bitmap, 270);
                                     break;
                             }
+                            // imageView를 Bitmap형식의 이미지로 설정
                             image.setImageBitmap(rotatedBitmap);
+                            // TFlite객체 생성
                             TFlite lite = new TFlite(getContext());
+                            // Interpreter를 통해 tflite파일 모델을 불러옴
                             Interpreter tflite = lite.getTfliteInterpreter("model_unquant.tflite");
-                            DataType[] outputDataTypes = new DataType[tflite.getOutputTensorCount()];
+                            // ByteBuffer를 2차원 형태로 생성하는데 tflite모델의 출력 수만큼 행의 갯수를 정의하고 나머지는 []
                             ByteBuffer[][] outputs = new ByteBuffer[tflite.getOutputTensorCount()][];
 
-                            Tensor inputTensor = tflite.getInputTensor(0);
-                            DataType inputDataType = inputTensor.dataType();
-
+                            // tflite를 실행 인자(인자1 : 전달할 데이터, 인자2 : 출력된 데이터를 받을 데이터)
                             tflite.run(convertColorBitmapToFloatArray(rotatedBitmap), outputs);
 
                         }

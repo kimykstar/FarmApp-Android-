@@ -26,8 +26,8 @@ public class HttpConnection {
 
     private String link;
     private HttpURLConnection conn;
-    private OutputStream outputStream;
-    private BufferedReader reader;
+//    private OutputStream outputStream;
+//    private BufferedReader reader;
 
     // url을 생성 시 입력받아 connection을 생성
     public HttpConnection(String link){
@@ -40,44 +40,38 @@ public class HttpConnection {
         }
     }
 
-    public void connect() {
-        try{
-            conn.connect();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-
     public void setHeader(int time, String method, boolean output, boolean input) {
         try {
             if (conn == null) {
                 throw new IllegalStateException("Connection is not initialized. Make sure to provide a valid URL in the constructor.");
             }
-
-//            // 기존 연결 끊기
-//            conn.disconnect();
-
+            Log.i("connection is", "Not null");
+            Log.i("output : ", Boolean.toString(output));
+            Log.i("input : ", Boolean.toString(input));
             conn.setConnectTimeout(time);
             conn.setRequestProperty("Content-Type", "UTF-8");
             conn.setRequestMethod(method);
 
-            if (input == true) {
-                conn.setDoInput(true);
-                conn.connect();
-                reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                Log.i("reader", "set");
-            }
-
-            if (output == true) {
-                Log.i("outer", "set1");
-                conn.setDoOutput(true);
-                outputStream = conn.getOutputStream();
-                Log.i("outer", "set2");
-            }
+//            if (input == true) {
+//                conn.setDoInput(true);
+//                conn.connect();
+//                reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//                Log.i("reader", "set");
+//            }
+//
+//            if (output == true) {
+//                Log.i("outer", "set1");
+//                conn.setDoOutput(true);
+//                outputStream = conn.getOutputStream();
+//                Log.i("outer", "set2");
+//            }
+            conn.setDoInput(input);
+            conn.setDoOutput(output);
         } catch (ProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
             Log.e("Set Header Error", "setHeader Error");
+            e.printStackTrace();
         }
     }
 
@@ -86,9 +80,11 @@ public class HttpConnection {
         String result = "";
         try{
             String line;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             while((line = reader.readLine()) != null){
                 result += line;
             }
+            reader.close();
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -98,7 +94,9 @@ public class HttpConnection {
     // Header를 설정한 Connection을 통해 Server로 데이터를 보낸다.
     public boolean writeData(String data){
         try{
+            OutputStream outputStream = conn.getOutputStream();
             outputStream.write(data.getBytes("UTF-8"));
+            outputStream.flush();
         }catch(IOException e){
             e.printStackTrace();
             return false;
