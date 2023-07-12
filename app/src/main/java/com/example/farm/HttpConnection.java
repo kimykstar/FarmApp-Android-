@@ -40,33 +40,44 @@ public class HttpConnection {
         }
     }
 
+    public void connect() {
+        try{
+            conn.connect();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
     public void setHeader(int time, String method, boolean output, boolean input) {
         try {
             if (conn == null) {
                 throw new IllegalStateException("Connection is not initialized. Make sure to provide a valid URL in the constructor.");
             }
 
-            // 기존 연결 끊기
-            conn.disconnect();
+//            // 기존 연결 끊기
+//            conn.disconnect();
 
             conn.setConnectTimeout(time);
             conn.setRequestProperty("Content-Type", "UTF-8");
             conn.setRequestMethod(method);
 
-            if (input) {
+            if (input == true) {
                 conn.setDoInput(true);
                 conn.connect();
                 reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                Log.i("reader", "set");
             }
 
-            if (output) {
+            if (output == true) {
+                Log.i("outer", "set1");
                 conn.setDoOutput(true);
                 outputStream = conn.getOutputStream();
+                Log.i("outer", "set2");
             }
         } catch (ProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            Log.e("Set Header Error", null);
+            Log.e("Set Header Error", "setHeader Error");
         }
     }
 

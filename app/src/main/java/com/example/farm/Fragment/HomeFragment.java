@@ -76,7 +76,7 @@ public class HomeFragment extends Fragment {
 
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view_ll.getLayoutParams();
         params.width = (int) (metrics.widthPixels * 0.8);
-        params.height = (int)(metrics.widthPixels * 0.8);
+        params.height = params.width;
         view_ll.setLayoutParams(params);
 
 

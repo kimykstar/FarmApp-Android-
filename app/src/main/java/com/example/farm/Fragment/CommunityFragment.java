@@ -5,8 +5,10 @@ import static android.app.Activity.RESULT_OK;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,11 +47,10 @@ public class CommunityFragment extends Fragment {
         regist_review.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
+                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 // 갤러리에서 사진 여러개를 선택하기 위한 코드
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(intent, 1);
             }
         });
@@ -62,17 +63,21 @@ public class CommunityFragment extends Fragment {
         if(requestCode == 1){
             if(resultCode == RESULT_OK){
                 try{
-                    InputStream in = getContext().getContentResolver().openInputStream(data.getData());
+                    Uri imageUri = data.getData();
+                    if(imageUri != null){
+                        InputStream inputStream = getContext().getContentResolver().openInputStream(imageUri);
+                        Bitmap img = BitmapFactory.decodeStream(inputStream);
+                        inputStream.close();
+                        setimage.setImageBitmap(img);
+                        UploadTask task = new UploadTask();
+                        task.execute(img);
+                    }else{
+                        Log.e("Image URI Null", "need uri");
+                    }
 
-                    Bitmap img = BitmapFactory.decodeStream(in);
-                    in.close();
-
-//                    UploadTask task = new UploadTask();
-//                    task.execute(img);
-
-                    setimage.setImageBitmap(img);
                 }catch(Exception e){
                     Log.e("갤러리 불러오기 오류", "");
+                    e.printStackTrace();
                 }
             }
         }
@@ -84,15 +89,15 @@ public class CommunityFragment extends Fragment {
             Bitmap selectedImage = params[0];
             HttpUrl url = new HttpUrl();
             HttpConnection connection = new HttpConnection(url.getUrl() + "load");
-            connection.setHeader(1000, "POST",true, true);
             connection.setProperty("Connection", "Keep-Alive");
             connection.setProperty("Content-Type", "multipart/form-data;boundary=*****");
+            connection.setHeader(1000, "POST",true, true);
+
 
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             selectedImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
             byte[] bitmapData = byteArrayOutputStream.toByteArray();
 
-            OutputStream outputStream = connection.getOutputStream();
             DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
             try {
                 dataOutputStream.writeBytes("--*****\r\n");

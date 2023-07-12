@@ -135,9 +135,6 @@ public class CameraFragment extends Fragment {
                             Tensor inputTensor = tflite.getInputTensor(0);
                             DataType inputDataType = inputTensor.dataType();
 
-
-
-
                             tflite.run(convertColorBitmapToFloatArray(rotatedBitmap), outputs);
 
                         }
