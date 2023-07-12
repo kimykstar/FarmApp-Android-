@@ -26,11 +26,15 @@ import com.example.farm.MainActivity;
 import com.example.farm.R;
 import com.example.farm.TFlite;
 
+import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.Interpreter;
+import org.tensorflow.lite.Tensor;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,7 +48,7 @@ public class CameraFragment extends Fragment {
     String mCurrentPhotoPath = null;
     static final int REQUEST_TAKE_PHOTO = 1;
 
-    Map<Integer, Object> outputs = new HashMap<>();
+//    Map<Integer, Object> outputs = new HashMap<>();
 
     public CameraFragment() {}
 
@@ -125,8 +129,17 @@ public class CameraFragment extends Fragment {
                             image.setImageBitmap(rotatedBitmap);
                             TFlite lite = new TFlite(getContext());
                             Interpreter tflite = lite.getTfliteInterpreter("model_unquant.tflite");
+                            DataType[] outputDataTypes = new DataType[tflite.getOutputTensorCount()];
+                            ByteBuffer[][] outputs = new ByteBuffer[tflite.getOutputTensorCount()][];
+
+                            Tensor inputTensor = tflite.getInputTensor(0);
+                            DataType inputDataType = inputTensor.dataType();
+
+
+
+
                             tflite.run(convertColorBitmapToFloatArray(rotatedBitmap), outputs);
-                            Log.i("output Size : ", outputs.size() + "");
+
                         }
                     }
                     break;
@@ -138,12 +151,12 @@ public class CameraFragment extends Fragment {
     }
 
     // Bitmap이미지를 받아 컬러형태의 int배열로 변환하는 함수
-    private float[] convertColorBitmapToFloatArray(Bitmap imageBitmap) {
+    // 4차원 배열로 batch_size, height, width, channels형태의 입력을 받아야 함
+    private float[][][][] convertColorBitmapToFloatArray(Bitmap imageBitmap) {
         int width = imageBitmap.getWidth();
         int height = imageBitmap.getHeight();
-        float[] floatArray = new float[width * height * 3]; // 3 channels (RGB)
+        float[][][][] inputArray = new float[1][height][width][3]; // 1 batch, 3 channels (RGB)
 
-        int pixelIndex = 0;
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 int pixel = imageBitmap.getPixel(x, y);
@@ -151,13 +164,13 @@ public class CameraFragment extends Fragment {
                 float green = ((pixel >> 8) & 0xFF) / 224.0f;
                 float blue = (pixel & 0xFF) / 255.0f;
 
-                floatArray[pixelIndex++] = red;
-                floatArray[pixelIndex++] = green;
-                floatArray[pixelIndex++] = blue;
+                inputArray[0][y][x][0] = red;
+                inputArray[0][y][x][1] = green;
+                inputArray[0][y][x][2] = blue;
             }
         }
 
-        return floatArray;
+        return inputArray;
     }
 
     // 이미지 회전

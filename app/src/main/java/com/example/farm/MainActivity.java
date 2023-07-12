@@ -1,8 +1,6 @@
 package com.example.farm;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -12,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import com.example.farm.Fragment.CameraFragment;
 import com.example.farm.Fragment.HomeFragment;
 import com.example.farm.Fragment.MyInfoFragment;
-import com.example.farm.Fragment.SearchFragment;
+import com.example.farm.Fragment.CommunityFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragment_home = new HomeFragment();
         fragment_camera = new CameraFragment();
-        fragment_search = new SearchFragment();
+        fragment_search = new CommunityFragment();
         fragment_myInfo = new MyInfoFragment();
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);

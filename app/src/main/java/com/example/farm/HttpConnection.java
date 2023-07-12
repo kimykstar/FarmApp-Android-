@@ -1,7 +1,10 @@
 package com.example.farm;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -23,6 +26,8 @@ public class HttpConnection {
 
     private String link;
     private HttpURLConnection conn;
+    private OutputStream outputStream;
+    private BufferedReader reader;
 
     // url을 생성 시 입력받아 connection을 생성
     public HttpConnection(String link){
@@ -41,20 +46,27 @@ public class HttpConnection {
         conn.setRequestProperty("Content-Type", "UTF-8");
         try{
             conn.setRequestMethod(method);
+            if(output == true) {
+                outputStream = conn.getOutputStream();
+                conn.setDoOutput(true);
+            }
+            if(input == true) {
+                reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                conn.setDoInput(true);
+            }
         }catch(ProtocolException e){
             e.printStackTrace();
+        }catch(IOException e){
+            Log.e("Set Header Error", null);
         }
-        conn.setDoInput(input);
-        conn.setDoOutput(output);
+
     }
 
     // Header를 설정한 Connection을 통해 Server로부터 데이터를 읽어온다.
     public String readData(){
         String result = "";
-        BufferedReader reader = null;
         try{
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line = "";
+            String line;
             while((line = reader.readLine()) != null){
                 result += line;
             }
@@ -64,27 +76,10 @@ public class HttpConnection {
         return result;
     }
 
-    // 서버로부터 받은 String형태를 Fruit객체의 필드에 맞게 변환하여 Fruit자료형으로 반환해주는 메소드
-    public Fruit parseStringToFruit(String st){
-        Fruit fruit = new Fruit();
-        String[] elements = st.split(",");
-
-        fruit.setFruit_name(elements[0].split(":")[1]);
-        fruit.setCalories(elements[1].split(":")[1]);
-        fruit.setCarbohydrate(elements[2].split(":")[1]);
-        fruit.setProtein(elements[3].split(":")[1]);
-        fruit.setFat(elements[4].split(":")[1]);
-        fruit.setSugar(elements[5].split(":")[1]);
-
-        return fruit;
-    }
-
     // Header를 설정한 Connection을 통해 Server로 데이터를 보낸다.
     public boolean writeData(String data){
         try{
-            OutputStream outputStream = conn.getOutputStream();
             outputStream.write(data.getBytes("UTF-8"));
-            outputStream.flush();
         }catch(IOException e){
             e.printStackTrace();
             return false;
@@ -93,6 +88,28 @@ public class HttpConnection {
         return true;
     }
 
+    public OutputStream getOutputStream(){
+        return outputStream;
+    }
 
+    public void setProperty(String key, String value){
+        conn.setRequestProperty(key, value);
+    }
+
+    public void close_All(){
+        try{
+            if(conn != null){
+                if(reader != null)
+                    reader.close();
+                if(outputStream != null)
+                    outputStream.flush();
+                conn.disconnect();
+            }
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+    }
 
 }

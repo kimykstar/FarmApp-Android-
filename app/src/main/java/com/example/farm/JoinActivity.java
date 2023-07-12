@@ -99,7 +99,7 @@ public class JoinActivity extends AppCompatActivity {
             String message = String.format("%s %s %s %s %s", id, pw, name, phone, age); // server에 보낼 메시지 생성
             conn.writeData(message); // server에 메시지를 전달
             String result = conn.readData(); // server로부터 결과를 받아온다.
-
+            conn.close_All();
             return result;
         }
     }

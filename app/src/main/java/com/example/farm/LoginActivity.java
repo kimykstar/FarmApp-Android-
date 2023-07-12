@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                 conn.writeData(message);
                 result = conn.readData();
                 Log.i("message", result);
+                conn.close_All();
             }catch(Exception e){
                 e.printStackTrace();
             }

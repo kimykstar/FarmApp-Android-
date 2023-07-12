@@ -149,6 +149,7 @@ public class MyInfoFragment extends Fragment {
             conn.setHeader(1000, "GET", false,  true);
             String result = conn.readData();
             Log.i("delete Result : ", result);
+            conn.close_All();
             return result;
         }
     }

@@ -1,6 +1,7 @@
 package com.example.farm.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,18 +16,23 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.farm.Fruit;
+import com.example.farm.FruitInfoActivity;
 import com.example.farm.HttpConnection;
 import com.example.farm.HttpUrl;
 import com.example.farm.MainActivity;
+import com.example.farm.MainActivity2;
 import com.example.farm.PeriodFruit;
 import com.example.farm.R;
 import com.example.farm.RecommendFruit;
@@ -48,8 +54,8 @@ public class HomeFragment extends Fragment {
     private ViewPager2 viewPager;
     private TextView hashTag, recommend_tv;
     private RecyclerView recommend;
-    private LinearLayout recommend_ll;
-    private LinearLayout view_ll;
+    private LinearLayout recommend_ll, view_ll;
+    private SearchView search;
 
     @Nullable
     @Override
@@ -61,6 +67,7 @@ public class HomeFragment extends Fragment {
         recommend = view.findViewById(R.id.fruit_list);
         recommend_ll = view.findViewById(R.id.recommend_fl);
         view_ll = view.findViewById(R.id.view_ll);
+        search = view.findViewById(R.id.searchFruit);
 
         // ViewPager 화면 크기에 맞게 크기 조절
         DisplayMetrics metrics = new DisplayMetrics();
@@ -81,6 +88,39 @@ public class HomeFragment extends Fragment {
         RecommendTask task = new RecommendTask();
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat format = new SimpleDateFormat("M");
+
+        // 검색바 이벤트 추가
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+
+            // 검색버튼 눌렀을때 작동하는 메소드
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                SearchTask task = new SearchTask();
+                try {
+                    Fruit fruit = task.execute(query).get();
+                    if(fruit != null) {
+                        // intent로 정보 제공 layout으로 넘어감
+                        Intent intent = new Intent(view.getContext().getApplicationContext(), FruitInfoActivity.class);
+                        intent.putExtra("info", fruit);
+                        startActivity(intent);
+                    }else{
+                        Toast.makeText(view.getContext().getApplicationContext(), "검색 결과가 없습니다", Toast.LENGTH_LONG).show();
+                    }
+                } catch (ExecutionException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                return false;
+            }
+
+            // 검색내용이 변할때 작동되는 메소드
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         String month = format.format(calendar.getTime());
         try {
@@ -244,7 +284,7 @@ public class HomeFragment extends Fragment {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
             Log.i("fruit_list(background) : ", gson.toJson(fruit_list));
-
+            conn.close_All();
             ArrayList<PeriodFruit> result = gson.fromJson(fruit_list, new TypeToken<ArrayList<PeriodFruit>>() {}.getType());
 
             return result;
@@ -256,17 +296,36 @@ public class HomeFragment extends Fragment {
         @Override
         protected ArrayList<RecommendFruit> doInBackground(String... nutritions) {
             HttpUrl url = new HttpUrl();
-//            nutritions = url.getEncodeingURLParam(nutritions);
             HttpConnection conn = new HttpConnection(url.getUrl() + "recommend?nutrition=" + nutritions[0] + "&nutrition=" + nutritions[1] + "&nutrition=" + nutritions[2]);
             Log.i("Recommend URL : ", url.getUrl() + "recommend?nutrition=" + nutritions[0] + "&nutirition=" + nutritions[1] + "&nutirition=" + nutritions[2]);
             conn.setHeader(1000, "GET", false, true);
             String result = conn.readData();
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             Log.i("recommend Fruits : ", gson.toJson(result));
+            conn.close_All();
             ArrayList<RecommendFruit> fruits = gson.fromJson(result, new TypeToken<ArrayList<RecommendFruit>>() {}.getType());
             return fruits;
         }
 
+    }
+
+    public static class SearchTask extends AsyncTask<String, Void, Fruit> {
+        @Override
+        protected Fruit doInBackground(String ... fruit) {
+            HttpUrl url = new HttpUrl();
+            HttpConnection conn = new HttpConnection(url.getUrl() + "search?fruit=" + fruit[0]);
+            conn.setHeader(1000, "GET", false, true);
+            // 과일 정보 받기 String형태를 object로 받기?
+            String info = conn.readData();
+            Gson gson = new Gson();
+            Fruit f_info = gson.fromJson(info, Fruit.class);
+            gson = new GsonBuilder().setPrettyPrinting().create();
+            conn.close_All();
+
+            String temp = gson.toJson(f_info);
+            Log.i("fruit : ", temp);
+            return f_info;
+        }
     }
 
 }
