@@ -40,7 +40,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.ExecutionException;
 
@@ -100,6 +102,7 @@ public class RegistDialogFragment extends DialogFragment {
                     throw new RuntimeException(e);
                 }
 
+                // 게시글 정보 텍스트 입력 데이터 서버로 전송
                 try {
                     if(review != null){
                         CommunityTask task = new CommunityTask();
@@ -178,56 +181,28 @@ public class RegistDialogFragment extends DialogFragment {
 
         @Override
         protected String doInBackground(Bitmap...args){
-//            String serverUrl = "http://192.168.35.73/image";
-//            try {
-//                URL url = new URL(serverUrl);
-//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//                connection.setDoOutput(true);
-//                connection.setRequestMethod("POST");
-//                connection.setRequestProperty("Content-Type", "image/jpeg");
-//
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                args[0].compress(Bitmap.CompressFormat.JPEG, 100, stream);
-//                byte[] imageData = stream.toByteArray();
-//
-//                OutputStream outputStream = connection.getOutputStream();
-//                outputStream.write(imageData);
-//                outputStream.flush();
-//                outputStream.close();
-//
-//                int responseCode = connection.getResponseCode();
-//                if (responseCode == HttpURLConnection.HTTP_OK) {
-//                    // 업로드 성공 처리
-//                    return "true";
-//                } else {
-//                    // 업로드 실패 처리
-//                    return "false";
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return "false";
-//            }
+            String result = "false";
             HttpUrl url = new HttpUrl();
             HttpConnection conn = new HttpConnection(url.getUrl() + "image");
             conn.setHeader(1000, "POST", true, true);
             // boundary는 파일의 시작과 끝을 의미
-//            connection.setProperty("Content-Type", "image/jpeg");
+            conn.setProperty("Content-Type", "image/jpeg");
 
-            conn.writeData("hello");
-//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//            args[0].compress(Bitmap.CompressFormat.JPEG, 100, stream);
-//            byte[] imageData = stream.toByteArray();
-//
-//            OutputStream outputStream = connection.getDataOutputStream();
-//            try {
-//                outputStream.write(imageData);
-//                outputStream.flush();
-//                outputStream.close();
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            args[0].compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] imageData = stream.toByteArray();
 
-            return "true";
+            OutputStream outputStream = conn.getDataOutputStream();
+            try {
+                outputStream.write(imageData);
+                outputStream.flush();
+                outputStream.close();
+                result = conn.readData();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            return result;
         }
     }
 
