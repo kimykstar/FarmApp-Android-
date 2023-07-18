@@ -133,11 +133,19 @@ public class CameraFragment extends Fragment {
                             // Interpreter를 통해 tflite파일 모델을 불러옴
                             Interpreter tflite = lite.getTfliteInterpreter("model_unquant.tflite");
                             // ByteBuffer를 2차원 형태로 생성하는데 tflite모델의 출력 수만큼 행의 갯수를 정의하고 나머지는 []
-                            ByteBuffer[][] outputs = new ByteBuffer[tflite.getOutputTensorCount()][];
+                            ByteBuffer[][] outputs = new ByteBuffer[tflite.getOutputTensorCount()][6];
+                            Log.i("TensorFlow count : ", tflite.getOutputTensorCount() + "");
+                            float[][] outputs2 = new float[1][6];
+
 
                             // tflite를 실행 인자(인자1 : 전달할 데이터, 인자2 : 출력된 데이터를 받을 데이터)
-                            tflite.run(convertColorBitmapToFloatArray(rotatedBitmap), outputs);
-
+                            tflite.run(convertColorBitmapToFloatArray(rotatedBitmap), outputs2);
+                            Log.i("AI Result1 : ", outputs2[0][0] + "");
+                            Log.i("AI Result2 : ", outputs2[0][1] + "");
+                            Log.i("AI Result3 : ", outputs2[0][2] + "");
+                            Log.i("AI Result4 : ", outputs2[0][3] + "");
+                            Log.i("AI Result5 : ", outputs2[0][4] + "");
+                            Log.i("AI Result6 : ", outputs2[0][5] + "");
                         }
                     }
                     break;

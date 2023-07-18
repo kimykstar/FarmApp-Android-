@@ -8,8 +8,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.AbsSavedState;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.farm.CustomDialog;
-import com.example.farm.DialogBox;
+import com.example.farm.Dialog.CustomDialog;
 import com.example.farm.HttpConnection;
 import com.example.farm.HttpUrl;
 import com.example.farm.LoginActivity;
@@ -103,7 +100,7 @@ public class MyInfoFragment extends Fragment {
                     }
                 });
                 dialog.setMessage("Farm 회원을 탈퇴하시겠습니까?");
-                dialog.setNegativeButton("취소", null);
+                dialog.setNegativeButton("취소", null).setIcon(R.drawable.logo);
                 dialog.show();
             }
         });
@@ -149,7 +146,6 @@ public class MyInfoFragment extends Fragment {
             conn.setHeader(1000, "GET", false,  true);
             String result = conn.readData();
             Log.i("delete Result : ", result);
-            conn.close_All();
             return result;
         }
     }

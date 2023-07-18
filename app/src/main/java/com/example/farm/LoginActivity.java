@@ -94,7 +94,6 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i("Login Info : ", id + pw);
                 result = conn.readData();
                 Log.i("message", result);
-                conn.close_All();
             }catch(Exception e){
                 e.printStackTrace();
             }

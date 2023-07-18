@@ -284,7 +284,6 @@ public class HomeFragment extends Fragment {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
             Log.i("fruit_list(background) : ", gson.toJson(fruit_list));
-            conn.close_All();
             ArrayList<PeriodFruit> result = gson.fromJson(fruit_list, new TypeToken<ArrayList<PeriodFruit>>() {}.getType());
 
             return result;
@@ -303,11 +302,9 @@ public class HomeFragment extends Fragment {
             String result = conn.readData();
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             Log.i("recommend Fruits : ", gson.toJson(result));
-            conn.close_All();
             ArrayList<RecommendFruit> fruits = gson.fromJson(result, new TypeToken<ArrayList<RecommendFruit>>() {}.getType());
             return fruits;
         }
-
     }
 
     public static class SearchTask extends AsyncTask<String, Void, Fruit> {
@@ -321,7 +318,6 @@ public class HomeFragment extends Fragment {
             Gson gson = new Gson();
             Fruit f_info = gson.fromJson(info, Fruit.class);
             gson = new GsonBuilder().setPrettyPrinting().create();
-            conn.close_All();
 
             String temp = gson.toJson(f_info);
             Log.i("fruit : ", temp);

@@ -1,4 +1,4 @@
-package com.example.farm;
+package com.example.farm.Dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+
+import com.example.farm.R;
 
 public class CustomDialog extends Dialog {
 

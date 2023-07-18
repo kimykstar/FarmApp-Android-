@@ -41,11 +41,19 @@
 
     </RelativeLayout>
 
-    <ImageView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:scaleType="fitXY"
-        android:id="@+id/setimg"/>
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:entries="@array/fruit"
+        android:id="@+id/choose_box"
+        android:background="@drawable/spinner_layout"/>
+
+<!--    <ImageView-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="300dp"-->
+<!--        android:scaleType="fitXY"-->
+<!--        android:id="@+id/setimg"/>-->
 
     <GridView
         android:layout_width="match_parent"

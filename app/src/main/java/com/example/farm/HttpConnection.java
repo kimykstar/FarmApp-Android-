@@ -1,5 +1,6 @@
 package com.example.farm;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -105,28 +106,56 @@ public class HttpConnection {
         return true;
     }
 
-    public OutputStream getOutputStream(){
-        return outputStream;
-    }
-
-    public void setProperty(String key, String value){
-        conn.setRequestProperty(key, value);
-    }
-
-    public void close_All(){
+    public boolean writeData(byte[] image){
         try{
-            if(conn != null){
-                if(reader != null)
-                    reader.close();
-                if(outputStream != null)
-                    outputStream.flush();
-                conn.disconnect();
-            }
-
+            OutputStream outputStream = conn.getOutputStream();
+            outputStream.write(image);
+            outputStream.flush();
         }catch(Exception e){
             e.printStackTrace();
         }
 
+        return true;
     }
+
+    public DataOutputStream getDataOutputStream(){
+        DataOutputStream dataOutputStream = null;
+        try{
+            OutputStream outputStream = conn.getOutputStream();
+            dataOutputStream = new DataOutputStream(outputStream);
+            dataOutputStream.flush();
+            outputStream.flush();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        return dataOutputStream;
+    }
+//    public OutputStream getOutputStream(){
+//        return outputStream;
+//    }
+
+    public void connect_method() throws IOException {
+        conn.connect();
+    }
+    public void setProperty(String key, String value){
+        conn.setRequestProperty(key, value);
+    }
+
+//    public void close_All(){
+//        try{
+//            if(conn != null){
+//                if(reader != null)
+//                    reader.close();
+//                if(outputStream != null)
+//                    outputStream.flush();
+//                conn.disconnect();
+//            }
+//
+//        }catch(Exception e){
+//            e.printStackTrace();
+//        }
+//
+//    }
 
 }

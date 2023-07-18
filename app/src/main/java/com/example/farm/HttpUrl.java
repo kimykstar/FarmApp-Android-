@@ -8,7 +8,7 @@ public class HttpUrl {
     private String url;
 
     public HttpUrl(){
-        this.url = "http://10.0.2.2:8081/";
+        this.url = "http://192.168.35.73:8081/";
     }
 
     public String getUrl(){
