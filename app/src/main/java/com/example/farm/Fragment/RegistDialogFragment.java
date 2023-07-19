@@ -93,42 +93,48 @@ public class RegistDialogFragment extends DialogFragment {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss");
                 Review review = new Review("참외", format.toString(), session_id, body_content, flavor_content);
 
-                ImageTask imageTask = new ImageTask();
-                try {
-                    Log.i("Task Result : ", imageTask.execute(set_image).get());
-                } catch (ExecutionException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                if(set_image != null) {
+                    ImageTask imageTask = new ImageTask();
+                    try {
+                        Log.i("Task Result : ", imageTask.execute(set_image).get());
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
 
                 // 게시글 정보 텍스트 입력 데이터 서버로 전송
                 try {
-                    if(review != null){
-                        CommunityTask task = new CommunityTask();
-                        String result = task.execute(review).get(); // review객체를 서버에 전달 및 결과 반환
-                        Log.i("Result Request : ", result);
-                        if(result != null) { // 서버로부터 응답값을 받은 경우
-                            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
-                            if (result.equals("true")) { // 게시 성공
-                                dialog.setTitle("리뷰 작성").setMessage("리뷰 작성에 성공하였습니다.").setIcon(R.drawable.logo)
-                                        .setPositiveButton("확인", null).show();
-                                dismiss();
-                            } else { // 게시 요청했는데 서버에서 값을 못받아서 false를 반환한 경우
-                                dialog.setTitle("리뷰 작성").setMessage("리뷰 작성에 실패하였습니다.(네트워크 요청 오류)").setIcon(R.drawable.logo)
-                                        .setPositiveButton("확인", null).show();
+                    if(review != null) {
+                        String message = content.getText().toString();
+                        if (message.length() >= 0) { // 리뷰 작성 폼에 내용을 입력한 경우만 서버에 리뷰 데이터 전송
+                            CommunityTask task = new CommunityTask();
+                            String result = task.execute(review).get(); // review객체를 서버에 전달 및 결과 반환
+                            Log.i("Result Request : ", result);
+                            if (result != null) { // 서버로부터 응답값을 받은 경우
+                                AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                                if (result.equals("true")) { // 게시 성공
+                                    dialog.setTitle("리뷰 작성").setMessage("리뷰 작성에 성공하였습니다.").setIcon(R.drawable.logo)
+                                            .setPositiveButton("확인", null).show();
+                                    dismiss();
+                                } else { // 게시 요청했는데 서버에서 값을 못받아서 false를 반환한 경우
+                                    dialog.setTitle("리뷰 작성").setMessage("리뷰 작성에 실패하였습니다.(네트워크 요청 오류)").setIcon(R.drawable.logo)
+                                            .setPositiveButton("확인", null).show();
+                                }
+                            } else { // 서버로부터 응답값을 받지 못한 경우
+                                Toast.makeText(getContext(), "리뷰 작성에 실패하였습니다.(네트워크 응답 오류)", Toast.LENGTH_LONG).show();
                             }
-                        }else{ // 서버로부터 응답값을 받지 못한 경우
-                            Toast.makeText(getContext(), "리뷰 작성에 실패하였습니다.(네트워크 응답 오류)", Toast.LENGTH_LONG).show();
+                        } else {
+                            Log.e("register Error ", "review Object is NULL");
                         }
-                    }else{
-                        Log.e("register Error ", "review Object is NULL");
                     }
                 } catch (ExecutionException e) {
                     throw new RuntimeException(e);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+
 
             }
         });
