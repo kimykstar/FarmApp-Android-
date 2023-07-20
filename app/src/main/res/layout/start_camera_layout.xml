@@ -32,16 +32,31 @@ android:background="@color/white">
 
     </RelativeLayout>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="과일 촬영하러가기"
-            android:id="@+id/camera_open"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="과일 촬영하러가기"
+        android:background="@color/representColor"
+        android:layout_margin="5dp"
+        android:textSize="30sp"
+        android:layout_weight="1"
+        android:id="@+id/camera_open"/>
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:id="@+id/image"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/representColor"
+        android:layout_margin="5dp"
+        android:text="비디오로 촬영하기"
+        android:textSize="30sp"
+        android:layout_weight="1"
+        android:id="@+id/video_open"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:layout_weight="1"
+        android:id="@+id/image"/>
 
 </LinearLayout>

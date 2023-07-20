@@ -73,17 +73,10 @@ public class CommunityFragment extends Fragment {
             public void onClick(View v) {
                 // Dialog객체 생성
                 Session session = (Session)getActivity().getApplication();
-                if(session != null) {                                // 세션이 있는 경우(로그인) Regist Form을 띄워준다.
-                    RegistDialogFragment dialog = new RegistDialogFragment();
+                if(!session.getSessionId().equals("default")) {                                // 세션이 있는 경우(로그인) Regist Form을 띄워준다.
+                    RegistDialogFragment dialog = new RegistDialogFragment(choose_box.getSelectedItem().toString());
                     dialog.show(getChildFragmentManager(), null);
-//                    RegistDialog dialog = new RegistDialog(getContext(), session.getSessionId());
-//                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams(); // Layout의 매개변수를 관리할 수 있는 WindowManager생성
-//                    lp.copyFrom(dialog.getWindow().getAttributes()); // dialog의 Window의 속성을 lp객체에 복사
-//                    lp.width = WindowManager.LayoutParams.MATCH_PARENT; // lp의 너비속성을 Match_parent로 설정
-//                    lp.height = WindowManager.LayoutParams.MATCH_PARENT; // lp의 높이 속성을 Match_parent로 설정
-//                    Window window = dialog.getWindow(); // dialog의 Window에 대한 객체 생성
-//                    window.setAttributes(lp); // dialog의 Window속성을 설정한다.
-//                    dialog.show();
+
                 }else{                      // 세션이 없는 경우(비 로그인)
                     AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
                     dialog.setTitle("안내").setMessage("로그인이 필요한 서비스입니다 로그인하시겠습니까?")

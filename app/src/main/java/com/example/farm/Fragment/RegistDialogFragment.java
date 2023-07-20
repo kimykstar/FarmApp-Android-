@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ import com.example.farm.R;
 import com.example.farm.Review;
 import com.example.farm.Session;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -42,8 +44,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 public class RegistDialogFragment extends DialogFragment {
@@ -54,6 +58,10 @@ public class RegistDialogFragment extends DialogFragment {
     Button regist_btn;
     EditText flavor, content;
     Bitmap set_image;
+    String fruit_name;
+    public RegistDialogFragment(String fruit_name){
+        this.fruit_name = fruit_name;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,27 +98,20 @@ public class RegistDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 String flavor_content = flavor.getText().toString();
                 String body_content = content.getText().toString();
-                SimpleDateFormat format = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss");
-                Review review = new Review("참외", format.toString(), session_id, body_content, flavor_content);
-
-                if(set_image != null) {
-                    ImageTask imageTask = new ImageTask();
-                    try {
-                        Log.i("Task Result : ", imageTask.execute(set_image).get());
-                    } catch (ExecutionException e) {
-                        throw new RuntimeException(e);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+                String current = format.format(new Date());
+                Review review = new Review(fruit_name, current, session_id, body_content, flavor_content);
+                Log.i("Now Time : ", current);
+                Log.i("Fruit Name : ", fruit_name);
 
                 // 게시글 정보 텍스트 입력 데이터 서버로 전송
                 try {
                     if(review != null) {
                         String message = content.getText().toString();
-                        if (message.length() >= 0) { // 리뷰 작성 폼에 내용을 입력한 경우만 서버에 리뷰 데이터 전송
-                            CommunityTask task = new CommunityTask();
-                            String result = task.execute(review).get(); // review객체를 서버에 전달 및 결과 반환
+                        if (message.length() > 0) { // 리뷰 작성 폼에 내용을 입력한 경우만 서버에 리뷰 데이터 전송
+//                            CommunityTask task = new CommunityTask();
+                            RegistTask task = new RegistTask();
+                            String result = task.execute(set_image, review).get(); // review객체를 서버에 전달 및 결과 반환
                             Log.i("Result Request : ", result);
                             if (result != null) { // 서버로부터 응답값을 받은 경우
                                 AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
@@ -126,7 +127,7 @@ public class RegistDialogFragment extends DialogFragment {
                                 Toast.makeText(getContext(), "리뷰 작성에 실패하였습니다.(네트워크 응답 오류)", Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            Log.e("register Error ", "review Object is NULL");
+                            Toast.makeText(getContext(), "내용을 입력해주세요!", Toast.LENGTH_LONG).show();
                         }
                     }
                 } catch (ExecutionException e) {
@@ -183,47 +184,59 @@ public class RegistDialogFragment extends DialogFragment {
         }
     }
 
-    public class ImageTask extends AsyncTask<Bitmap, Void, String>{
-
+    public class RegistTask extends AsyncTask<Object, Void, String>{
         @Override
-        protected String doInBackground(Bitmap...args){
-            String result = "false";
+        protected String doInBackground(Object... args){
             HttpUrl url = new HttpUrl();
-            HttpConnection conn = new HttpConnection(url.getUrl() + "image");
-            conn.setHeader(1000, "POST", true, true);
-            // boundary는 파일의 시작과 끝을 의미
-            conn.setProperty("Content-Type", "image/jpeg");
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            args[0].compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] imageData = stream.toByteArray();
-
-            OutputStream outputStream = conn.getDataOutputStream();
-            try {
-                outputStream.write(imageData);
-                outputStream.flush();
-                outputStream.close();
-                result = conn.readData();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            return result;
-        }
-    }
-
-    public class CommunityTask extends AsyncTask<Review, Void, String> {
-
-        @Override
-        protected String doInBackground(Review... args) { // HttpUrlConnection에서 객체 전송이 안됨..인자로 초깃값 받아야 함
-            HttpUrl url = new HttpUrl();
+            String boundary = "****";
             HttpConnection conn = new HttpConnection(url.getUrl() + "regist");
             conn.setHeader(1000, "POST", true, true);
-            Gson gson = new Gson();
-            String temp = gson.toJson(args[0]);
-            conn.writeData(temp); // json형태로 값을 전달
-            String result = conn.readData();
+            conn.setProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
 
+            DataOutputStream dos = conn.getDataOutputStream();
+            if(args[0] instanceof Bitmap && args[0] != null) { // 이미지 전송
+                Bitmap image = (Bitmap) args[0];
+                Review review = (Review) args[1];
+                String imageName = review.getFruit_name() + "_" + review.getUser_id() + "_" + review.getReview_time() + ".jpg";
+                // 이미지 파일 이름을 UTF-8로 인코딩 후 Base64로 인코딩
+                String encodedImageName = Base64.encodeToString(imageName.getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
+
+                try {
+                    dos.writeBytes("--" + boundary + "\r\n");
+                    dos.writeBytes("Content-Disposition: form-data; name=\"image\";filename=\"" + encodedImageName + "\"\r\n");
+                    dos.writeBytes("Content-Type: image/jpeg\r\n\r\n");
+
+                    ByteArrayOutputStream imageStream = new ByteArrayOutputStream();
+                    image.compress(Bitmap.CompressFormat.JPEG, 100, imageStream);
+                    byte[] imageByteArray = imageStream.toByteArray();
+                    dos.write(imageByteArray);
+                    dos.writeBytes("\r\n");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            if(args[1] instanceof Review){
+                Review review = (Review)args[1];
+                try {
+                    dos.writeBytes("--" + boundary + "\r\n");
+                    dos.writeBytes("Content-Disposition: form-data; name=\"review\"\r\n\r\n");
+                    Gson gson = new Gson();
+                    String content = gson.toJson(review);
+                    byte[] contentBytes = content.getBytes(StandardCharsets.UTF_8);
+                    Log.i("Content : ", content);
+                    dos.write(contentBytes);
+                    dos.writeBytes("\r\n");
+                    dos.writeBytes("--" + boundary + "--\r\n");
+                    dos.flush();
+                    dos.close();
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            String result = conn.readData();
             return result;
         }
     }
