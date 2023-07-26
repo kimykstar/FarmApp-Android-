@@ -131,7 +131,7 @@ public class HomeFragment3 extends Fragment {
             Log.i("fruit_list(background) : ", gson.toJson(fruit_list));
 
             ArrayList<PeriodFruit> result = gson.fromJson(fruit_list, new TypeToken<ArrayList<PeriodFruit>>() {}.getType());
-
+            conn.closeAll();
             return result;
         }
     }

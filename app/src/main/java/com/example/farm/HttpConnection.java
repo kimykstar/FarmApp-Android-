@@ -46,26 +46,9 @@ public class HttpConnection {
             if (conn == null) {
                 throw new IllegalStateException("Connection is not initialized. Make sure to provide a valid URL in the constructor.");
             }
-            Log.i("connection is", "Not null");
-            Log.i("output : ", Boolean.toString(output));
-            Log.i("input : ", Boolean.toString(input));
             conn.setConnectTimeout(time);
             conn.setRequestProperty("Content-Type", "UTF-8");
             conn.setRequestMethod(method);
-
-//            if (input == true) {
-//                conn.setDoInput(true);
-//                conn.connect();
-//                reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//                Log.i("reader", "set");
-//            }
-//
-//            if (output == true) {
-//                Log.i("outer", "set1");
-//                conn.setDoOutput(true);
-//                outputStream = conn.getOutputStream();
-//                Log.i("outer", "set2");
-//            }
             conn.setDoInput(input);
             conn.setDoOutput(output);
         } catch (ProtocolException e) {
@@ -131,31 +114,23 @@ public class HttpConnection {
 
         return dataOutputStream;
     }
-//    public OutputStream getOutputStream(){
-//        return outputStream;
-//    }
 
-    public void connect_method() throws IOException {
-        conn.connect();
+    public void closeAll(){
+        if(conn != null)
+            conn.disconnect();
     }
+
+    public void connect() {
+        try {
+            conn.connect();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public void setProperty(String key, String value){
         conn.setRequestProperty(key, value);
     }
 
-//    public void close_All(){
-//        try{
-//            if(conn != null){
-//                if(reader != null)
-//                    reader.close();
-//                if(outputStream != null)
-//                    outputStream.flush();
-//                conn.disconnect();
-//            }
-//
-//        }catch(Exception e){
-//            e.printStackTrace();
-//        }
-//
-//    }
 
 }
