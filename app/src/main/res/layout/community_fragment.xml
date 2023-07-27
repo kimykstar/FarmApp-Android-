@@ -49,11 +49,6 @@
         android:id="@+id/choose_box"
         android:background="@drawable/spinner_layout"/>
 
-<!--    <ImageView-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="300dp"-->
-<!--        android:scaleType="fitXY"-->
-<!--        android:id="@+id/setimg"/>-->
 
     <GridView
         android:layout_width="match_parent"

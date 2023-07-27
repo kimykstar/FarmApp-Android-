@@ -39,6 +39,8 @@ import com.example.farm.HttpUrl;
 import com.example.farm.LoginActivity;
 import com.example.farm.PeriodFruit;
 import com.example.farm.R;
+import com.example.farm.Review;
+import com.example.farm.ReviewActivity;
 import com.example.farm.ReviewInfo;
 import com.example.farm.Session;
 import com.google.gson.Gson;
@@ -154,6 +156,7 @@ public class CommunityFragment extends Fragment {
         }
     }
 
+    // GridView에 연결하는 Adapter로 ImageView와 연결하는 Adapter
     public static class ReviewAdapter extends BaseAdapter{
         ArrayList<ReviewInfo> list;
         Context context;
@@ -195,6 +198,16 @@ public class CommunityFragment extends Fragment {
             if (image != null) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
                 image_view.setImageBitmap(bitmap);
+                View finalConvertView = convertView;
+                image_view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Review review = reviewInfo.getReview();
+                        Intent intent = new Intent(finalConvertView.getContext().getApplicationContext(), ReviewActivity.class);
+                        intent.putExtra("review", review);
+                        finalConvertView.getContext().startActivity(intent);
+                    }
+                });
             }
 
             return convertView;

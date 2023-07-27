@@ -1,6 +1,8 @@
 package com.example.farm;
 
-public class Review {
+import java.io.Serializable;
+
+public class Review implements Serializable {
 
     private String fruit_name;
     private String review_time;

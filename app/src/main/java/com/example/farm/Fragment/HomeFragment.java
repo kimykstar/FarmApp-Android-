@@ -69,17 +69,6 @@ public class HomeFragment extends Fragment {
         view_ll = view.findViewById(R.id.view_ll);
         search = view.findViewById(R.id.searchFruit);
 
-        // ViewPager 화면 크기에 맞게 크기 조절
-        DisplayMetrics metrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager)getActivity().getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-        windowManager.getDefaultDisplay().getMetrics(metrics);
-
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view_ll.getLayoutParams();
-        params.width = (int) (metrics.widthPixels * 0.8);
-        params.height = params.width;
-        view_ll.setLayoutParams(params);
-
-
         Session session = (Session)((MainActivity)getActivity()).getApplication();
         if(session.getSessionId().equals("default"))
             recommend_ll.setVisibility(View.INVISIBLE);
@@ -129,11 +118,7 @@ public class HomeFragment extends Fragment {
             // 제철과일 정보를 띄우기 위한 Adapter생성 및 설정
             ViewPagerAdapter adapter = new ViewPagerAdapter(fruits, R.layout.fruit_img);
             viewPager.setAdapter(adapter);
-            Iterator<PeriodFruit> it = fruits.iterator();
-            while(it.hasNext()){
-                 String text = "#" + it.next().getFruit_name() + "  ";
-                 hashTag.append(text);
-            }
+
 
         } catch (ExecutionException e) {
             e.printStackTrace();
@@ -211,17 +196,25 @@ public class HomeFragment extends Fragment {
     public class FruitViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView fruit_img;
-        private TextView tv_tag;
+        private TextView fruit_name, fruit_period;
 
         public FruitViewHolder(@NonNull View itemView) {
             super(itemView);
             fruit_img = itemView.findViewById(R.id.fruit_img);
+            fruit_name = itemView.findViewById(R.id.fruit_name);
+            fruit_period = itemView.findViewById(R.id.fruit_period);
+
+            int screenWidth = (int)(getResources().getDisplayMetrics().widthPixels * 0.8);
+            fruit_img.getLayoutParams().width = screenWidth;
+            fruit_img.getLayoutParams().height = screenWidth;
         }
 
         public void onBind(PeriodFruit fruit){
             if(fruit != null){
                 int imageResource = getResources().getIdentifier(fruit.getFile_name().toLowerCase(), "drawable", requireContext().getPackageName());
                 fruit_img.setImageResource(imageResource);
+                fruit_name.setText(fruit.getFruit_name());
+                fruit_period.append(fruit.getStart() + "월 ~ " + fruit.getEnd() + "월");
             }
 
         }
@@ -262,14 +255,14 @@ public class HomeFragment extends Fragment {
 
             fruit_img = itemView.findViewById(R.id.fruit_img);
             fruit_name = itemView.findViewById(R.id.fruit_name);
-            nutrition_name = itemView.findViewById(R.id.nutritiion_tv);
+            nutrition_name = itemView.findViewById(R.id.nutrition_tv);
         }
 
         public void onBind(RecommendFruit fruit){
             int imageResource = getResources().getIdentifier(fruit.getFruit_img().toLowerCase(), "drawable", requireContext().getPackageName());
             fruit_img.setImageResource(imageResource);
             fruit_name.setText(fruit.getFruit_name());
-            nutrition_name.setText(fruit.getNutrition_name());
+            nutrition_name.setText(fruit.getNutrition_name() + ": " + fruit.getNutrition_amount() + fruit.getUnit());
         }
     }
 

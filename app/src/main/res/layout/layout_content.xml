@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--본문 글-->
-
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -12,7 +11,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -53,82 +52,93 @@
 
             </RelativeLayout>
 
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:orientation="vertical"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:id="@+id/view_ll">
+                android:orientation="vertical">
+
                 <androidx.appcompat.widget.SearchView
+                    android:id="@+id/searchFruit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/searchFruit"
-                    app:iconifiedByDefault="true"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="30dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginLeft="10dp"
-                    app:queryHint="검색어를 입력하시오"
-                    android:background="@drawable/search">
-
+                    android:layout_marginTop="30dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@color/white"
+                    android:elevation="5dp"
+                    app:iconifiedByDefault="true"
+                    app:queryHint="검색어를 입력하시오">
                 </androidx.appcompat.widget.SearchView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="* 검색 시 돋보기 버튼을 누르고 입력해주세요"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="30dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="이 달의 추천과일!"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_ll"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:elevation="5dp"
+                android:padding="20dp"
+                android:orientation="vertical">
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPager"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    app:layoutManager="androidx.viewpager2.widget.LinearLayoutManager" />
-            </LinearLayout>
+                    android:scaleType="centerCrop"/>
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_tag1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@id/tv_tag"
-                    android:text="#추천과일  #제철과일  "
-                    android:textColor="#1D2285" />
-
-                <TextView
-                    android:id="@+id/tv_tag2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_toRightOf="@id/tv_tag"
-                    android:text="#Farm"
-                    android:textColor="#1D2285" />
-            </LinearLayout>
+                </LinearLayout>
 
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:background="@color/white"
+                android:layout_marginTop="10dp"
                 android:id="@+id/recommend_fl">
                 <TextView
                     android:id="@+id/recommend_tv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
                     android:layout_marginTop="80dp"
                     android:textColor="@color/black"
                     android:textSize="25sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="600dp"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="30dp"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white"
+                    android:elevation="5dp"
+                    android:layout_marginBottom="10dp"
                     android:id="@+id/fruit_list"/>
 
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
 
         </LinearLayout>
     </ScrollView>

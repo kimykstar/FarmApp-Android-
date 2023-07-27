@@ -47,6 +47,7 @@
         <activity android:name=".JoinActivity" />
         <activity android:name=".FruitInfoActivity" />
         <activity android:name=".FruitDetailInfoActivity" />
+        <activity android:name=".ReviewActivity"/>
     </application>
 
 </manifest>

@@ -4,11 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:background="@color/white"
-        android:id="@+id/review_image"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/content"/>
 
 </LinearLayout>
