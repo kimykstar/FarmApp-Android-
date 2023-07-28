@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
 
     private View view;
     private ViewPager2 viewPager;
-    private TextView hashTag, recommend_tv;
+    private TextView recommend_tv;
     private RecyclerView recommend;
     private LinearLayout recommend_ll, view_ll;
     private SearchView search;
@@ -62,7 +62,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.layout_content, container, false);
         viewPager = view.findViewById(R.id.viewPager);
-        hashTag = view.findViewById(R.id.tv_tag1);
         recommend_tv = view.findViewById(R.id.recommend_tv);
         recommend = view.findViewById(R.id.fruit_list);
         recommend_ll = view.findViewById(R.id.recommend_fl);
@@ -70,9 +69,15 @@ public class HomeFragment extends Fragment {
         search = view.findViewById(R.id.searchFruit);
 
         Session session = (Session)((MainActivity)getActivity()).getApplication();
-        if(session.getSessionId().equals("default"))
+        if(session.getSessionId().equals("default")) {
             recommend_ll.setVisibility(View.INVISIBLE);
-        recommend_tv.setText(session.getSessionId() + "님을 위한 과일");
+            recommend_tv.setVisibility(View.INVISIBLE);
+        }else{
+            SharedPreferences preferences = getActivity().getSharedPreferences(session.getSessionId(), Context.MODE_PRIVATE);
+            recommend_tv.setText(session.getSessionId() + "님을 위한 추천 과일");
+            recommend_ll.setVisibility(View.VISIBLE);
+            recommend_tv.setVisibility(View.VISIBLE);
+        }
 
         RecommendTask task = new RecommendTask();
         Calendar calendar = Calendar.getInstance();
@@ -118,8 +123,6 @@ public class HomeFragment extends Fragment {
             // 제철과일 정보를 띄우기 위한 Adapter생성 및 설정
             ViewPagerAdapter adapter = new ViewPagerAdapter(fruits, R.layout.fruit_img);
             viewPager.setAdapter(adapter);
-
-
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -288,10 +291,15 @@ public class HomeFragment extends Fragment {
         @Override
         protected ArrayList<RecommendFruit> doInBackground(String... nutritions) {
             HttpUrl url = new HttpUrl();
-
-            HttpConnection conn = new HttpConnection(url.getUrl() + "recommend?nutrition=" + nutritions[0] + "&nutrition=" + nutritions[1] + "&nutrition=" + nutritions[2]);
+            HttpConnection conn;
+            // nutritions갯수에 따라 제어
+            if(nutritions.length == 1)
+                conn = new HttpConnection(url.getUrl() + "recommend?nutrition=" + nutritions[0]);
+            else if(nutritions.length == 2)
+                conn = new HttpConnection(url.getUrl() + "recommend?nutrition=" + nutritions[0] + "&nutrition=" + nutritions[1]);
+            else
+                conn = new HttpConnection(url.getUrl() + "recommend?nutrition=" + nutritions[0] + "&nutrition=" + nutritions[1] + "&nutrition=" + nutritions[2]);
             conn.setHeader(1000, "GET", false, true);
-            Log.i("Recommend URL : ", url.getUrl() + "recommend?nutrition=" + nutritions[0] + "&nutirition=" + nutritions[1] + "&nutirition=" + nutritions[2]);
             String result = conn.readData();
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             Log.i("recommend Fruits : ", gson.toJson(result));

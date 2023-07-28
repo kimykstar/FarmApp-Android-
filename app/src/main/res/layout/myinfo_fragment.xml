@@ -49,8 +49,15 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginTop="10dp"
+        android:id="@+id/review_btn"
+        android:text="나의 게시물 보기"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/category_btn"
-        android:text="과일추천 영양소 수정"/>
+        android:text="과일추천 영양소 설정"/>
 
     <Button
         android:layout_width="match_parent"

@@ -31,7 +31,7 @@ import com.example.farm.Session;
 public class MyInfoFragment extends Fragment {
 
     private View view;
-    private Button login_btn, guide_btn, logout_btn, category_btn, delete_btn;
+    private Button login_btn, guide_btn, logout_btn, category_btn, delete_btn, review_btn;
 
     @Nullable
     @Override
@@ -43,9 +43,18 @@ public class MyInfoFragment extends Fragment {
         category_btn = view.findViewById(R.id.category_btn);
         logout_btn = view.findViewById(R.id.logout_btn);
         delete_btn = view.findViewById(R.id.delete_user);
+        review_btn = view.findViewById(R.id.review_btn);
 
         Session session = (Session)((MainActivity)getActivity()).getApplication();
         String sessionId = session.getSessionId();
+
+        // 나의 게시글 보기 버튼 클릭 시
+        review_btn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+            }
+        });
 
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override

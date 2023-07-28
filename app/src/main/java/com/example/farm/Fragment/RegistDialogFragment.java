@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.AsyncQueryHandler;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,22 +18,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.loader.content.AsyncTaskLoader;
 
 import com.example.farm.Dialog.RegistDialog;
 import com.example.farm.HttpConnection;
 import com.example.farm.HttpUrl;
+import com.example.farm.PeriodFruit;
 import com.example.farm.R;
 import com.example.farm.Review;
 import com.example.farm.Session;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -47,7 +53,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
 public class RegistDialogFragment extends DialogFragment {
@@ -59,9 +67,12 @@ public class RegistDialogFragment extends DialogFragment {
     EditText flavor, content;
     Bitmap set_image;
     String fruit_name;
+    Spinner choose_fruit;
     public RegistDialogFragment(String fruit_name){
         this.fruit_name = fruit_name;
     }
+
+    public RegistDialogFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -72,8 +83,19 @@ public class RegistDialogFragment extends DialogFragment {
         content = view.findViewById(R.id.content);
         image_button = view.findViewById(R.id.image_button);
         image = view.findViewById(R.id.image_view);
+        choose_fruit = view.findViewById(R.id.choose_btn);
 
         String session_id = ((Session)getActivity().getApplication()).getSessionId();
+
+        // Choose_fruit(Spinner)에 과일 이름들의 데이터를 저장하기 위한 adapter생성
+        ChooseTask chooseTask = new ChooseTask();
+        try {
+            ArrayList<String> names = chooseTask.execute().get();
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item , names);
+            choose_fruit.setAdapter(adapter);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,9 +122,9 @@ public class RegistDialogFragment extends DialogFragment {
                 String body_content = content.getText().toString();
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
                 String current = format.format(new Date());
+                fruit_name = choose_fruit.getSelectedItem().toString();
                 Review review = new Review(fruit_name, current, session_id, body_content, flavor_content);
-                Log.i("Now Time : ", current);
-                Log.i("Fruit Name : ", fruit_name);
+
 
                 // 게시글 정보 텍스트 입력 데이터 서버로 전송
                 try {
@@ -182,6 +204,7 @@ public class RegistDialogFragment extends DialogFragment {
         }
     }
 
+    // 게시글 작성 데이터 서버로 전송
     public class RegistTask extends AsyncTask<Object, Void, String>{
         @Override
         protected String doInBackground(Object... args){
@@ -236,6 +259,21 @@ public class RegistDialogFragment extends DialogFragment {
 
             String result = conn.readData();
             return result;
+        }
+    }
+
+    public class ChooseTask extends AsyncTask<Void, Void, ArrayList<String>>{
+
+        @Override
+        protected ArrayList<String> doInBackground(Void... voids) {
+            HttpUrl url = new HttpUrl();
+            HttpConnection conn = new HttpConnection(url.getUrl() + "fruitnames");
+            conn.setHeader(1000, "GET", false, true);
+
+            String result = conn.readData();
+            Gson gson = new Gson();
+            ArrayList<String> list = gson.fromJson(result, new TypeToken<ArrayList<String>>() {}.getType());
+            return list;
         }
     }
 

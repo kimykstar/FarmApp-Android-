@@ -42,21 +42,18 @@
     </RelativeLayout>
 
     <Spinner
+        android:id="@+id/choose_box"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="10dp"
-        android:entries="@array/fruit"
-        android:id="@+id/choose_box"
-        android:background="@drawable/spinner_layout"/>
+        android:background="@drawable/spinner_layout" />
 
-
-    <GridView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/reviews"
-        android:padding="7dp"
-        android:numColumns="4"/>
-
+        android:layout_height="wrap_content"
+        android:id="@+id/community"
+        android:layout_marginBottom="50dp"
+        android:orientation="vertical"/>
 
 
 </LinearLayout>
