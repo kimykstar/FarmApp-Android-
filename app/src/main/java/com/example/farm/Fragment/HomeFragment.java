@@ -71,6 +71,7 @@ public class HomeFragment extends Fragment {
         Session session = (Session)((MainActivity)getActivity()).getApplication();
         if(session.getSessionId().equals("default")) {
             recommend_ll.setVisibility(View.INVISIBLE);
+            recommend_ll.setVisibility(View.INVISIBLE);
             recommend_tv.setVisibility(View.INVISIBLE);
         }else{
             SharedPreferences preferences = getActivity().getSharedPreferences(session.getSessionId(), Context.MODE_PRIVATE);

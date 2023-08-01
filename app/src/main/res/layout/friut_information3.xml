@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity"
+    android:id="@+id/sliding_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    app:umanoPanelHeight="200dp"
+    app:umanoShadowHeight="4dp"
+    app:umanoOverlay="false"
+    app:umanoParallaxOffset="100dp"
+    app:umanoDragView="@id/dragView"
+    app:umanoScrollableView="@id/listView"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/white"
+            tools:context=".MainActivity">
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/backBtn"
+                android:src="@drawable/left"
+                android:scaleType="fitCenter"
+                android:background="#FFFFFF"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/fruit_img"
+                    android:layout_width="359dp"
+                    android:src="@drawable/koreamelon"
+                    android:layout_height="290dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/fruit_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"/>
+
+
+                <TextView
+                    android:id="@+id/editTextText4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
+                    android:inputType="text"
+                    android:text="함유 영양소(100g 당) "
+                    android:textStyle="bold" />
+
+                <ScrollView
+                    android:layout_width="350dp"
+                    android:layout_height="180dp"
+                    android:background="@drawable/round_button1">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/calories"
+                            android:textColor="@color/black"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/carbohydrate"
+                            android:textColor="@color/black"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/protein"
+                            android:textColor="@color/black"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/fat"
+                            android:textColor="@color/black"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/sugar"
+                            android:textColor="@color/black"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"/>
+
+                    </LinearLayout>
+                </ScrollView>
+
+                <Button
+                    android:id="@+id/detail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="20dp"
+                    android:text="효능 및 성분보기"
+                    android:background="@drawable/round_button1"
+                    app:layout_constraintEnd_toEndOf="@+id/editTextText3"
+                    app:layout_constraintStart_toStartOf="@+id/editTextText3"
+                    app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- The sliding panel content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        >
+
+        <!-- Add the content of the sliding panel here -->
+        <TextView
+            android:id="@+id/fruit_name_sliding_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="30sp" />
+
+        <!-- Add other elements of the sliding panel here -->
+        <!-- ... -->
+
+        <!-- For example, you can add more TextViews or other views to display additional information -->
+        <TextView
+            android:id="@+id/calories_sliding_panel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calories: "
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:id="@+id/carbohydrate_sliding_panel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Carbohydrate: "
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp" />
+
+        <!-- Add more TextViews for displaying other information -->
+        <!-- ... -->
+
+    </LinearLayout>
+
+
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

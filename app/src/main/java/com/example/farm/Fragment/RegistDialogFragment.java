@@ -131,7 +131,6 @@ public class RegistDialogFragment extends DialogFragment {
                     if(review != null) {
                         String message = content.getText().toString();
                         if (message.length() > 0) { // 리뷰 작성 폼에 내용을 입력한 경우만 서버에 리뷰 데이터 전송
-//                            CommunityTask task = new CommunityTask();
                             RegistTask task = new RegistTask();
                             String result = task.execute(set_image, review).get(); // review객체를 서버에 전달 및 결과 반환
                             Log.i("Result Request : ", result);
@@ -262,7 +261,7 @@ public class RegistDialogFragment extends DialogFragment {
         }
     }
 
-    public class ChooseTask extends AsyncTask<Void, Void, ArrayList<String>>{
+    public static class ChooseTask extends AsyncTask<Void, Void, ArrayList<String>>{
 
         @Override
         protected ArrayList<String> doInBackground(Void... voids) {

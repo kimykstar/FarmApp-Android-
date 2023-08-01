@@ -112,8 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:numColumns="2">
-                </GridView>
+                    android:numColumns="2"></GridView>
             </LinearLayout>
 
 

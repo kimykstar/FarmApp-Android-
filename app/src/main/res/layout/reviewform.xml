@@ -72,16 +72,16 @@
         android:layout_marginBottom="10dp"/>
 
     <ImageButton
+        android:id="@+id/dialog"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_below="@+id/content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
         android:background="@color/white"
         android:scaleType="fitXY"
-        android:layout_alignParentRight="true"
-        android:src="@drawable/dialog"
-        android:id="@+id/dialog"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp" />
+        android:src="@drawable/dialog" />
     
     <ImageButton
         android:layout_width="30dp"
@@ -94,6 +94,36 @@
         android:layout_marginRight="10dp"
         android:scaleType="fitXY"
         android:id="@+id/good"/>
+
+    <Button
+        android:layout_width="40dp"
+        android:layout_height="25dp"
+        android:text="수정"
+        android:id="@+id/update_btn"
+        android:textSize="12sp"
+        android:textColor="#F44336"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/content"
+        android:layout_marginRight="10dp"
+        android:visibility="invisible"
+        android:layout_toLeftOf="@+id/delete_btn"
+        android:background="@color/white"
+        />
+
+    <Button
+        android:layout_width="40dp"
+        android:layout_height="25dp"
+        android:text="삭제"
+        android:id="@+id/delete_btn"
+        android:textColor="#F44336"
+        android:textSize="12sp"
+        android:visibility="invisible"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/content"
+        android:layout_alignParentRight="true"
+        android:background="@color/white"/>
+
 
 
 

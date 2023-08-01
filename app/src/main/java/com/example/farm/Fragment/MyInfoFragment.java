@@ -27,6 +27,7 @@ import com.example.farm.LoginActivity;
 import com.example.farm.MainActivity;
 import com.example.farm.R;
 import com.example.farm.Session;
+import com.example.farm.UpdateReview;
 
 public class MyInfoFragment extends Fragment {
 
@@ -52,7 +53,8 @@ public class MyInfoFragment extends Fragment {
         review_btn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-
+                Intent intent = new Intent(getContext(), UpdateReview.class);
+                startActivity(intent);
             }
         });
 
