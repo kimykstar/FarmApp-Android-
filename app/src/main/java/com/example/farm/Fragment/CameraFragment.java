@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import com.example.farm.MainActivity;
 import com.example.farm.R;
 import com.example.farm.TFlite;
+import com.example.farm.VideoActivity;
 
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.Interpreter;
@@ -44,7 +45,7 @@ public class CameraFragment extends Fragment {
 
     private View view;
     private ImageView image;
-    private Button camera_btn;
+    private Button camera_btn, video_btn;
     String mCurrentPhotoPath = null;
     static final int REQUEST_TAKE_PHOTO = 1;
 
@@ -58,6 +59,7 @@ public class CameraFragment extends Fragment {
         view = inflater.inflate(R.layout.start_camera_layout, container, false);
         image = view.findViewById(R.id.image);
         camera_btn = view.findViewById(R.id.camera_open);
+        video_btn = view.findViewById(R.id.video_open);
 
         camera_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +67,15 @@ public class CameraFragment extends Fragment {
                 dispatchTakePictureIntent();
             }
         });
+
+        video_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext().getApplicationContext(), VideoActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         return view;
     }

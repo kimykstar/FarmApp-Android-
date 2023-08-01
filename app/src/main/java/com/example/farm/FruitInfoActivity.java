@@ -22,7 +22,6 @@ import java.util.Iterator;
 
 public class FruitInfoActivity extends AppCompatActivity {
     TextView fruit_name;
-    GridView nutritions;
     Button detail;
     TextView calories, carbohydrate, protein, fat, sugar;
     ImageView fruit_img;
