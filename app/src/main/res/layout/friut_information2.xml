@@ -8,12 +8,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="bottom"
+    android:background="#00FFFFFF"
     app:umanoPanelHeight="200dp"
     app:umanoShadowHeight="4dp"
-    app:umanoOverlay="false"
+    app:umanoOverlay="true"
     app:umanoParallaxOffset="100dp"
-    app:umanoDragView="@id/dragView"
-    app:umanoScrollableView="@id/listView"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -151,35 +150,152 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/dragView"
+        android:id="@+id/main_layout2"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
-        android:clickable="true"
-        android:focusable="false"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        tools:context=".MainActivity">
+
+        <Button
+            android:id="@+id/btn_touch"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="터치잠금"
+            />
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/backBtn2"
+            android:src="@drawable/left"
+            android:scaleType="fitCenter"
+            android:background="#FFFFFF"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical">
+            <TextView
+                android:id="@+id/fruit_name2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/black"
+                android:gravity="center"
+                android:textSize="30sp" />
+
 
             <TextView
+                android:id="@+id/text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="16sp"
-                android:text="Action"
-                android:textSize="24sp" />
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:inputType="text"
+                android:text="효능"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="@color/black"/>
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/effeciency"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/effeciency1"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="20dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/effeciency2"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginTop="20dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/effeciency3"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginTop="20dp"/>
+            </LinearLayout>
         </LinearLayout>
-
-        <!-- 스크롤 해서 보여줄 부분은 listview 또는 custom listview 또는 recyclerview를 사용 -->
-        <ListView
-            android:id="@+id/listView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:text="함유 성분(100g당)"
+                android:layout_marginStart="16dp"
+                android:textSize="25sp"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="비타민류"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:textSize="15sp"
+                android:gravity="center"/>
 
-        </ListView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
 
+                <GridView
+                    android:id="@+id/vitamin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:numColumns="2"></GridView>
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:layout_marginTop="50dp"
+                android:layout_marginBottom="20dp"
+                android:text="그 외 영양소"
+                android:gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <GridView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/etc"
+                    android:gravity="center"
+                    android:numColumns="2">
+
+                </GridView>
+            </LinearLayout>
+        </LinearLayout>
+        <!-- 스크롤 해서 보여줄 부분은 listview 또는 custom listview 또는 recyclerview를 사용 -->
     </LinearLayout>
 
 
