@@ -1,12 +1,5 @@
 package com.example.farm;
 
-<<<<<<< HEAD
-import android.annotation.SuppressLint;
-import android.os.Bundle;
-import android.widget.ImageButton;
-
-import androidx.appcompat.app.AppCompatActivity;
-=======
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
@@ -17,20 +10,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
->>>>>>> 93ceec6520bd00a5ecd3c67775aa2a6810ea6879
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.Preview;
 import androidx.camera.core.VideoCapture;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-<<<<<<< HEAD
-import androidx.core.content.ContextCompat;
-=======
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
->>>>>>> 93ceec6520bd00a5ecd3c67775aa2a6810ea6879
 
 
 import com.google.common.util.concurrent.ListenableFuture;
@@ -48,22 +36,13 @@ public class VideoActivity extends AppCompatActivity {
 
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
 
-<<<<<<< HEAD
-=======
     private static final int REQUEST_CAMERA_PERMISSION = 200;
 
->>>>>>> 93ceec6520bd00a5ecd3c67775aa2a6810ea6879
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_layout);
 
-<<<<<<< HEAD
-
-        video = findViewById(R.id.viewFinder);
-
-        // ProcessCameraProvider는 카메라 제공자
-=======
         video = findViewById(R.id.viewFinder);
 
         // 카메라 권한 설정이 되지 않은 경우
@@ -75,32 +54,10 @@ public class VideoActivity extends AppCompatActivity {
     }
 
     private void setupCamera() {
->>>>>>> 93ceec6520bd00a5ecd3c67775aa2a6810ea6879
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         cameraProviderFuture.addListener(() -> {
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-<<<<<<< HEAD
-                startCameraX(cameraProvider);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }, getExecutor());
-
-    }
-
-    private Executor getExecutor() {
-        return ContextCompat.getMainExecutor(this);
-    }
-
-    @SuppressLint("RestrictedApi")
-    private void startCameraX(ProcessCameraProvider cameraProvider) {
-
-        cameraProvider.unbindAll();
-=======
                 bindPreview(cameraProvider);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -114,29 +71,11 @@ public class VideoActivity extends AppCompatActivity {
     // Preview위젯에 cameraprovider를 bind한다.
     private void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
         Preview preview = new Preview.Builder().build();
->>>>>>> 93ceec6520bd00a5ecd3c67775aa2a6810ea6879
 
         CameraSelector cameraSelector = new CameraSelector.Builder()
                 .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                 .build();
 
-<<<<<<< HEAD
-        Preview preview = new Preview.Builder().build();
-
-        preview.setSurfaceProvider(video.getSurfaceProvider());
-
-        imageCapture = new ImageCapture.Builder()
-                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                .build();
-
-        videoCapture = new VideoCapture.Builder()
-                .setVideoFrameRate(30)
-                .build();
-
-        cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture, videoCapture);
-    }
-}
-=======
         preview.setSurfaceProvider(video.getSurfaceProvider());
 
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner) this, cameraSelector, preview);
@@ -159,4 +98,3 @@ public class VideoActivity extends AppCompatActivity {
         }
     }
 }
->>>>>>> 93ceec6520bd00a5ecd3c67775aa2a6810ea6879
