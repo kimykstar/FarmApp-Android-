@@ -14,9 +14,9 @@
         android:enabled="true"/>
 
     <item
-        android:id="@+id/search"
-        android:title="검색"
-        android:icon="@drawable/searching"
+        android:id="@+id/community"
+        android:title="커뮤니티"
+        android:icon="@drawable/people"
         android:enabled="true"/>
 
     <item

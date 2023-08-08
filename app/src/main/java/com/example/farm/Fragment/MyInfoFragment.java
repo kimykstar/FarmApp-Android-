@@ -138,11 +138,13 @@ public class MyInfoFragment extends Fragment {
             category_btn.setVisibility(View.INVISIBLE);
             logout_btn.setVisibility(View.INVISIBLE);
             delete_btn.setVisibility(View.INVISIBLE);
+            review_btn.setVisibility(View.INVISIBLE);
         }else{
             login_btn.setVisibility(View.INVISIBLE);
             category_btn.setVisibility(View.VISIBLE);
             logout_btn.setVisibility(View.VISIBLE);
             delete_btn.setVisibility(View.VISIBLE);
+            review_btn.setVisibility(View.VISIBLE);
         }
 
         return view;

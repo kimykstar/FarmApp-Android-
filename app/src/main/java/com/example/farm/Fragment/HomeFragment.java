@@ -29,6 +29,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.farm.Fruit;
 import com.example.farm.FruitInfoActivity;
+import com.example.farm.FruitInformationActivity;
 import com.example.farm.HttpConnection;
 import com.example.farm.HttpUrl;
 import com.example.farm.MainActivity;
@@ -95,7 +96,7 @@ public class HomeFragment extends Fragment {
                     Fruit fruit = task.execute(query).get();
                     if(fruit != null) {
                         // intent로 정보 제공 layout으로 넘어감
-                        Intent intent = new Intent(view.getContext().getApplicationContext(), FruitInfoActivity.class);
+                        Intent intent = new Intent(view.getContext().getApplicationContext(), FruitInformationActivity.class);
                         intent.putExtra("info", fruit);
                         startActivity(intent);
                     }else{
@@ -218,7 +219,7 @@ public class HomeFragment extends Fragment {
                 int imageResource = getResources().getIdentifier(fruit.getFile_name().toLowerCase(), "drawable", requireContext().getPackageName());
                 fruit_img.setImageResource(imageResource);
                 fruit_name.setText(fruit.getFruit_name());
-                fruit_period.append(fruit.getStart() + "월 ~ " + fruit.getEnd() + "월");
+                fruit_period.setText("제철 시기 : " + fruit.getStart() + "월 ~ " + fruit.getEnd() + "월");
             }
 
         }

@@ -15,7 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
-    Fragment fragment_home, fragment_camera, fragment_search, fragment_myInfo;
+    Fragment fragment_home, fragment_camera, fragment_community, fragment_myInfo;
 
 
     @Override
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragment_home = new HomeFragment();
         fragment_camera = new CameraFragment();
-        fragment_search = new CommunityFragment();
+        fragment_community = new CommunityFragment();
         fragment_myInfo = new MyInfoFragment();
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -41,11 +41,10 @@ public class MainActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.main_layout, fragment_home).commitAllowingStateLoss();
                         return true;
                     case R.id.camera:
-                        //getSupportFragmentManager().beginTransaction().replace(R.id.main_layout, fragment_camera).commitAllowingStateLoss();
                         getSupportFragmentManager().beginTransaction().replace(R.id.main_layout, fragment_camera).commitAllowingStateLoss();
                         return true;
-                    case R.id.search:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.main_layout, fragment_search).commitAllowingStateLoss();
+                    case R.id.community:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.main_layout, fragment_community).commitAllowingStateLoss();
                         return true;
                     case R.id.my:
                         getSupportFragmentManager().beginTransaction().replace(R.id.main_layout, fragment_myInfo).commitAllowingStateLoss();

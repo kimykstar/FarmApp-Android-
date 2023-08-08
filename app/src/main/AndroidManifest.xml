@@ -50,6 +50,8 @@
         <activity android:name=".FruitDetailInfoActivity" />
         <activity android:name=".ReviewActivity"/>
         <activity android:name=".VideoActivity"/>
+        <activity android:name=".FruitInformationActivity"/>
+        <activity android:name=".UpdateReview"/>
     </application>
 
 </manifest>

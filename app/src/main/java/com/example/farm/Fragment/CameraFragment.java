@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.example.farm.FruitInformationActivity;
 import com.example.farm.MainActivity;
 import com.example.farm.R;
 import com.example.farm.TFlite;
