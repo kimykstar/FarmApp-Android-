@@ -9,10 +9,20 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,10 +79,12 @@ public class FruitInformationActivity extends AppCompatActivity {
         return result;
     }
 
-    private TextView f_name, calories, carbohydrate, protein, fat, sugar;
+    private TextView f_name;
     TextView fruit_name, effective1, effective2, effective3;
     GridView vitaminView, etcView;
     ImageButton back_btn;
+    private PieChart pie_chart, vitamin_chart;
+    private ImageView fruit_img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,18 +94,28 @@ public class FruitInformationActivity extends AppCompatActivity {
         // 과일 정보 받기
         Fruit fruit = (Fruit) getIntent().getSerializableExtra("info");
         f_name = findViewById(R.id.f_name);
-        calories = findViewById(R.id.calories);
-        carbohydrate = findViewById(R.id.carbohydrate);
-        protein = findViewById(R.id.protein);
-        fat = findViewById(R.id.fat);
-        sugar = findViewById(R.id.sugar);
+        pie_chart = findViewById(R.id.pie_chart);
+        fruit_img = findViewById(R.id.fruit_img);
 
-        f_name.setText(fruit.getFruit_name());
-        calories.setText("칼로리 : " + fruit.getCalories() + "Kcal");
-        carbohydrate.setText("탄수화물 : " + fruit.getCarbohydrate() + "g");
-        protein.setText("단백질 : " + fruit.getProtein() + "g");
-        fat.setText("지방 : " + fruit.getFat() + "g");
-        sugar.setText("당 : " + fruit.getSugar() + "g");
+        int img_resource = getResources().getIdentifier(fruit.getFile_name().toLowerCase(), "drawable", getPackageName());
+        fruit_img.setImageResource(img_resource);
+
+        ArrayList<PieEntry> list = new ArrayList<>();
+        list.add(new PieEntry(Float.parseFloat(fruit.getCarbohydrate()), "탄수화물"));
+        list.add(new PieEntry(Float.parseFloat(fruit.getProtein()), "단백질"));
+        list.add(new PieEntry(Float.parseFloat(fruit.getFat()), "지방"));
+        list.add(new PieEntry(Float.parseFloat(fruit.getSugar()), "당"));
+
+        PieDataSet pieDataSet = new PieDataSet(list, "기본 영양정보");
+        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieDataSet.setValueTextColor(Color.BLACK);
+        pieDataSet.setValueTextSize(12f);
+
+        PieData pieData = new PieData(pieDataSet);
+
+        pie_chart.setData(pieData);
+        pie_chart.setCenterText("기본 영양정보");
+        pie_chart.animateXY(1000, 1000);
 
         fruit_name = findViewById(R.id.fruit_name);
         vitaminView = findViewById(R.id.vitamin);
@@ -102,6 +124,7 @@ public class FruitInformationActivity extends AppCompatActivity {
         effective2 = findViewById(R.id.effeciency2);
         effective3 = findViewById(R.id.effeciency3);
         back_btn = findViewById(R.id.backBtn);
+        vitamin_chart = findViewById(R.id.vitamin_chart);
 
         fruit_name.setText(fruit.getFruit_name());
         // 효능 : type을 분류하고 그 안에서 가장 많은 3개를 분별하여 사용
@@ -109,6 +132,8 @@ public class FruitInformationActivity extends AppCompatActivity {
         ArrayList<Nutrition> vitamin = new ArrayList<Nutrition>();
         ArrayList<Nutrition> etc = new ArrayList<Nutrition>();
         Iterator<Nutrition> it = infos.iterator();
+
+
 
         // 함유 영양소 정보 가져오기
         // vitamin과 etc종류를 나누어 vitamin ArrayList와 etc ArrayList에 각각 추가한다.
@@ -119,6 +144,11 @@ public class FruitInformationActivity extends AppCompatActivity {
             else
                 etc.add(temp);
         }
+
+        PieData vitaminPieData = getPieDatas(vitamin);
+        vitamin_chart.setData(vitaminPieData);
+        vitamin_chart.setCenterText("비타민");
+        vitamin_chart.animateXY(1000, 1000);
         // 아래 정의한 AdapterView를 이용하여 Adapter를 설정한다.
         VitaminAdapter vAdapter = new VitaminAdapter(this, vitamin);
         EtcAdapter eAdapter = new EtcAdapter(this, etc);
@@ -140,6 +170,26 @@ public class FruitInformationActivity extends AppCompatActivity {
         });
 
     }
+
+    // PieChart를 위한 PieData를 반환하는 함수(영양소 배열 -> PieData)
+    private PieData getPieDatas(ArrayList<Nutrition> nutritions){
+        Iterator<Nutrition> it = nutritions.iterator();
+        ArrayList<PieEntry> list = new ArrayList<>();
+        while(it.hasNext()){
+            Nutrition temp = it.next();
+            list.add(new PieEntry((float) unitConvertMg(temp), temp.getNutrition()));
+        }
+
+        PieDataSet pieDataSet = new PieDataSet(list, "");
+        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        pieDataSet.setValueTextColor(Color.YELLOW);
+        pieDataSet.setValueTextSize(12f);
+
+        PieData pieData = new PieData(pieDataSet);
+
+        return pieData;
+    }
+
 
     // 함유 영양소에 포함된 비타민류, 그외 카테고리를 위한 GridView Adapter클래스 선언
     public class VitaminAdapter extends BaseAdapter {
