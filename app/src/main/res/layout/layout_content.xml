@@ -68,16 +68,11 @@
                     android:layout_marginRight="10dp"
                     android:background="@color/white"
                     android:elevation="5dp"
-                    app:iconifiedByDefault="true"
-                    app:queryHint="검색어를 입력하시오">
+                    app:iconifiedByDefault="false"
+                    app:queryHint="과일 이름을 입력하세요"
+                    app:searchIcon="@drawable/search_icon">
                 </androidx.appcompat.widget.SearchView>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="* 검색 시 돋보기 버튼을 누르고 입력해주세요"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginBottom="30dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"

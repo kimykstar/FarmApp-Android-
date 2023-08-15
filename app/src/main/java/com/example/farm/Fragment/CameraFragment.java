@@ -5,6 +5,8 @@ import static android.app.Activity.RESULT_OK;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,13 +33,23 @@ import com.example.farm.VideoActivity;
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.Interpreter;
 import org.tensorflow.lite.Tensor;
+import org.tensorflow.lite.support.common.ops.NormalizeOp;
+import org.tensorflow.lite.support.image.ImageProcessor;
+import org.tensorflow.lite.support.image.TensorImage;
+import org.tensorflow.lite.support.image.ops.ResizeOp;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -121,6 +133,9 @@ public class CameraFragment extends Fragment {
                 case REQUEST_TAKE_PHOTO:{
                     if(resultCode == RESULT_OK){
                         File file = new File(mCurrentPhotoPath);
+                        Drawable drawable = getContext().getResources().getDrawable(R.drawable.koreamelon2);
+
+                        Bitmap image1 = drawableToBitmap(drawable);
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
                         if(bitmap != null){
                             ExifInterface ei = new ExifInterface(mCurrentPhotoPath);
@@ -138,26 +153,51 @@ public class CameraFragment extends Fragment {
                                     rotatedBitmap = rotateImage(bitmap, 270);
                                     break;
                             }
-                            // imageView를 Bitmap형식의 이미지로 설정
-                            image.setImageBitmap(rotatedBitmap);
+
+                            // 크기 변환
+                            rotatedBitmap = Bitmap.createScaledBitmap(image1, 224, 224, true);
+                            image.setImageBitmap(image1);
                             // TFlite객체 생성
                             TFlite lite = new TFlite(getContext());
+
+                            // 4byte(float)크기의 3채널 224, 224배열 자료형
+                            ByteBuffer inputBuffer = ByteBuffer.allocateDirect(224 * 224 * 3 * 4);  // 224 X 224크기 3채널 이미지 4바이트
+                            inputBuffer.order(ByteOrder.nativeOrder());
+
+                            int[] pixels = new int[224 * 224];
+                            rotatedBitmap.getPixels(pixels, 0, 224, 0, 0, 224, 224);
+
+                            int pixelIndex = 0;
+                            for (int row = 0; row < 224; row++) {
+                                for (int col = 0; col < 224; col++) {
+                                    final int pixel = pixels[pixelIndex++];
+                                    float r = ((pixel >> 16) & 0xFF) / 255.0f;
+                                    float g = ((pixel >> 8) & 0xFF) / 255.0f;
+                                    float b = (pixel & 0xFF) / 255.0f;
+
+                                    inputBuffer.putFloat(r);
+                                    inputBuffer.putFloat(g);
+                                    inputBuffer.putFloat(b);
+                                }
+                            }
+
                             // Interpreter를 통해 tflite파일 모델을 불러옴
                             Interpreter tflite = lite.getTfliteInterpreter("model_unquant.tflite");
-                            // ByteBuffer를 2차원 형태로 생성하는데 tflite모델의 출력 수만큼 행의 갯수를 정의하고 나머지는 []
-                            ByteBuffer[][] outputs = new ByteBuffer[tflite.getOutputTensorCount()][6];
                             Log.i("TensorFlow count : ", tflite.getOutputTensorCount() + "");
+
                             float[][] outputs2 = new float[1][6];
 
 
-                            // tflite를 실행 인자(인자1 : 전달할 데이터, 인자2 : 출력된 데이터를 받을 데이터)
-                            tflite.run(convertColorBitmapToFloatArray(rotatedBitmap), outputs2);
-                            Log.i("AI Result1 : ", outputs2[0][0] + "");
-                            Log.i("AI Result2 : ", outputs2[0][1] + "");
-                            Log.i("AI Result3 : ", outputs2[0][2] + "");
-                            Log.i("AI Result4 : ", outputs2[0][3] + "");
-                            Log.i("AI Result5 : ", outputs2[0][4] + "");
-                            Log.i("AI Result6 : ", outputs2[0][5] + "");
+//                            // tflite를 실행 인자(인자1 : 전달할 데이터, 인자2 : 출력된 데이터를 받을 데이터)
+                            tflite.run(inputBuffer, outputs2);
+                            String name = findFruitName(outputs2).split(" ")[1];
+                            Log.i("fruit_name : ", name);
+                            Log.i("AI Result1 : ", String.format("%.2f", outputs2[0][0]) + "");
+                            Log.i("AI Result2 : ", String.format("%.2f", outputs2[0][1]) + "");
+                            Log.i("AI Result3 : ", String.format("%.2f", outputs2[0][2]) + "");
+                            Log.i("AI Result4 : ", String.format("%.2f", outputs2[0][3]) + "");
+                            Log.i("AI Result5 : ", String.format("%.2f", outputs2[0][4]) + "");
+                            Log.i("AI Result6 : ", String.format("%.2f", outputs2[0][5]) + "");
                         }
                     }
                     break;
@@ -168,27 +208,45 @@ public class CameraFragment extends Fragment {
         }
     }
 
-    // Bitmap이미지를 받아 컬러형태의 int배열로 변환하는 함수
-    // 4차원 배열로 batch_size, height, width, channels형태의 입력을 받아야 함
-    private float[][][][] convertColorBitmapToFloatArray(Bitmap imageBitmap) {
-        int width = imageBitmap.getWidth();
-        int height = imageBitmap.getHeight();
-        float[][][][] inputArray = new float[1][height][width][3]; // 1 batch, 3 channels (RGB)
+    // 식별된 과일의 Label을 찾는 함수
+    private String findFruitName(float[][] result){
+        String fruit = "";
 
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int pixel = imageBitmap.getPixel(x, y);
-                float red = ((pixel >> 16) & 0xFF) / 224.0f;
-                float green = ((pixel >> 8) & 0xFF) / 224.0f;
-                float blue = (pixel & 0xFF) / 255.0f;
-
-                inputArray[0][y][x][0] = red;
-                inputArray[0][y][x][1] = green;
-                inputArray[0][y][x][2] = blue;
+        int length = result[0].length;
+        int index = 0; // 가장 높은 수치를 지닌 인덱스를 저장
+        float max = -1f;
+        for(int i = 0; i < length; i++){
+            if(Float.compare(max, result[0][i]) < 0){
+                max = result[0][i];
+                index = i;
             }
         }
 
-        return inputArray;
+        Log.i("index", index+"   " + max);
+
+        ArrayList<String> labels = new ArrayList<>();
+        try{
+            InputStream labelInput = getResources().getAssets().open("labels.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(labelInput));
+            String line;
+            int cnt = 0;
+            while(cnt <= index){
+                line = br.readLine();
+                labels.add(line);
+                cnt++;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        fruit = labels.get(index);
+        return fruit;
+    }
+
+    private Bitmap drawableToBitmap(Drawable drawable){
+        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+
+        return bitmap;
     }
 
     // 이미지 회전

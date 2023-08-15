@@ -69,6 +69,8 @@ public class HomeFragment extends Fragment {
         view_ll = view.findViewById(R.id.view_ll);
         search = view.findViewById(R.id.searchFruit);
 
+        search.setSubmitButtonEnabled(true);
+
         Session session = (Session)((MainActivity)getActivity()).getApplication();
         if(session.getSessionId().equals("default")) {
             recommend_ll.setVisibility(View.INVISIBLE);
@@ -99,6 +101,8 @@ public class HomeFragment extends Fragment {
                         Intent intent = new Intent(view.getContext().getApplicationContext(), FruitInformationActivity.class);
                         intent.putExtra("info", fruit);
                         startActivity(intent);
+                        search.setQuery("", false);
+                        search.clearFocus();
                     }else{
                         Toast.makeText(view.getContext().getApplicationContext(), "검색 결과가 없습니다", Toast.LENGTH_LONG).show();
                     }
