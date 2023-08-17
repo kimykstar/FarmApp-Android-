@@ -18,41 +18,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import com.example.farm.FruitInformationActivity;
-import com.example.farm.MainActivity;
+import com.example.farm.CameraActivity;
+import com.example.farm.FruitFresh;
+import com.example.farm.FruitFreshActivity;
 import com.example.farm.R;
 import com.example.farm.TFlite;
 import com.example.farm.VideoActivity;
-
-import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.Interpreter;
-import org.tensorflow.lite.Tensor;
-import org.tensorflow.lite.support.common.ops.NormalizeOp;
-import org.tensorflow.lite.support.image.ImageProcessor;
-import org.tensorflow.lite.support.image.TensorImage;
-import org.tensorflow.lite.support.image.ops.ResizeOp;
-import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CameraFragment extends Fragment {
 
@@ -77,7 +64,9 @@ public class CameraFragment extends Fragment {
         camera_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispatchTakePictureIntent();
+                Intent intent = new Intent(getContext().getApplicationContext(), CameraActivity.class);
+                startActivity(intent);
+                //dispatchTakePictureIntent();
             }
         });
 
@@ -127,7 +116,6 @@ public class CameraFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
         super.onActivityResult(requestCode, resultCode, intent);
-        double result = 0;
         try{
             switch(requestCode){ // 카메라로 촬영한 사진을 모델링파일에 전달하여 결과값을 받는다.
                 case REQUEST_TAKE_PHOTO:{
@@ -155,8 +143,8 @@ public class CameraFragment extends Fragment {
                             }
 
                             // 크기 변환
-                            rotatedBitmap = Bitmap.createScaledBitmap(image1, 224, 224, true);
-                            image.setImageBitmap(image1);
+                            rotatedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 224, 224, true);
+                            image.setImageBitmap(rotatedBitmap);
                             // TFlite객체 생성
                             TFlite lite = new TFlite(getContext());
 
@@ -187,11 +175,20 @@ public class CameraFragment extends Fragment {
 
                             float[][] outputs2 = new float[1][6];
 
-
-//                            // tflite를 실행 인자(인자1 : 전달할 데이터, 인자2 : 출력된 데이터를 받을 데이터)
+                            // tflite를 실행 인자(인자1 : 전달할 데이터, 인자2 : 출력된 데이터를 받을 데이터)
                             tflite.run(inputBuffer, outputs2);
-                            String name = findFruitName(outputs2).split(" ")[1];
-                            Log.i("fruit_name : ", name);
+                            String temp = findFruitName(outputs2);
+                            // 전달값 : 과일의 이름, 사진, 신선도 수치(float)
+                            FruitFresh info = new FruitFresh(temp, rotatedBitmap);
+
+//                            if(Float.parseFloat(temp.split(" ")[3]) * 100 > 80f){
+                            Intent intent2 = new Intent(getContext().getApplicationContext(), FruitFreshActivity.class);
+                            intent2.putExtra("photo", rotatedBitmap);
+                            intent2.putExtra("freshInfo", temp);
+//                            startActivity(intent2);
+//                            }
+
+                            Log.i("fruit_name : ", temp.split(" ")[1]);
                             Log.i("AI Result1 : ", String.format("%.2f", outputs2[0][0]) + "");
                             Log.i("AI Result2 : ", String.format("%.2f", outputs2[0][1]) + "");
                             Log.i("AI Result3 : ", String.format("%.2f", outputs2[0][2]) + "");
@@ -239,7 +236,7 @@ public class CameraFragment extends Fragment {
             e.printStackTrace();
         }
 
-        fruit = labels.get(index);
+        fruit = labels.get(index) + " " + max;
         return fruit;
     }
 

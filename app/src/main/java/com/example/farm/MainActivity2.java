@@ -2,7 +2,6 @@ package com.example.farm;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.AsyncQueryHandler;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -16,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
+
+import com.example.farm.Connection.HttpConnection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

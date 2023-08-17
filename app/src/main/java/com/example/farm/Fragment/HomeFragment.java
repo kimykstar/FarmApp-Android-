@@ -5,14 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,16 +20,14 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.farm.Connection.SearchTask;
 import com.example.farm.Fruit;
-import com.example.farm.FruitInfoActivity;
 import com.example.farm.FruitInformationActivity;
-import com.example.farm.HttpConnection;
+import com.example.farm.Connection.HttpConnection;
 import com.example.farm.HttpUrl;
 import com.example.farm.MainActivity;
-import com.example.farm.MainActivity2;
 import com.example.farm.PeriodFruit;
 import com.example.farm.R;
 import com.example.farm.RecommendFruit;
@@ -314,22 +308,22 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    public static class SearchTask extends AsyncTask<String, Void, Fruit> {
-        @Override
-        protected Fruit doInBackground(String ... fruit) {
-            HttpUrl url = new HttpUrl();
-            HttpConnection conn = new HttpConnection(url.getUrl() + "search?fruit=" + fruit[0]);
-            conn.setHeader(1000, "GET", false, true);
-            // 과일 정보 받기 String형태를 object로 받기?
-            String info = conn.readData();
-            Gson gson = new Gson();
-            Fruit f_info = gson.fromJson(info, Fruit.class);
-            gson = new GsonBuilder().setPrettyPrinting().create();
-
-            String temp = gson.toJson(f_info);
-            Log.i("fruit : ", temp);
-            return f_info;
-        }
-    }
+//    public static class SearchTask extends AsyncTask<String, Void, Fruit> {
+//        @Override
+//        protected Fruit doInBackground(String ... fruit) {
+//            HttpUrl url = new HttpUrl();
+//            HttpConnection conn = new HttpConnection(url.getUrl() + "search?fruit=" + fruit[0]);
+//            conn.setHeader(1000, "GET", false, true);
+//            // 과일 정보 받기 String형태를 object로 받기?
+//            String info = conn.readData();
+//            Gson gson = new Gson();
+//            Fruit f_info = gson.fromJson(info, Fruit.class);
+//            gson = new GsonBuilder().setPrettyPrinting().create();
+//
+//            String temp = gson.toJson(f_info);
+//            Log.i("fruit : ", temp);
+//            return f_info;
+//        }
+//    }
 
 }

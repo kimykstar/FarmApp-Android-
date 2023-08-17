@@ -53,6 +53,8 @@
         <activity android:name=".VideoActivity"/>
         <activity android:name=".FruitInformationActivity"/>
         <activity android:name=".UpdateReview"/>
+        <activity android:name=".FruitFreshActivity"/>
+        <activity android:name=".CameraActivity"/>
     </application>
 
 </manifest>

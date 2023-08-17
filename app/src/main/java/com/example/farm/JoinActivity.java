@@ -1,6 +1,5 @@
 package com.example.farm;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -11,6 +10,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.farm.Connection.HttpConnection;
 
 import java.util.concurrent.ExecutionException;
 

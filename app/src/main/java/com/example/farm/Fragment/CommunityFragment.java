@@ -1,30 +1,22 @@
 package com.example.farm.Fragment;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.app.AlertDialog;
-import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -37,12 +29,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.farm.Dialog.RegistDialog;
-import com.example.farm.DialogBox;
-import com.example.farm.HttpConnection;
+import com.example.farm.Connection.HttpConnection;
 import com.example.farm.HttpUrl;
 import com.example.farm.LoginActivity;
-import com.example.farm.PeriodFruit;
 import com.example.farm.R;
 import com.example.farm.Review;
 import com.example.farm.ReviewActivity;
@@ -51,16 +40,8 @@ import com.example.farm.Session;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Iterator;
-import java.util.concurrent.ExecutionException;
 
 public class CommunityFragment extends Fragment {
 

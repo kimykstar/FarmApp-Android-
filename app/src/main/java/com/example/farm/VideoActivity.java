@@ -44,11 +44,10 @@ import java.util.concurrent.Executor;
 public class VideoActivity extends AppCompatActivity {
 
     PreviewView video;
-    ImageButton back_btn;
-    private ImageCapture imageCapture;
     private ImageView capture_img;
     private Button capture_btn;
     ProcessCameraProvider cameraProvider;
+    private ImageButton back_btn;
 
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
 
@@ -62,7 +61,14 @@ public class VideoActivity extends AppCompatActivity {
         video = findViewById(R.id.viewFinder);
         capture_img = findViewById(R.id.capture_img);
         capture_btn = findViewById(R.id.capture_btn);
+        back_btn = findViewById(R.id.back_btn);
 
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         // 카메라 권한 설정이 되지 않은 경우
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
@@ -96,18 +102,6 @@ public class VideoActivity extends AppCompatActivity {
         Timer timer = new Timer();
         tt.run();
         timer.schedule(tt, 0, 1000);
-
-
-
-//        Handler handler = new Handler();
-//        while(true) {
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    captureImage();
-//                }
-//            }, 1000);
-//        }
 
     }
 
@@ -155,41 +149,6 @@ public class VideoActivity extends AppCompatActivity {
                 finish(); // 앱 종료 또는 다른 조치를 취할 수 있습니다.
             }
         }
-    }
-
-
-//    private class CameraThread extends Thread{
-//        @Override
-//        public void run(){
-//            // Timer를 이용하여
-//        }
-//    }
-
-    public void captureImage(){
-        capture_img.setImageBitmap(video.getBitmap());
-    }
-
-    // Bitmap이미지를 받아 컬러형태의 int배열로 변환하는 함수
-    // 4차원 배열로 batch_size, height, width, channels형태의 입력을 받아야 함
-    private float[][][][] convertColorBitmapToFloatArray(Bitmap imageBitmap) {
-        int width = imageBitmap.getWidth();
-        int height = imageBitmap.getHeight();
-        float[][][][] inputArray = new float[1][height][width][3]; // 1 batch, 3 channels (RGB)
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                int pixel = imageBitmap.getPixel(x, y);
-                float red = ((pixel >> 16) & 0xFF) / 224.0f;
-                float green = ((pixel >> 8) & 0xFF) / 224.0f;
-                float blue = (pixel & 0xFF) / 255.0f;
-
-                inputArray[0][y][x][0] = red;
-                inputArray[0][y][x][1] = green;
-                inputArray[0][y][x][2] = blue;
-            }
-        }
-
-        return inputArray;
     }
 
 

@@ -1,15 +1,9 @@
 package com.example.farm.Dialog;
 
-import static android.app.Activity.RESULT_OK;
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -21,16 +15,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.farm.Fragment.CommunityFragment;
-import com.example.farm.HttpConnection;
+import com.example.farm.Connection.HttpConnection;
 import com.example.farm.HttpUrl;
 import com.example.farm.R;
 import com.example.farm.Review;
 import com.google.gson.Gson;
 
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 public class RegistDialog extends Dialog {

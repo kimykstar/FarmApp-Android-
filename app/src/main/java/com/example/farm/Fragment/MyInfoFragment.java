@@ -21,7 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.farm.Dialog.CustomDialog;
-import com.example.farm.HttpConnection;
+import com.example.farm.Connection.HttpConnection;
 import com.example.farm.HttpUrl;
 import com.example.farm.LoginActivity;
 import com.example.farm.MainActivity;
