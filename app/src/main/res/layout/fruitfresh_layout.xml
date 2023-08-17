@@ -30,19 +30,31 @@
         android:id="@+id/fruit_name"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/fruit_fresh"
+        android:gravity="center"
         android:layout_below="@+id/fruit_name"
         android:layout_marginTop="10dp"
         android:textSize="15sp"
         android:textColor="@color/black"/>
 
-    <com.github.mikephil.charting.charts.BarChart
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="(단위 : %)"
+        android:textColor="@color/black"
+        android:layout_above="@+id/fresh_graph"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="-30dp"/>
+
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_marginTop="20dp"
         android:id="@+id/fresh_graph"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_below="@+id/fruit_fresh"/>
 
 </RelativeLayout>

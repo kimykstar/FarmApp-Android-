@@ -42,54 +42,6 @@ import java.util.List;
 
 public class FruitInformationActivity extends AppCompatActivity {
 
-    // 여러 단위(g, mg, ug)을 mg으로 변환하여 반환해주는 단위 변환기 (함유량을 정렬하기 위해 사용)
-    public double unitConvertMg(Nutrition nutrition){
-        double amount = -1;
-
-        if(nutrition.getUnit().equals("g"))
-            amount = nutrition.getAmount() * 1000;
-        else if(nutrition.getUnit().equals("ug"))
-            amount = nutrition.getAmount() / 1000;
-        else
-            amount = nutrition.getAmount();
-
-        return amount;
-    }
-
-    // 과일의 성분 함유량 배열을 이용하여 정렬 후 가장 많이 포함된 영양소 3개에 대한 효능을 반환한다.
-    public ArrayList<Nutrition> getEffective(ArrayList<Nutrition> nutrition){
-        // ArrayList<Nutrition>자료형을 Nutrition[]배열로 변환하기 위한 작업
-        Nutrition[] nutritions = new Nutrition[nutrition.size()];
-        Iterator<Nutrition> it = nutrition.iterator();
-        int i = 0;
-        while(it.hasNext()){
-            Nutrition temp = it.next();
-            nutritions[i] = temp;
-            i++;
-        }
-        String[] effective = new String[3];
-
-        // 영양소 함유량에 따라 내림차순 정렬 Comparator을 이용
-        Arrays.sort(nutritions, new Comparator<Nutrition>() {
-            @Override
-            public int compare(Nutrition o1, Nutrition o2) {
-                return -Double.compare(unitConvertMg(o1), unitConvertMg(o2));
-            }
-        });
-
-        Log.i("effect1", nutritions[0].getNutrition() + effective[0]);
-        Log.i("effect2", nutritions[1].getNutrition() + effective[1]);
-        Log.i("effect3", nutritions[2].getNutrition() + effective[2]);
-
-        // 결과를 추가 후 반환
-        ArrayList<Nutrition> result = new ArrayList<>();
-        result.add(nutritions[0]);
-        result.add(nutritions[1]);
-        result.add(nutritions[2]);
-
-        return result;
-    }
-
     private TextView f_name;
     TextView fruit_name, effective1, effective2, effective3;
     ImageButton back_btn;
@@ -187,6 +139,54 @@ public class FruitInformationActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    // 여러 단위(g, mg, ug)을 mg으로 변환하여 반환해주는 단위 변환기 (함유량을 정렬하기 위해 사용)
+    public double unitConvertMg(Nutrition nutrition){
+        double amount = -1;
+
+        if(nutrition.getUnit().equals("g"))
+            amount = nutrition.getAmount() * 1000;
+        else if(nutrition.getUnit().equals("ug"))
+            amount = nutrition.getAmount() / 1000;
+        else
+            amount = nutrition.getAmount();
+
+        return amount;
+    }
+
+    // 과일의 성분 함유량 배열을 이용하여 정렬 후 가장 많이 포함된 영양소 3개에 대한 효능을 반환한다.
+    public ArrayList<Nutrition> getEffective(ArrayList<Nutrition> nutrition){
+        // ArrayList<Nutrition>자료형을 Nutrition[]배열로 변환하기 위한 작업
+        Nutrition[] nutritions = new Nutrition[nutrition.size()];
+        Iterator<Nutrition> it = nutrition.iterator();
+        int i = 0;
+        while(it.hasNext()){
+            Nutrition temp = it.next();
+            nutritions[i] = temp;
+            i++;
+        }
+        String[] effective = new String[3];
+
+        // 영양소 함유량에 따라 내림차순 정렬 Comparator을 이용
+        Arrays.sort(nutritions, new Comparator<Nutrition>() {
+            @Override
+            public int compare(Nutrition o1, Nutrition o2) {
+                return -Double.compare(unitConvertMg(o1), unitConvertMg(o2));
+            }
+        });
+
+        Log.i("effect1", nutritions[0].getNutrition() + effective[0]);
+        Log.i("effect2", nutritions[1].getNutrition() + effective[1]);
+        Log.i("effect3", nutritions[2].getNutrition() + effective[2]);
+
+        // 결과를 추가 후 반환
+        ArrayList<Nutrition> result = new ArrayList<>();
+        result.add(nutritions[0]);
+        result.add(nutritions[1]);
+        result.add(nutritions[2]);
+
+        return result;
     }
 
 }

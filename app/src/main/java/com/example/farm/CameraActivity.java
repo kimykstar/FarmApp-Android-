@@ -38,7 +38,6 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 
 public class CameraActivity extends AppCompatActivity {
-
     private static final int REQUEST_CAMERA_PERMISSION = 200;
 
     private ImageButton back_btn;
@@ -205,7 +204,7 @@ public class CameraActivity extends AppCompatActivity {
             } else {
                 // 권한이 거부되었을 때
                 Toast.makeText(this, "카메라 권한이 필요합니다.", Toast.LENGTH_SHORT).show();
-                finish(); // 앱 종료 또는 다른 조치를 취할 수 있습니다.
+                finish();
             }
         }
     }

@@ -64,9 +64,9 @@ public class CameraFragment extends Fragment {
         camera_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext().getApplicationContext(), CameraActivity.class);
-                startActivity(intent);
-                //dispatchTakePictureIntent();
+//                Intent intent = new Intent(getContext().getApplicationContext(), CameraActivity.class);
+//                startActivity(intent);
+                dispatchTakePictureIntent();
             }
         });
 
@@ -77,7 +77,6 @@ public class CameraFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
 
         return view;
     }
@@ -144,7 +143,7 @@ public class CameraFragment extends Fragment {
 
                             // 크기 변환
                             rotatedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 224, 224, true);
-                            image.setImageBitmap(rotatedBitmap);
+//                            image.setImageBitmap(rotatedBitmap);
                             // TFlite객체 생성
                             TFlite lite = new TFlite(getContext());
 
@@ -181,12 +180,12 @@ public class CameraFragment extends Fragment {
                             // 전달값 : 과일의 이름, 사진, 신선도 수치(float)
                             FruitFresh info = new FruitFresh(temp, rotatedBitmap);
 
-//                            if(Float.parseFloat(temp.split(" ")[3]) * 100 > 80f){
+
                             Intent intent2 = new Intent(getContext().getApplicationContext(), FruitFreshActivity.class);
-                            intent2.putExtra("photo", rotatedBitmap);
+                            intent2.putExtra("imageURI", mCurrentPhotoPath);
                             intent2.putExtra("freshInfo", temp);
-//                            startActivity(intent2);
-//                            }
+                            startActivity(intent2);
+
 
                             Log.i("fruit_name : ", temp.split(" ")[1]);
                             Log.i("AI Result1 : ", String.format("%.2f", outputs2[0][0]) + "");
