@@ -57,4 +57,15 @@
         android:layout_marginLeft="30dp"
         android:layout_below="@+id/fruit_fresh"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fresh_graph"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:text="정보보기"
+        android:id="@+id/info_btn"
+        android:background="#B0EDB3"/>
+
 </RelativeLayout>

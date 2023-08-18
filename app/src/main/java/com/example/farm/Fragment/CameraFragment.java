@@ -3,6 +3,7 @@ package com.example.farm.Fragment;
 import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
@@ -20,12 +21,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import com.example.farm.CameraActivity;
-import com.example.farm.FruitFresh;
 import com.example.farm.FruitFreshActivity;
+import android.Manifest;
 import com.example.farm.R;
 import com.example.farm.TFlite;
 import com.example.farm.VideoActivity;
@@ -48,6 +50,7 @@ public class CameraFragment extends Fragment {
     private Button camera_btn, video_btn;
     String mCurrentPhotoPath = null;
     static final int REQUEST_TAKE_PHOTO = 1;
+    private static final int REQUEST_CAMERA_PERMISSION = 200;
 
 //    Map<Integer, Object> outputs = new HashMap<>();
 
@@ -66,7 +69,11 @@ public class CameraFragment extends Fragment {
             public void onClick(View v) {
 //                Intent intent = new Intent(getContext().getApplicationContext(), CameraActivity.class);
 //                startActivity(intent);
-                dispatchTakePictureIntent();
+                if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+                }else {
+                    dispatchTakePictureIntent();
+                }
             }
         });
 
@@ -185,7 +192,6 @@ public class CameraFragment extends Fragment {
                             intent2.putExtra("imageURI", mCurrentPhotoPath);
                             intent2.putExtra("freshInfo", temp);
                             startActivity(intent2);
-
 
                             Log.i("fruit_name : ", temp.split(" ")[1]);
                             Log.i("AI Result1 : ", String.format("%.2f", outputs2[0][0]) + "");

@@ -11,12 +11,14 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.farm.Connection.SearchTask;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -29,12 +31,14 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class FruitFreshActivity extends AppCompatActivity {
     private ImageView fruit_image;
     private TextView fruit_name, fruit_fresh;
     private HorizontalBarChart fresh_graph;
     private ImageButton back_btn;
+    private Button info_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +57,8 @@ public class FruitFreshActivity extends AppCompatActivity {
         fruit_fresh = findViewById(R.id.fruit_fresh);
         fresh_graph = findViewById(R.id.fresh_graph);
         back_btn = findViewById(R.id.back_btn);
+        info_btn = findViewById(R.id.info_btn);
 
-
-//        FruitFresh info = (FruitFresh) intent.getSerializableExtra("freshInfo");
         Bitmap photo = null;
 
         // Intent로부터 Image의 URI를 받아 Bitmap으로 변환한다.
@@ -132,6 +135,24 @@ public class FruitFreshActivity extends AppCompatActivity {
         yRight.setEnabled(false);
 
         fresh_graph.animateY(1000);
+
+        info_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), FruitInformationActivity.class);
+                SearchTask task = new SearchTask();
+                Fruit fruit;
+                try {
+                    fruit = task.execute(f_name).get();
+                } catch (ExecutionException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                intent.putExtra("info", fruit);
+                startActivity(intent);
+            }
+        });
     }
 
     private BarDataSet getBarDataSet(ArrayList<Float> data){
