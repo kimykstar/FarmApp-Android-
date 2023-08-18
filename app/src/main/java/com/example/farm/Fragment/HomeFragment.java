@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment {
     private ViewPager2 viewPager;
     private TextView recommend_tv;
     private RecyclerView recommend;
-    private LinearLayout recommend_ll, view_ll;
+    private LinearLayout recommend_ll;
     private SearchView search;
 
     @Nullable
@@ -60,7 +60,6 @@ public class HomeFragment extends Fragment {
         recommend_tv = view.findViewById(R.id.recommend_tv);
         recommend = view.findViewById(R.id.fruit_list);
         recommend_ll = view.findViewById(R.id.recommend_fl);
-        view_ll = view.findViewById(R.id.view_ll);
         search = view.findViewById(R.id.searchFruit);
 
         search.setSubmitButtonEnabled(true);

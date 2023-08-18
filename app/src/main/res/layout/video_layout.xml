@@ -7,6 +7,8 @@
     <androidx.camera.view.PreviewView
         android:layout_width="300dp"
         android:layout_height="300dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="70dp"
         android:id="@+id/viewFinder"/>
 
 
@@ -21,9 +23,10 @@
         android:id="@+id/back_btn"/>
 
     <ImageView
-        android:layout_width="400dp"
-        android:layout_height="400dp"
-        android:layout_marginTop="300dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="400dp"
+        android:layout_gravity="center_horizontal"
         android:id="@+id/capture_img"/>
 
     <Button

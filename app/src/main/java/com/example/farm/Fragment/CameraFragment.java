@@ -185,7 +185,6 @@ public class CameraFragment extends Fragment {
                             tflite.run(inputBuffer, outputs2);
                             String temp = findFruitName(outputs2);
                             // 전달값 : 과일의 이름, 사진, 신선도 수치(float)
-                            FruitFresh info = new FruitFresh(temp, rotatedBitmap);
 
 
                             Intent intent2 = new Intent(getContext().getApplicationContext(), FruitFreshActivity.class);
