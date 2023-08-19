@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/left"
+        android:background="@color/white"
+        android:id="@+id/back_btn"/>
+
+    <ImageView
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_below="@+id/back_btn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:id="@+id/fruit_img"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fruit_img"
+        android:textSize="35sp"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/black"
+        android:id="@+id/fruit_name"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fruit_fresh"
+        android:gravity="center"
+        android:layout_below="@+id/fruit_name"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
+        android:textColor="@color/black"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(단위 : %)"
+        android:textColor="@color/black"
+        android:layout_above="@+id/fresh_graph"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="-30dp"/>
+
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/fresh_graph"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_below="@+id/fruit_fresh"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fresh_graph"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:text="정보보기"
+        android:id="@+id/info_btn"
+        android:background="#B0EDB3"/>
+
+</RelativeLayout>

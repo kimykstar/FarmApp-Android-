@@ -1,4 +1,4 @@
-package com.example.farm;
+package com.example.farm.Connection;
 
 import android.graphics.Bitmap;
 import android.util.Log;

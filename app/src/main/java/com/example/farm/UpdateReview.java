@@ -1,6 +1,5 @@
 package com.example.farm;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -18,11 +17,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.farm.Fragment.CommunityFragment;
+import com.example.farm.Connection.HttpConnection;
 import com.example.farm.Fragment.UpdateDialogFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

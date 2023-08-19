@@ -2,9 +2,7 @@ package com.example.farm.Fragment;
 
 import static android.app.Activity.RESULT_OK;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.content.AsyncQueryHandler;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,35 +25,23 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.loader.content.AsyncTaskLoader;
 
-import com.example.farm.Dialog.RegistDialog;
-import com.example.farm.HttpConnection;
+import com.example.farm.Connection.HttpConnection;
 import com.example.farm.HttpUrl;
-import com.example.farm.PeriodFruit;
 import com.example.farm.R;
 import com.example.farm.Review;
 import com.example.farm.Session;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
 public class RegistDialogFragment extends DialogFragment {

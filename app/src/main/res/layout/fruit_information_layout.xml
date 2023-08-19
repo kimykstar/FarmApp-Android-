@@ -30,7 +30,6 @@
             <ImageView
                 android:id="@+id/fruit_img"
                 android:layout_width="359dp"
-                android:src="@drawable/koreamelon"
                 android:layout_height="290dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
@@ -82,147 +81,84 @@
         android:background="@color/white"
         tools:context=".MainActivity">
 
-        <ScrollView
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:orientation="vertical">
+                <TextView
+                    android:id="@+id/fruit_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="30sp" />
+
+
+                <TextView
+                    android:id="@+id/text1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:inputType="text"
+                    android:text="효능"
+                    android:textStyle="bold"
+                    android:textSize="25sp"
+                    android:textColor="@color/black"/>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:id="@+id/effeciency"
                     android:orientation="vertical">
                     <TextView
-                        android:id="@+id/fruit_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text=""
+                        android:id="@+id/effeciency1"
+                        android:textSize="18sp"
                         android:textColor="@color/black"
-                        android:gravity="center"
-                        android:textSize="30sp" />
-
+                        android:layout_marginTop="20dp"/>
 
                     <TextView
-                        android:id="@+id/text1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/effeciency2"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:layout_marginTop="20dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/effeciency3"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:layout_marginTop="20dp"/>
+
+                    <Button
+                        android:layout_marginTop="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_gravity="right"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:inputType="text"
-                        android:text="효능"
-                        android:textStyle="bold"
-                        android:textSize="25sp"
-                        android:textColor="@color/black"/>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/effeciency"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/effeciency1"
-                            android:textSize="18sp"
-                            android:textColor="@color/black"
-                            android:layout_marginTop="20dp"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/effeciency2"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            android:layout_marginTop="20dp"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/effeciency3"
-                            android:textColor="@color/black"
-                            android:textSize="18sp"
-                            android:layout_marginTop="20dp"/>
-                    </LinearLayout>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/text2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:text="함유 성분(100g당)"
-                        android:layout_marginStart="16dp"
-                        android:textSize="25sp"
-                        android:textColor="@color/black"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="비타민류"
-                        android:layout_marginTop="20dp"
-                        android:layout_marginBottom="20dp"
-                        android:textSize="15sp"
-                        android:gravity="center"/>
-
-                    <com.github.mikephil.charting.charts.PieChart
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/vitamin_chart"/>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <GridView
-                            android:id="@+id/vitamin"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:numColumns="2"></GridView>
-                    </LinearLayout>
-
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:layout_marginTop="50dp"
-                        android:layout_marginBottom="20dp"
-                        android:text="그 외 영양소"
-                        android:gravity="center"/>
-
-                    <com.github.mikephil.charting.charts.PieChart
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/etc_chart"/>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <GridView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/etc"
-                            android:gravity="center"
-                            android:numColumns="2">
-
-                        </GridView>
-                    </LinearLayout>
+                        android:text="함유 영양소 보기"
+                        android:id="@+id/nutrition_btn"/>
                 </LinearLayout>
             </LinearLayout>
-        </ScrollView>
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
