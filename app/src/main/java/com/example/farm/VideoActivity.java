@@ -107,7 +107,7 @@ public class VideoActivity extends AppCompatActivity {
                             TFlite lite = new TFlite(getApplicationContext());
                             // Interpreter를 통해 tflite파일 모델을 불러옴
                             Interpreter tflite = lite.getTfliteInterpreter("model_unquant.tflite");
-                            ByteBuffer inputBuffer = bitmapToByteBuffer(video.getBitmap());
+                            inputBuffer.rewind();
                             float[][] outputs2 = new float[1][6];
                             tflite.run(inputBuffer, outputs2);
                             Log.i("AI Result1 : ", String.format("%.2f", outputs2[0][0]) + "");

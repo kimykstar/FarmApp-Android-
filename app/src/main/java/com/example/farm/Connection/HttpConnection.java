@@ -53,9 +53,6 @@ public class HttpConnection {
             conn.setDoOutput(output);
         } catch (ProtocolException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            Log.e("Set Header Error", "setHeader Error");
-            e.printStackTrace();
         }
     }
 
