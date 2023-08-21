@@ -5,6 +5,8 @@ import static com.example.farm.Fragment.CameraFragment.rotateImage;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -69,6 +71,9 @@ public class FruitFreshActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         Log.i("Image URI : ", imageURI.toString());
+
+        Drawable drawable = this.getResources().getDrawable(R.drawable.koreamelon2);
+        photo = ((BitmapDrawable)drawable).getBitmap();
 //        try {
 //            InputStream inputStream = getContentResolver().openInputStream(imageURI);
 //            photo = BitmapFactory.decodeStream(inputStream);
@@ -97,7 +102,8 @@ public class FruitFreshActivity extends AppCompatActivity {
                     rotatedBitmap = rotateImage(photo, 270);
                     break;
             }
-            fruit_image.setImageBitmap(rotatedBitmap);
+
+            fruit_image.setImageBitmap(photo);
         }
 
         fruit_name.setText(f_name);

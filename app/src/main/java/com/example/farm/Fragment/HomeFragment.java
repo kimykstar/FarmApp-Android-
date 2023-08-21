@@ -254,7 +254,6 @@ public class HomeFragment extends Fragment {
         TextView nutrition_name;
         public RecommendViewHolder(@NonNull View itemView) {
             super(itemView);
-
             fruit_img = itemView.findViewById(R.id.fruit_img);
             fruit_name = itemView.findViewById(R.id.fruit_name);
             nutrition_name = itemView.findViewById(R.id.nutrition_tv);

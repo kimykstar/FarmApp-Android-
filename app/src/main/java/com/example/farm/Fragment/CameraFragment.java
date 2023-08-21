@@ -149,7 +149,7 @@ public class CameraFragment extends Fragment {
                             }
 
                             // 크기 변환
-                            rotatedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 224, 224, true);
+                            rotatedBitmap = Bitmap.createScaledBitmap(image1, 224, 224, true);
 //                            image.setImageBitmap(rotatedBitmap);
                             // TFlite객체 생성
                             TFlite lite = new TFlite(getContext());

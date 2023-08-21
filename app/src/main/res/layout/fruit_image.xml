@@ -5,11 +5,12 @@
     android:background="@drawable/grayborder"
     android:padding="10dp"
     android:elevation="10dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center">
 
     <ImageView
-        android:layout_width="230dp"
-        android:layout_height="230dp"
+        android:layout_width="170dp"
+        android:layout_height="170dp"
         android:scaleType="fitXY"
         android:src="@drawable/strawberry"
         android:id="@+id/fruit_img"/>
@@ -31,6 +32,7 @@
         android:textColor="@color/black"
         android:layout_gravity="center"
         android:layout_marginBottom="20dp"
+        android:textSize="10sp"
         android:id="@+id/nutrition_tv"/>
 
 </LinearLayout>
