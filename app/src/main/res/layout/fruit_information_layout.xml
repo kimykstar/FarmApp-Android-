@@ -27,16 +27,33 @@
             android:orientation="vertical"
             android:gravity="center">
 
-            <ImageView
-                android:id="@+id/fruit_img"
-                android:layout_width="359dp"
-                android:layout_height="290dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/fruit_img"
+                    android:layout_width="359dp"
+                    android:layout_height="290dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:text="과일 단면"
+                    android:layout_gravity="right|bottom"
+                    android:layout_marginRight="70dp"
+                    android:layout_marginBottom="20dp"
+                    android:scaleType="fitXY"
+                    android:id="@+id/ar_Btn"
+                    android:src="@drawable/ar"
+                    android:background="@color/white"/>
+
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/f_name"

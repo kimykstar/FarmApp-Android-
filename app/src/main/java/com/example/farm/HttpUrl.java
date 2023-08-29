@@ -8,8 +8,11 @@ public class HttpUrl {
     private String url;
 
     public HttpUrl(){
-        this.url = "http://43.201.66.244:8081/";
+        this.url = "http://13.125.180.255:8082/";
     }
+//    public HttpUrl(){
+//        this.url = "http://localhost:8082/";
+//    }
 
     public String getUrl(){
         return url;

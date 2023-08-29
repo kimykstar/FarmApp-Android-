@@ -119,7 +119,6 @@ public class CommunityFragment extends Fragment {
                 }else{
                     Toast.makeText(getContext(), "게시물 받아오기 오류", Toast.LENGTH_LONG);
                 }
-
             }
 
             @Override

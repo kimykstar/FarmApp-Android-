@@ -67,13 +67,22 @@ public class HomeFragment extends Fragment {
         Session session = (Session)((MainActivity)getActivity()).getApplication();
         if(session.getSessionId().equals("default")) {
             recommend_ll.setVisibility(View.INVISIBLE);
-            recommend_ll.setVisibility(View.INVISIBLE);
             recommend_tv.setVisibility(View.INVISIBLE);
         }else{
             SharedPreferences preferences = getActivity().getSharedPreferences(session.getSessionId(), Context.MODE_PRIVATE);
-            recommend_tv.setText(session.getSessionId() + "님을 위한 추천 과일");
-            recommend_ll.setVisibility(View.VISIBLE);
-            recommend_tv.setVisibility(View.VISIBLE);
+            Map<String, String> list = (Map<String, String>) preferences.getAll();
+            Iterator<String> it = list.values().iterator();
+            boolean flag = false;
+            while(it.hasNext())
+                if(it.next().equals("true")) {
+                    flag = true;
+                    break;
+                }
+            if(flag == true) {
+                recommend_tv.setText(session.getSessionId() + "님을 위한 추천 과일");
+                recommend_ll.setVisibility(View.VISIBLE);
+                recommend_tv.setVisibility(View.VISIBLE);
+            }
         }
 
         RecommendTask task = new RecommendTask();
@@ -209,6 +218,23 @@ public class HomeFragment extends Fragment {
             int screenWidth = (int)(getResources().getDisplayMetrics().widthPixels * 0.8);
             fruit_img.getLayoutParams().width = screenWidth;
             fruit_img.getLayoutParams().height = screenWidth;
+
+            fruit_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext().getApplicationContext(), FruitInformationActivity.class);
+                    SearchTask task = new SearchTask();
+                    try {
+                        Fruit fruit_info = task.execute(fruit_name.getText().toString()).get();
+                        intent.putExtra("info", fruit_info);
+                        startActivity(intent);
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
         }
 
         public void onBind(PeriodFruit fruit){
@@ -264,6 +290,23 @@ public class HomeFragment extends Fragment {
             fruit_img.setImageResource(imageResource);
             fruit_name.setText(fruit.getFruit_name());
             nutrition_name.setText(fruit.getNutrition_name() + ": " + fruit.getNutrition_amount() + fruit.getUnit());
+            fruit_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext().getApplicationContext(), FruitInformationActivity.class);
+                    SearchTask task = new SearchTask();
+                    try {
+                        Fruit info = task.execute(fruit_name.getText().toString()).get();
+                        intent.putExtra("info", info);
+                        startActivity(intent);
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+            });
         }
     }
 
@@ -305,23 +348,4 @@ public class HomeFragment extends Fragment {
             return fruits;
         }
     }
-
-//    public static class SearchTask extends AsyncTask<String, Void, Fruit> {
-//        @Override
-//        protected Fruit doInBackground(String ... fruit) {
-//            HttpUrl url = new HttpUrl();
-//            HttpConnection conn = new HttpConnection(url.getUrl() + "search?fruit=" + fruit[0]);
-//            conn.setHeader(1000, "GET", false, true);
-//            // 과일 정보 받기 String형태를 object로 받기?
-//            String info = conn.readData();
-//            Gson gson = new Gson();
-//            Fruit f_info = gson.fromJson(info, Fruit.class);
-//            gson = new GsonBuilder().setPrettyPrinting().create();
-//
-//            String temp = gson.toJson(f_info);
-//            Log.i("fruit : ", temp);
-//            return f_info;
-//        }
-//    }
-
 }

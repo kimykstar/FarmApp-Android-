@@ -72,14 +72,9 @@ public class FruitFreshActivity extends AppCompatActivity {
         }
         Log.i("Image URI : ", imageURI.toString());
 
-        Drawable drawable = this.getResources().getDrawable(R.drawable.koreamelon2);
-        photo = ((BitmapDrawable)drawable).getBitmap();
-//        try {
-//            InputStream inputStream = getContentResolver().openInputStream(imageURI);
-//            photo = BitmapFactory.decodeStream(inputStream);
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
+//        Drawable drawable = this.getResources().getDrawable(R.drawable.koreamelon2);
+//        photo = ((BitmapDrawable)drawable).getBitmap();
+
 
         if(photo != null) {
             ExifInterface ei = null;
@@ -103,7 +98,7 @@ public class FruitFreshActivity extends AppCompatActivity {
                     break;
             }
 
-            fruit_image.setImageBitmap(photo);
+            fruit_image.setImageBitmap(rotatedBitmap);
         }
 
         fruit_name.setText(f_name);

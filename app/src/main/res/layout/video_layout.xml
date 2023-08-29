@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-
-    <androidx.camera.view.PreviewView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="70dp"
-        android:id="@+id/viewFinder"/>
 
 
     <ImageButton
@@ -22,12 +14,26 @@
         android:layout_marginLeft="10dp"
         android:id="@+id/back_btn"/>
 
-    <ImageView
+    <androidx.camera.view.PreviewView
+        android:id="@+id/viewFinder"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_marginTop="400dp"
+        android:layout_centerInParent="true"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/capture_img"/>
+        android:layout_below="@id/back_btn"
+        android:layout_marginTop="20dp"/>
+
+
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/viewFinder"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:id="@+id/fresh_chart" />
+
 
     <Button
         android:layout_width="wrap_content"
@@ -36,7 +42,4 @@
         android:layout_marginLeft="350dp"
         android:id="@+id/capture_btn"/>
 
-
-
-
-</FrameLayout>
+</RelativeLayout>

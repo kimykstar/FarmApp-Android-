@@ -12,9 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-
 import com.example.farm.Connection.HttpConnection;
 import com.example.farm.HttpUrl;
 import com.example.farm.R;
@@ -25,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.concurrent.ExecutionException;
 
 public class RegistDialog extends Dialog {
-
     ImageButton close_btn, image_button;
     ImageView image;
     Button regist_btn;
@@ -99,7 +96,6 @@ public class RegistDialog extends Dialog {
             }
         });
     }
-
 
 
     public class CommunityTask extends AsyncTask<Review, Void, String>{
