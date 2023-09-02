@@ -16,4 +16,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Farm"
 include ':app'
-include ':unityLibrary'

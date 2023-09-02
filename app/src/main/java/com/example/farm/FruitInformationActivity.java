@@ -1,7 +1,9 @@
 package com.example.farm;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -48,6 +50,7 @@ public class FruitInformationActivity extends AppCompatActivity {
     private PieChart pie_chart;
     private ImageView fruit_img;
     private Button nutrition_btn;
+    private ImageButton ar_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class FruitInformationActivity extends AppCompatActivity {
         f_name = findViewById(R.id.f_name);
         pie_chart = findViewById(R.id.pie_chart);
         fruit_img = findViewById(R.id.fruit_img);
+        ar_btn = findViewById(R.id.ar_btn);
 //        etc_chart = findViewById(R.id.etc_chart);
 
         int img_resource = getResources().getIdentifier(fruit.getFile_name().toLowerCase(), "drawable", getPackageName());
@@ -136,6 +140,24 @@ public class FruitInformationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        ar_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
+                HttpUrl url = new HttpUrl();
+                String fruit_file = fruit.getFile_name();
+                String serverPath = url.getUrl();
+                Uri intentUri =
+                        Uri.parse("https://arvr.google.com/scene-viewer/1.0").buildUpon()
+                                .appendQueryParameter("file", serverPath + "arimage?fruit_name=" + fruit_file)
+                                .appendQueryParameter("mode", "3D_preferred")
+                                .build();
+                sceneViewerIntent.setData(intentUri);
+                sceneViewerIntent.setPackage("com.google.ar.core");
+                startActivity(sceneViewerIntent);
             }
         });
 
