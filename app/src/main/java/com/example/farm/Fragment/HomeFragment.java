@@ -218,17 +218,6 @@ public class HomeFragment extends Fragment {
             int screenWidth = (int)(getResources().getDisplayMetrics().widthPixels * 0.8);
             fruit_img.getLayoutParams().width = screenWidth;
             fruit_img.getLayoutParams().height = screenWidth;
-<<<<<<< HEAD
-
-            fruit_img.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getContext().getApplicationContext(), FruitInformationActivity.class);
-                    SearchTask task = new SearchTask();
-                    try {
-                        Fruit fruit_info = task.execute(fruit_name.getText().toString()).get();
-                        intent.putExtra("info", fruit_info);
-=======
             fruit_img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -237,7 +226,7 @@ public class HomeFragment extends Fragment {
                     try {
                         Fruit info = task.execute(fruit_name.getText().toString()).get();
                         intent.putExtra("info", info);
->>>>>>> android
+
                         startActivity(intent);
                     } catch (ExecutionException e) {
                         throw new RuntimeException(e);
@@ -376,9 +365,4 @@ public class HomeFragment extends Fragment {
             return fruits;
         }
     }
-<<<<<<< HEAD
-=======
-
-
->>>>>>> android
 }
