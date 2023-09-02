@@ -63,6 +63,7 @@ public class FruitInformationActivity extends AppCompatActivity {
         pie_chart = findViewById(R.id.pie_chart);
         fruit_img = findViewById(R.id.fruit_img);
         ar_btn = findViewById(R.id.ar_Btn);
+
 //        etc_chart = findViewById(R.id.etc_chart);
 
         int img_resource = getResources().getIdentifier(fruit.getFile_name().toLowerCase(), "drawable", getPackageName());
@@ -148,10 +149,14 @@ public class FruitInformationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
+                HttpUrl url = new HttpUrl();
+                String fruit_file = fruit.getFile_name();
+                String serverPath = url.getUrl();
                 Uri intentUri =
                         Uri.parse("https://arvr.google.com/scene-viewer/1.0").buildUpon()
-                                .appendQueryParameter("file", "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF/Avocado.gltf")
-                                .appendQueryParameter("mode", "ar_preferred")
+                                .appendQueryParameter("file", serverPath + "arimage?fruit_name=" + fruit_file)
+                                .appendQueryParameter("mode", "3D_preferred")
+
                                 .build();
                 sceneViewerIntent.setData(intentUri);
                 sceneViewerIntent.setPackage("com.google.ar.core");

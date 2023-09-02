@@ -218,6 +218,7 @@ public class HomeFragment extends Fragment {
             int screenWidth = (int)(getResources().getDisplayMetrics().widthPixels * 0.8);
             fruit_img.getLayoutParams().width = screenWidth;
             fruit_img.getLayoutParams().height = screenWidth;
+<<<<<<< HEAD
 
             fruit_img.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -227,6 +228,16 @@ public class HomeFragment extends Fragment {
                     try {
                         Fruit fruit_info = task.execute(fruit_name.getText().toString()).get();
                         intent.putExtra("info", fruit_info);
+=======
+            fruit_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SearchTask task = new SearchTask();
+                    Intent intent = new Intent(view.getContext().getApplicationContext(), FruitInformationActivity.class);
+                    try {
+                        Fruit info = task.execute(fruit_name.getText().toString()).get();
+                        intent.putExtra("info", info);
+>>>>>>> android
                         startActivity(intent);
                     } catch (ExecutionException e) {
                         throw new RuntimeException(e);
@@ -283,6 +294,23 @@ public class HomeFragment extends Fragment {
             fruit_img = itemView.findViewById(R.id.fruit_img);
             fruit_name = itemView.findViewById(R.id.fruit_name);
             nutrition_name = itemView.findViewById(R.id.nutrition_tv);
+            fruit_img.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SearchTask task = new SearchTask();
+                    Intent intent = new Intent(view.getContext().getApplicationContext(), FruitInformationActivity.class);
+                    try {
+                        Fruit info = task.execute(fruit_name.getText().toString()).get();
+                        intent.putExtra("info", info);
+                        startActivity(intent);
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+            });
         }
 
         public void onBind(RecommendFruit fruit){
@@ -348,4 +376,9 @@ public class HomeFragment extends Fragment {
             return fruits;
         }
     }
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> android
 }
