@@ -126,14 +126,14 @@ public class UpdateDialogFragment extends DialogFragment {
                 // 이미지가 수정되지 않은 경우
                 if (is_changed == false) {
                     try {
-                        result = bodyTask.execute(null, new Review(fruit_name, review_time, user_id, up_content, up_flavor), s_fileName).get();
+                        result = bodyTask.execute(null, new Review(fruit_name, review_time, user_id, up_content, up_flavor, ""), s_fileName).get();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                 } else { // 이미지가 수정된 경우
                     try {
-                        result = allTask.execute(set_image, new Review(fruit_name, review_time, user_id, up_content, up_flavor), s_fileName).get();
+                        result = allTask.execute(set_image, new Review(fruit_name, review_time, user_id, up_content, up_flavor, ""), s_fileName).get();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

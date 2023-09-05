@@ -1,5 +1,6 @@
 package com.example.farm;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -164,6 +165,7 @@ public class UpdateReview extends AppCompatActivity{
 
 
                 delete_btn.setOnClickListener(new View.OnClickListener() {
+                    @SuppressLint("SuspiciousIndentation")
                     @Override
                     public void onClick(View v) {
                         DeleteTask task = new DeleteTask();
@@ -173,7 +175,7 @@ public class UpdateReview extends AppCompatActivity{
                         String cont = content.getText().toString();
                         String fla = flavor.getText().toString();
                         try {
-                            String result = task.execute(new Review(f_name, r_time, u_id, cont, fla)).get();
+                            String result = task.execute(new Review(f_name, r_time, u_id, cont, fla, "")).get();
 
                             // DB작업 성공 시 안내 메시지와 게시글 삭제
                             if(result.equals("true"))

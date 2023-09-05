@@ -1,6 +1,7 @@
 package com.example.farm.Fragment;
 
 import android.app.AlertDialog;
+import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,10 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -37,6 +40,7 @@ import com.example.farm.Review;
 import com.example.farm.ReviewActivity;
 import com.example.farm.ReviewInfo;
 import com.example.farm.Session;
+import com.example.farm.SingleComment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -76,7 +80,6 @@ public class CommunityFragment extends Fragment {
                 // Dialog객체 생성
                 Session session = (Session)getActivity().getApplication();
                 if(!session.getSessionId().equals("default")) {                                // 세션이 있는 경우(로그인) Regist Form을 띄워준다.
-//                    RegistDialogFragment dialog = new RegistDialogFragment(choose_box.getSelectedItem().toString());
                     RegistDialogFragment dialog = new RegistDialogFragment();
                     dialog.show(getChildFragmentManager(), null);
 
@@ -155,7 +158,7 @@ public class CommunityFragment extends Fragment {
         }
     }
 
-    public static class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAdapter.ReviewViewHolder>{
+    public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAdapter.ReviewViewHolder>{
 
         ArrayList<ReviewInfo> reviews;
 
@@ -182,8 +185,9 @@ public class CommunityFragment extends Fragment {
         public class ReviewViewHolder extends RecyclerView.ViewHolder{
 
             ImageView fruit_img;
-            TextView user_id, fruit_name, flavor, content, time;
-            ImageButton good, dialog;
+            TextView user_id, fruit_name, flavor, content, time, review_id;
+            ImageButton good, dialog, check;
+            EditText new_comment;
             public ReviewViewHolder(@NonNull View itemView) {
                 super(itemView);
                 fruit_img = itemView.findViewById(R.id.fruit_img);
@@ -194,6 +198,9 @@ public class CommunityFragment extends Fragment {
                 content = itemView.findViewById(R.id.content);
                 good = itemView.findViewById(R.id.good);
                 dialog = itemView.findViewById(R.id.dialog);
+                check = itemView.findViewById(R.id.check);
+                new_comment = itemView.findViewById(R.id.new_comment);
+                review_id = itemView.findViewById(R.id.review_id);
             }
 
             public void onBind(ReviewInfo reviewInfo){
@@ -206,7 +213,25 @@ public class CommunityFragment extends Fragment {
                 time.setText(review.getReview_time());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                     fruit_img.setImageBitmap(getImageBitmap(Base64.getDecoder().decode(reviewInfo.getImage())));
+                review_id.setText(review.getReview_id());
+                Log.i("review ", new Gson().toJson(review));
+                good.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 좋아요 누를 시 기능
+                        // 서버에 review_id를 주고 good테이블의 good필드를 하나 상승시킨다.
 
+                    }
+                });
+
+                dialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 댓글 누를 시 댓글들을 보여주는 DialogFragment를 띄운다.
+                        CommentDialogFragment dialog = new CommentDialogFragment(review.getReview_id());
+                        dialog.show(getParentFragmentManager(), null);
+                    }
+                });
             }
 
             private Bitmap getImageBitmap(byte[] data){
@@ -219,63 +244,6 @@ public class CommunityFragment extends Fragment {
         }
     }
 
-    // GridView에 연결하는 Adapter로 ImageView와 연결하는 Adapter
-    public static class ReviewAdapter extends BaseAdapter{
-        ArrayList<ReviewInfo> list;
-        Context context;
-        public ReviewAdapter(ArrayList<ReviewInfo> list){
-            this.list = list;
-        }
-
-        @Override
-        public int getCount() {
-            return list.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return list.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            context = parent.getContext();
-
-            if (convertView == null) {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                convertView = inflater.inflate(R.layout.review_image, parent, false);
-            }
-
-            ImageView image_view = convertView.findViewById(R.id.review_image);
-            ReviewInfo reviewInfo = list.get(position); // Get the ReviewInfo for the current position
-            byte[] image = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                image = Base64.getDecoder().decode(reviewInfo.getImage());
-            }
-
-            if (image != null) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-                image_view.setImageBitmap(bitmap);
-                View finalConvertView = convertView;
-                image_view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Review review = reviewInfo.getReview();
-                        Intent intent = new Intent(finalConvertView.getContext().getApplicationContext(), ReviewActivity.class);
-                        intent.putExtra("review", review);
-                        finalConvertView.getContext().startActivity(intent);
-                    }
-                });
-            }
-
-            return convertView;
-        }
-    }
 
     public class ChooseTask extends AsyncTask<Void, Void, ArrayList<String>>{
 

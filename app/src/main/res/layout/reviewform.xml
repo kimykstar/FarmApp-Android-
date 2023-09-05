@@ -6,6 +6,16 @@
     android:layout_margin="10dp"
     android:elevation="5dp">
 
+<!--    review ID를 저장할 textView-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text=""
+        android:id="@+id/review_id"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"/>
+
     <ImageView
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -82,7 +92,7 @@
         android:background="@color/white"
         android:scaleType="fitXY"
         android:src="@drawable/dialog" />
-    
+
     <ImageButton
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -107,8 +117,7 @@
         android:layout_marginRight="10dp"
         android:visibility="invisible"
         android:layout_toLeftOf="@+id/delete_btn"
-        android:background="@color/white"
-        />
+        android:background="@color/white"/>
 
     <Button
         android:layout_width="40dp"
@@ -124,18 +133,60 @@
         android:layout_alignParentRight="true"
         android:background="@color/white"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#D1CDCD"
+        android:layout_below="@+id/time"
+        android:id="@+id/line"/>
 
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="해피"-->
+<!--        android:layout_marginLeft="20dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:textSize="15sp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:id="@+id/user_id_comment"-->
+<!--        android:layout_below="@+id/time"/>-->
 
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/comment"-->
+<!--        android:layout_below="@+id/user_id_comment"-->
+<!--        android:text="내용"-->
+<!--        android:layout_marginLeft="20dp"-->
+<!--        android:layout_marginTop="7dp"-->
+<!--        android:textColor="@color/black"/>-->
 
+<!--    스크롤 가능한 edittext xml-->
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/new_comment"
+        android:layout_below="@id/time"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="50dp"
+        android:maxHeight="84dp"
+        android:inputType="textMultiLine"
+        android:isScrollContainer="true"
+        android:textSize="15sp"
+        android:hint="댓글을 입력해주세요..."
+        android:textColor="@color/black"/>
 
-
-
-
-
-
-
-
-
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/check"
+        android:scaleType="fitXY"
+        android:background="@color/white"
+        android:layout_toRightOf="@id/new_comment"
+        android:layout_below="@+id/time"
+        android:padding="10dp"
+        android:id="@+id/check"
+        android:layout_marginLeft="-50dp"/>
 
 
 

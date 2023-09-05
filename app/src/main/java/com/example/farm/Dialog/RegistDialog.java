@@ -63,7 +63,7 @@ public class RegistDialog extends Dialog {
                 String flavor_content = flavor.getText().toString();
                 String body_content = content.getText().toString();
                 SimpleDateFormat format = new SimpleDateFormat("yyyy:MM:dd:HH:mm:ss");
-                Review review = new Review("참외", format.toString(), session_id, body_content, flavor_content);
+                Review review = new Review("참외", format.toString(), session_id, body_content, flavor_content, "");
                 String[] args = {"참외", format.toString(), session_id, body_content, flavor_content};
 
                 try {
