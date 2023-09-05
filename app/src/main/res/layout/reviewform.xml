@@ -182,7 +182,7 @@
         android:src="@drawable/check"
         android:scaleType="fitXY"
         android:background="@color/white"
-        android:layout_toRightOf="@id/new_comment"
+        android:layout_toRightOf="@+id/new_comment"
         android:layout_below="@+id/time"
         android:padding="10dp"
         android:id="@+id/check"
