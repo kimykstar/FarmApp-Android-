@@ -1,5 +1,8 @@
 package com.example.farm.Fragment;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
 import android.app.AlertDialog;
 import android.content.AsyncQueryHandler;
 import android.content.Context;
@@ -10,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +39,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.farm.Connection.HttpConnection;
 import com.example.farm.HttpUrl;
 import com.example.farm.LoginActivity;
+import com.example.farm.MainActivity;
 import com.example.farm.R;
 import com.example.farm.Review;
 import com.example.farm.ReviewActivity;
@@ -44,8 +49,11 @@ import com.example.farm.SingleComment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
 public class CommunityFragment extends Fragment {
 
@@ -54,11 +62,13 @@ public class CommunityFragment extends Fragment {
     private Spinner choose_box;
     private RecyclerView community;
 
+    Session session;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.community_fragment, container, false);
 
+        session = (Session)((MainActivity)getActivity()).getApplication();
         regist_review = view.findViewById(R.id.regist_review);
         choose_box = view.findViewById(R.id.choose_box);
         community = view.findViewById(R.id.community);
@@ -111,17 +121,23 @@ public class CommunityFragment extends Fragment {
                 } catch (Exception e) {
                     Log.i("Review get Error!", "True");
                 }
-                if(list != null){
+
+                if(list != null) {
                     Log.i("total length : ", list.size() + "");
                     ReviewRecyclerAdapter adapter = new ReviewRecyclerAdapter(list);
                     RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
                     community.setLayoutManager(manager);
                     community.setAdapter(adapter);
+                }else{ // null인 경우 보이지 않는다.
+                    list = new ArrayList<>();
+                    ReviewRecyclerAdapter adapter = new ReviewRecyclerAdapter(list);
+                    RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
 
-                }else{
-                    Toast.makeText(getContext(), "게시물 받아오기 오류", Toast.LENGTH_LONG);
+                    community.setLayoutManager(manager);
+                    community.setAdapter(adapter);
                 }
+
             }
 
             @Override
@@ -129,7 +145,6 @@ public class CommunityFragment extends Fragment {
 
             }
         });
-
 
         return view;
     }
@@ -186,7 +201,7 @@ public class CommunityFragment extends Fragment {
 
             ImageView fruit_img;
             TextView user_id, fruit_name, flavor, content, time, review_id;
-            ImageButton good, dialog, check;
+            ImageButton heart, dialog, check, colorheart;
             EditText new_comment;
             public ReviewViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -196,11 +211,12 @@ public class CommunityFragment extends Fragment {
                 flavor = itemView.findViewById(R.id.flavor);
                 time = itemView.findViewById(R.id.time);
                 content = itemView.findViewById(R.id.content);
-                good = itemView.findViewById(R.id.good);
+                heart = itemView.findViewById(R.id.heart);
                 dialog = itemView.findViewById(R.id.dialog);
                 check = itemView.findViewById(R.id.check);
                 new_comment = itemView.findViewById(R.id.new_comment);
                 review_id = itemView.findViewById(R.id.review_id);
+                colorheart = itemView.findViewById(R.id.colorheart);
             }
 
             public void onBind(ReviewInfo reviewInfo){
@@ -214,13 +230,57 @@ public class CommunityFragment extends Fragment {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                     fruit_img.setImageBitmap(getImageBitmap(Base64.getDecoder().decode(reviewInfo.getImage())));
                 review_id.setText(review.getReview_id());
+                // 자신이 review에 좋아요 한 것이라면
+                if(review.getGood() != null) {
+                    if (review.getGood().equals(session.getSessionId())) {
+                        colorheart.setVisibility(VISIBLE);
+                        heart.setVisibility(INVISIBLE);
+                    } else {
+                        colorheart.setVisibility(INVISIBLE);
+                        heart.setVisibility(VISIBLE);
+                    }
+                }
                 Log.i("review ", new Gson().toJson(review));
-                good.setOnClickListener(new View.OnClickListener() {
+
+                heart.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // 좋아요 누를 시 기능
-                        // 서버에 review_id를 주고 good테이블의 good필드를 하나 상승시킨다.
+                        if(!session.getSessionId().equals("default")) {
+                            heart.setVisibility(INVISIBLE);
+                            colorheart.setVisibility(VISIBLE);
+                            InsertGoodTask task = new InsertGoodTask();
+                            try {
+                                String result = task.execute(review_id.getText().toString(), session.getSessionId()).get();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+                            dialog.setTitle("안내").setMessage("로그인이 필요한 서비스입니다 로그인하시겠습니까?")
+                                    .setPositiveButton("로그인하러가기", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = new Intent(getContext(), LoginActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    }).setNegativeButton("취소", null)
+                                    .setIcon(R.drawable.logo).show();
+                        }
+                    }
+                });
 
+                colorheart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 좋아요 취소
+                        heart.setVisibility(VISIBLE);
+                        colorheart.setVisibility(INVISIBLE);
+                        DeleteGoodTask task = new DeleteGoodTask();
+                        try{
+                            task.execute(review_id.getText().toString(), session.getSessionId());
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
                     }
                 });
 
@@ -230,6 +290,48 @@ public class CommunityFragment extends Fragment {
                         // 댓글 누를 시 댓글들을 보여주는 DialogFragment를 띄운다.
                         CommentDialogFragment dialog = new CommentDialogFragment(review.getReview_id());
                         dialog.show(getParentFragmentManager(), null);
+                    }
+                });
+
+                check.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 로그인이 된 상태
+                        if(!session.getSessionId().equals("default")) {
+                            // 댓글 내용을 입력한 경우
+                            if (new_comment.getText().length() > 0) {
+                                try {
+                                    CommentDialogFragment.InsertCommentTask task = new CommentDialogFragment.InsertCommentTask();
+                                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+                                    String now = format.format(new Date());
+                                    // 여기 DB DateTime자료형 형식이랑 맞게 DateFormatter를 이용하여서 String now에 저장
+                                    // Insert결과 처리해야 함
+                                    String result = task.execute(new SingleComment(session.getSessionId(), new_comment.getText().toString(), now, review_id.getText().toString())).get();
+                                    new_comment.setText("");
+                                } catch (ExecutionException e) {
+                                    throw new RuntimeException(e);
+                                } catch (InterruptedException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }else{
+                                Toast.makeText(getContext(), "댓글 내용을 입력해야합니다.", Toast.LENGTH_LONG);
+                            }
+                        }else{ // 로그인이 안된 상태
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(getContext()).setTitle("안내").setIcon(R.drawable.logo)
+                                    .setNegativeButton("로그인하러가기", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent intent = new Intent(getContext().getApplicationContext(), LoginActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    }).setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            new_comment.setText("");
+                                        }
+                                    }).setMessage("댓글을 이용하려면 로그인해야합니다.");
+                            dialog.show();
+                        }
                     }
                 });
             }
@@ -259,6 +361,38 @@ public class CommunityFragment extends Fragment {
             list = gson.fromJson(result, new TypeToken<ArrayList<String>>() {}.getType());
 
             return list;
+        }
+    }
+
+    // 좋아요 누를 시 전송
+    public static class InsertGoodTask extends AsyncTask<String, Void, String>{
+
+        // review_id, user_id를 받는다.
+        @Override
+        protected String doInBackground(String... strings) {
+            HttpUrl url = new HttpUrl();
+            String review_id = strings[0];
+            String user_id = strings[1];
+            HttpConnection conn = new HttpConnection(url.getUrl() + "insertGood");
+            conn.setHeader(1000, "POST", true, true);
+
+            conn.writeData(review_id + " " + user_id);
+            String result = conn.readData();
+
+            return result;
+        }
+    }
+
+    public static class DeleteGoodTask extends AsyncTask<String, Void, String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            HttpUrl url = new HttpUrl();
+            HttpConnection conn = new HttpConnection(url.getUrl() + "deleteGood?review_id=" + strings[0] + "&user_id=" + strings[1]);
+            conn.setHeader(1000, "DELETE", false, true);
+            String result = conn.readData();
+
+            return result;
         }
     }
 

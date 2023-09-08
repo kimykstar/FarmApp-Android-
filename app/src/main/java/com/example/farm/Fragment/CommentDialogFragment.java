@@ -1,6 +1,7 @@
 package com.example.farm.Fragment;
 
 import android.app.AlertDialog;
+import android.content.AsyncQueryHandler;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -43,6 +45,9 @@ public class CommentDialogFragment extends DialogFragment {
     EditText comment_et;
     ImageButton check_btn;
     RecyclerView comment_view;
+    Session session;
+    CommentRecyclerAdapter adapter;
+    ArrayList<SingleComment> comments;
 
     private String review_id;
 
@@ -58,14 +63,15 @@ public class CommentDialogFragment extends DialogFragment {
         comment_et = view.findViewById(R.id.comment_et);
         check_btn = view.findViewById(R.id.check_btn);
 
+
         Log.i("reveiw_id", review_id);
-        Session session = (Session)((MainActivity)getActivity()).getApplication();
+        session = (Session)((MainActivity)getActivity()).getApplication();
 
         // 게시물에대한 댓글들을 서버로부터 가져온다.
         try {
             CommentTask task = new CommentTask();
-            ArrayList<SingleComment> comments = task.execute(review_id).get();
-            CommentRecyclerAdapter adapter = new CommentRecyclerAdapter(comments); // 받았는데 갱신이 안된거..
+            comments = task.execute(review_id).get();
+            adapter = new CommentRecyclerAdapter(comments); // 받았는데 갱신이 안된거..
             RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
             comment_view.setLayoutManager(manager);
             comment_view.setAdapter(adapter);
@@ -96,11 +102,14 @@ public class CommentDialogFragment extends DialogFragment {
                             String now = format.format(new Date());
                             // 여기 DB DateTime자료형 형식이랑 맞게 DateFormatter를 이용하여서 String now에 저장
                             result = task.execute(new SingleComment(session.getSessionId(), comment_et.getText().toString(), now, review_id)).get();
-                            if (result.equals("false")) {
-                                Toast.makeText(getContext(), "댓글 등록에 실패했습니다.", Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(getContext(), "댓글 등록에 성공했습니다.", Toast.LENGTH_LONG).show();
-                            }
+                            comments.add(new SingleComment(session.getSessionId(), comment_et.getText().toString(), now, review_id));
+                            adapter.notifyItemChanged(comments.size());
+                            // 서버 동작 결과에 따른 동작분류
+//                            if (result.equals("false")) {
+//                                Toast.makeText(getContext(), "댓글 등록에 실패했습니다.", Toast.LENGTH_LONG).show();
+//                            } else {
+//                                Toast.makeText(getContext(), "댓글 등록에 성공했습니다.", Toast.LENGTH_LONG).show();
+//                            }
                             comment_et.setText("");
                         }else{
                             AlertDialog.Builder dialog = new AlertDialog.Builder(getContext()).setTitle("안내").setIcon(R.drawable.logo)
@@ -169,14 +178,17 @@ public class CommentDialogFragment extends DialogFragment {
             return comments.size();
         }
 
+
         public class CommentViewHolder extends RecyclerView.ViewHolder{
             TextView user_id, comment_tv, date_tv;
+            Button delete_btn;
 
             public CommentViewHolder(@NonNull View itemView) {
                 super(itemView);
                 user_id = itemView.findViewById(R.id.user_id);
                 comment_tv = itemView.findViewById(R.id.comment_tv);
                 date_tv = itemView.findViewById(R.id.comment_time);
+                delete_btn = itemView.findViewById(R.id.delete_btn);
             }
 
             // onBind메소드 위젯과 id를 엮어서 코드 실행
@@ -184,6 +196,16 @@ public class CommentDialogFragment extends DialogFragment {
                 user_id.setText(comment.getUser_id());
                 comment_tv.setText(comment.getComment());
                 date_tv.setText(comment.getDate());
+                if(user_id.equals(session.getSessionId()))
+                    delete_btn.setVisibility(View.VISIBLE);
+
+                // 댓글 삭제 요청 및 레이아웃 삭제
+                delete_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+//                        adapter.notifyItemRemoved();
+                    }
+                });
             }
         }
     }
@@ -209,7 +231,7 @@ public class CommentDialogFragment extends DialogFragment {
         }
     }
 
-    public class InsertCommentTask extends AsyncTask<SingleComment, Void, String>{
+    public static class InsertCommentTask extends AsyncTask<SingleComment, Void, String>{
 
         @Override
         protected String doInBackground(SingleComment... singleComments) {
@@ -226,4 +248,22 @@ public class CommentDialogFragment extends DialogFragment {
             return result;
         }
     }
+
+    public static class RemoveCommentTesk extends AsyncTask<SingleComment, Void, String>{
+        @Override
+        protected String doInBackground(SingleComment... singleComments) {
+            String result = "false";
+
+            HttpUrl url = new HttpUrl();
+            SingleComment comment = singleComments[0];
+            HttpConnection conn = new HttpConnection(url.getUrl() + "removeComment?review_id=" + comment.getReview_id() + "&user_id=" + comment.getUser_id() + "&comment=" + comment.getComment());
+            conn.setHeader(1000, "DELETE", false, true);
+
+            result = conn.readData();
+
+            return result;
+        }
+    }
+
+
 }

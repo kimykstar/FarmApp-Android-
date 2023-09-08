@@ -117,8 +117,8 @@ public class UpdateReview extends AppCompatActivity{
 
         private class ReviewHolder extends RecyclerView.ViewHolder{
             ImageView fruit_img;
-            TextView user_id, fruit_name, flavor, content, time;
-            ImageButton good, dialog;
+            TextView user_id, fruit_name, flavor, content, time, review_id;
+            ImageButton heart, dialog;
             Button update_btn, delete_btn;
             public ReviewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -130,13 +130,13 @@ public class UpdateReview extends AppCompatActivity{
                 content = itemView.findViewById(R.id.content);
                 update_btn = itemView.findViewById(R.id.update_btn);
                 delete_btn = itemView.findViewById(R.id.delete_btn);
-
+                review_id = itemView.findViewById(R.id.review_id);
                 update_btn.setVisibility(View.VISIBLE);
                 delete_btn.setVisibility(View.VISIBLE);
 
-                good = itemView.findViewById(R.id.good);
+                heart = itemView.findViewById(R.id.heart);
                 dialog = itemView.findViewById(R.id.dialog);
-                good.setVisibility(View.INVISIBLE);
+                heart.setVisibility(View.INVISIBLE);
                 dialog.setVisibility(View.INVISIBLE);
             }
 
@@ -149,6 +149,7 @@ public class UpdateReview extends AppCompatActivity{
                 flavor.append(review.getFlavor());
                 content.setText(review.getContent());
                 time.setText(review.getReview_time());
+                review_id.setText(review.getReview_id());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                     fruit_img.setImageBitmap(getImageBitmap(Base64.getDecoder().decode(reviewInfo.getImage())));
 
@@ -156,6 +157,8 @@ public class UpdateReview extends AppCompatActivity{
                     @Override
                     public void onClick(View v){
                         UpdateDialogFragment dialog = null;
+                        // 서버연동
+
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                             dialog = new UpdateDialogFragment(getImageBitmap(Base64.getDecoder().decode(reviewInfo.getImage())), review);
                         }
@@ -174,10 +177,13 @@ public class UpdateReview extends AppCompatActivity{
                         String u_id = user_id.getText().toString();
                         String cont = content.getText().toString();
                         String fla = flavor.getText().toString();
+                        String review_t = review_id.getText().toString();
                         try {
-                            String result = task.execute(new Review(f_name, r_time, u_id, cont, fla, "")).get();
+                            String result = task.execute(new Review(f_name, r_time, u_id, cont, fla, review_t, "")).get();
 
                             // DB작업 성공 시 안내 메시지와 게시글 삭제
+
+
                             if(result.equals("true"))
                                 ((ViewGroup)delete_btn.getParent()).removeAllViews();
                                 Toast.makeText(getApplicationContext(), "삭제 완료!", Toast.LENGTH_LONG).show();

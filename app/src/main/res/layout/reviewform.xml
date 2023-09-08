@@ -93,17 +93,38 @@
         android:scaleType="fitXY"
         android:src="@drawable/dialog" />
 
-    <ImageButton
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/content"
-        android:background="@color/white"
-        android:src="@drawable/good"
-        android:layout_marginTop="20dp"
-        android:layout_toLeftOf="@+id/dialog"
-        android:layout_marginRight="10dp"
-        android:scaleType="fitXY"
-        android:id="@+id/good"/>
+        android:layout_toLeftOf="@+id/dialog">
+
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_below="@+id/content"
+            android:background="@color/white"
+            android:src="@drawable/heart"
+            android:layout_marginTop="20dp"
+            android:layout_toLeftOf="@+id/dialog"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitXY"
+            android:id="@+id/heart"/>
+
+        <ImageButton
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_below="@+id/content"
+            android:background="@color/white"
+            android:src="@drawable/colorheart"
+            android:layout_marginTop="20dp"
+            android:visibility="invisible"
+            android:layout_toLeftOf="@+id/dialog"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitXY"
+            android:id="@+id/colorheart"/>
+
+    </FrameLayout>
 
     <Button
         android:layout_width="40dp"

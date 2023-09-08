@@ -109,7 +109,7 @@ public class RegistDialogFragment extends DialogFragment {
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
                 String current = format.format(new Date());
                 fruit_name = choose_fruit.getSelectedItem().toString();
-                Review review = new Review(fruit_name, current, session_id, body_content, flavor_content, "");
+                Review review = new Review(fruit_name, current, session_id, body_content, flavor_content, "", "");
 
 
                 // 게시글 정보 텍스트 입력 데이터 서버로 전송

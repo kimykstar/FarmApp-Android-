@@ -1,5 +1,6 @@
 package com.example.farm.Fragment;
 
+import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,9 +50,10 @@ public class HomeFragment extends Fragment {
     private View view;
     private ViewPager2 viewPager;
     private TextView recommend_tv;
-    private RecyclerView recommend;
+    private RecyclerView recommend, hotfruit_list;
     private LinearLayout recommend_ll;
     private SearchView search;
+    private Button hotFruit1, hotFruit2, hotFruit3;
 
     @Nullable
     @Override
@@ -61,6 +64,9 @@ public class HomeFragment extends Fragment {
         recommend = view.findViewById(R.id.fruit_list);
         recommend_ll = view.findViewById(R.id.recommend_fl);
         search = view.findViewById(R.id.searchFruit);
+        hotFruit1 = view.findViewById(R.id.hotFruit1);
+        hotFruit2 = view.findViewById(R.id.hotFruit2);
+        hotFruit3 = view.findViewById(R.id.hotFruit3);
 
         search.setSubmitButtonEnabled(true);
 
@@ -167,7 +173,64 @@ public class HomeFragment extends Fragment {
         recommend.setLayoutManager(manager);
         recommend.setAdapter(adapter);
 
+        // Hot과일의 목록을 가져온다.
+        HotFruitTask hotTask = new HotFruitTask();
+        try {
+            String name = hotTask.execute().get();
+            String[] names = name.split(" ");
+            Log.i("size : ", names.length + "");
+            int size = names.length;
+
+            switch(size){
+                case 1:
+                    hotFruit1.setText("1. " + names[0]);
+                    hotFruit1.setOnClickListener(new HotClickListener(names[0]));
+                    hotFruit2.setText("2. " + "추천과일이 없어요 ㅠㅠ");
+                    hotFruit3.setText("2. " + "추천과일이 없어요 ㅠㅠ");
+                    break;
+                case 2:
+                    hotFruit1.setText("1. " + names[0]);
+                    hotFruit1.setOnClickListener(new HotClickListener(names[0]));
+                    hotFruit2.setText("2. " + names[1]);
+                    hotFruit2.setOnClickListener(new HotClickListener(names[1]));
+                    hotFruit3.setText("2. " + "추천과일이 없어요 ㅠㅠ");
+                    break;
+                case 3:
+                    hotFruit1.setText("1. " + names[0]);
+                    hotFruit1.setOnClickListener(new HotClickListener(names[0]));
+                    hotFruit2.setText("2. " + names[1]);
+                    hotFruit2.setOnClickListener(new HotClickListener(names[1]));
+                    hotFruit3.setText("3. " + names[2]);
+                    hotFruit3.setOnClickListener(new HotClickListener(names[2]));
+                    break;
+            }
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         return view;
+    }
+
+    public class HotClickListener implements View.OnClickListener{
+        private String fruit_name;
+        public HotClickListener(String fruit_name){
+            this.fruit_name = fruit_name;
+        }
+        @Override
+        public void onClick(View v) {
+            SearchTask task = new SearchTask();
+            try {
+                Fruit fruit = task.execute(fruit_name).get();
+                Intent intent = new Intent(getContext().getApplicationContext(), FruitInformationActivity.class);
+                intent.putExtra("info", fruit);
+                startActivity(intent);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
     }
 
     // 제철과일 추천을 위한 ViewPager Adapter클래스 선언
@@ -363,6 +426,19 @@ public class HomeFragment extends Fragment {
             Log.i("recommend Fruits : ", gson.toJson(result));
             ArrayList<RecommendFruit> fruits = gson.fromJson(result, new TypeToken<ArrayList<RecommendFruit>>() {}.getType());
             return fruits;
+        }
+    }
+
+    public static class HotFruitTask extends AsyncTask<Void, Void, String>{
+        @Override
+        protected String doInBackground(Void... voids) {
+            HttpUrl url = new HttpUrl();
+            HttpConnection conn = new HttpConnection(url.getUrl() + "hotFruits");
+            conn.setHeader(1000, "GET", false, true);
+
+            String result = conn.readData();
+
+            return result;
         }
     }
 }
