@@ -58,7 +58,7 @@ import java.util.concurrent.ExecutionException;
 public class CommunityFragment extends Fragment {
 
     private View view;
-    private Button regist_review;
+    private ImageButton regist_review;
     private Spinner choose_box;
     private RecyclerView community;
 
@@ -77,7 +77,7 @@ public class CommunityFragment extends Fragment {
         ChooseTask task = new ChooseTask();
         try{
             ArrayList<String> names = task.execute().get();
-            ArrayAdapter adapter = new ArrayAdapter(getContext().getApplicationContext(), android.R.layout.simple_spinner_item, names);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext().getApplicationContext(), android.R.layout.simple_spinner_item, names);
             choose_box.setAdapter(adapter);
         }catch(Exception e){
             e.printStackTrace();

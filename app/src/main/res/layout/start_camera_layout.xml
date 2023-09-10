@@ -32,32 +32,70 @@ android:background="@color/white">
 
     </RelativeLayout>
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="과일 촬영하러가기"
-        android:background="@color/representColor"
-        android:layout_margin="5dp"
-        android:textSize="30sp"
-        android:layout_weight="1"
-        android:id="@+id/camera_open"/>
+        android:orientation="horizontal"
+        android:layout_marginTop="150dp">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/representColor"
-        android:layout_margin="5dp"
-        android:text="비디오로 촬영하기"
-        android:textSize="30sp"
-        android:layout_weight="1"
-        android:id="@+id/video_open"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:layout_weight="1"
-        android:id="@+id/image"/>
+            <ImageButton
+                android:id="@+id/camera_open"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@drawable/transparent_round"
+                android:padding="10dp"
+                android:elevation="5dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/camera" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="사진촬영"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/video_open"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:background="@drawable/transparent_round"
+                android:padding="10dp"
+                android:scaleType="fitXY"
+                android:elevation="5dp"
+                android:src="@drawable/video"
+                android:textSize="30sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="비디오촬영"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </LinearLayout>

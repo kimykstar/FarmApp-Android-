@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -46,13 +47,10 @@ import java.util.Date;
 public class CameraFragment extends Fragment {
 
     private View view;
-    private ImageView image;
-    private Button camera_btn, video_btn;
+    private ImageButton camera_btn, video_btn;
     String mCurrentPhotoPath = null;
     static final int REQUEST_TAKE_PHOTO = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
-
-//    Map<Integer, Object> outputs = new HashMap<>();
 
     public CameraFragment() {}
 
@@ -60,15 +58,18 @@ public class CameraFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.start_camera_layout, container, false);
-        image = view.findViewById(R.id.image);
         camera_btn = view.findViewById(R.id.camera_open);
         video_btn = view.findViewById(R.id.video_open);
+
+        int screenWidth = (int)(getResources().getDisplayMetrics().widthPixels) - 50;
+        camera_btn.getLayoutParams().width = screenWidth / 2;
+        camera_btn.getLayoutParams().height = screenWidth / 2;
+        video_btn.getLayoutParams().width = screenWidth / 2;
+        video_btn.getLayoutParams().height = screenWidth / 2;
 
         camera_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(getContext().getApplicationContext(), CameraActivity.class);
-//                startActivity(intent);
                 if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
                 }else {

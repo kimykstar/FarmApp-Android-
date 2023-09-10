@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.farm.Connection.SearchTask;
+import com.example.farm.Dialog.CustomDialog;
 import com.example.farm.Fruit;
 import com.example.farm.FruitInformationActivity;
 import com.example.farm.Connection.HttpConnection;
@@ -50,10 +53,10 @@ public class HomeFragment extends Fragment {
     private View view;
     private ViewPager2 viewPager;
     private TextView recommend_tv;
-    private RecyclerView recommend, hotfruit_list;
+    private RecyclerView recommend;
     private LinearLayout recommend_ll;
     private SearchView search;
-    private Button hotFruit1, hotFruit2, hotFruit3;
+    private Button hotFruit1, hotFruit2, hotFruit3, more_btn;
 
     @Nullable
     @Override
@@ -67,6 +70,7 @@ public class HomeFragment extends Fragment {
         hotFruit1 = view.findViewById(R.id.hotFruit1);
         hotFruit2 = view.findViewById(R.id.hotFruit2);
         hotFruit3 = view.findViewById(R.id.hotFruit3);
+        more_btn = view.findViewById(R.id.more_btn);
 
         search.setSubmitButtonEnabled(true);
 
@@ -90,6 +94,22 @@ public class HomeFragment extends Fragment {
                 recommend_tv.setVisibility(View.VISIBLE);
             }
         }
+
+        more_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomDialog dialog = new  CustomDialog(getContext(), session.getSessionId());
+                // WindowManager의 Layoutparameter변수를 생성하여 copyFrom을 통해 CustomDialog의 Window속성을 가져온다.
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                // layout Parameter의 height와 width를 설정하고 dialog의 Window를 불러와 속성을 재 설정한다.
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                Window window = dialog.getWindow();
+                window.setAttributes(lp);
+                dialog.show();
+            }
+        });
 
         RecommendTask task = new RecommendTask();
         Calendar calendar = Calendar.getInstance();

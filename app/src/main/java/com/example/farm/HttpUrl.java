@@ -12,7 +12,7 @@ public class HttpUrl {
 //    }
 
     public HttpUrl(){
-        this.url = "http://192.168.0.20:8082/";
+        this.url = "http://192.168.35.73:8082/";
     }
 
     public String getUrl(){

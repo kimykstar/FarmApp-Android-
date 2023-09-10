@@ -1,5 +1,9 @@
 package com.example.farm;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -35,6 +39,7 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,13 +50,15 @@ import java.util.List;
 public class FruitInformationActivity extends AppCompatActivity {
 
     private TextView f_name;
-    TextView fruit_name, effective1, effective2, effective3;
-    ImageButton back_btn;
+    TextView fruit_name, effective1, effective2, effective3, nutrition1, nutrition2, nutrition3, slide_tv;
+    ImageButton back_btn, chart_btn;
     private PieChart pie_chart;
     private ImageView fruit_img;
     private Button nutrition_btn;
     private ImageButton ar_btn;
+    private SlidingUpPanelLayout slide;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,8 +70,11 @@ public class FruitInformationActivity extends AppCompatActivity {
         pie_chart = findViewById(R.id.pie_chart);
         fruit_img = findViewById(R.id.fruit_img);
         ar_btn = findViewById(R.id.ar_Btn);
-
-//        etc_chart = findViewById(R.id.etc_chart);
+        chart_btn = findViewById(R.id.chart_btn);
+        nutrition1 = findViewById(R.id.nutrition_name1);
+        nutrition2 = findViewById(R.id.nutrition_name2);
+        nutrition3 = findViewById(R.id.nutrition_name3);
+        slide = findViewById(R.id.slide);
 
         int img_resource = getResources().getIdentifier(fruit.getFile_name().toLowerCase(), "drawable", getPackageName());
         fruit_img.setImageResource(img_resource);
@@ -93,6 +103,38 @@ public class FruitInformationActivity extends AppCompatActivity {
         effective3 = findViewById(R.id.effeciency3);
         back_btn = findViewById(R.id.backBtn);
         nutrition_btn = findViewById(R.id.nutrition_btn);
+        slide_tv = findViewById(R.id.slide_tv);
+
+        fruit_name.setVisibility(INVISIBLE);
+
+        slide.setPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                fruit_name.setVisibility(VISIBLE);
+                slide_tv.setVisibility(INVISIBLE);
+            }
+
+            @Override
+            public void onPanelCollapsed(View panel) {
+                fruit_name.setVisibility(INVISIBLE);
+                slide_tv.setVisibility(VISIBLE);
+            }
+
+            @Override
+            public void onPanelExpanded(View panel) {
+
+            }
+
+            @Override
+            public void onPanelAnchored(View panel) {
+
+            }
+
+            @Override
+            public void onPanelHidden(View panel) {
+
+            }
+        });
 
         // 함유 영양정보 보여주는 DialogFragment생성 버튼
 
@@ -118,6 +160,20 @@ public class FruitInformationActivity extends AppCompatActivity {
             }
         });
 
+        chart_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NutritionDialog dialog = new NutritionDialog(FruitInformationActivity.this, vitamin, etc);
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                Window window = dialog.getWindow();
+                window.setAttributes(lp);
+                dialog.show();
+            }
+        });
+
 
         // 함유 영양소 정보 가져오기
         // vitamin과 etc종류를 나누어 vitamin ArrayList와 etc ArrayList에 각각 추가한다.
@@ -129,9 +185,12 @@ public class FruitInformationActivity extends AppCompatActivity {
                 etc.add(temp);
         }
 
-
         // 효능 정보 가져오기
         ArrayList<Nutrition> result = getEffective(infos);
+
+        nutrition1.setText(result.get(0).getNutrition());
+        nutrition2.setText(result.get(1).getNutrition());
+        nutrition3.setText(result.get(2).getNutrition());
 
         effective1.setText(result.get(0).getNutrition() + " 성분에 의해 " + result.get(0).getEffect());
         effective2.setText(result.get(1).getNutrition() + " 성분에 의해 " + result.get(1).getEffect());

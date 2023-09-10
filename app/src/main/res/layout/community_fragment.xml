@@ -31,14 +31,17 @@
             android:textColor="@android:color/black"
             android:text="Farm 커뮤니티"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="게시물 작성"
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/edit"
+            android:layout_marginTop="12dp"
+            android:scaleType="fitXY"
+            android:padding="5dp"
+            android:background="@drawable/grayborder"
             android:layout_alignParentRight="true"
             android:id="@+id/regist_review"
             android:layout_marginRight="7dp"/>
-
     </RelativeLayout>
 
     <Spinner
@@ -46,6 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="10dp"
+        android:elevation="5dp"
         android:background="@drawable/spinner_layout" />
 
     <androidx.recyclerview.widget.RecyclerView
