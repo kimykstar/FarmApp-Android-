@@ -46,8 +46,10 @@ import com.example.farm.ReviewActivity;
 import com.example.farm.ReviewInfo;
 import com.example.farm.Session;
 import com.example.farm.SingleComment;
+import com.facebook.shimmer.Shimmer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.todkars.shimmer.ShimmerRecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,6 +63,7 @@ public class CommunityFragment extends Fragment {
     private ImageButton regist_review;
     private Spinner choose_box;
     private RecyclerView community;
+    private ShimmerRecyclerView loading_view;
 
     Session session;
     @Nullable
@@ -72,13 +75,14 @@ public class CommunityFragment extends Fragment {
         regist_review = view.findViewById(R.id.regist_review);
         choose_box = view.findViewById(R.id.choose_box);
         community = view.findViewById(R.id.community);
+        loading_view = view.findViewById(R.id.loading_view);
+
+        loading_view.showShimmer();
 
         // choose_box adapter코드 추가
         ChooseTask task = new ChooseTask();
         try{
-            ArrayList<String> names = task.execute().get();
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext().getApplicationContext(), android.R.layout.simple_spinner_item, names);
-            choose_box.setAdapter(adapter);
+            task.execute();
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -113,29 +117,15 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // item이 선택되었을 때 과일의 이름을 서버로 보내서 관련 게시글만 받아온다.
+                community.setVisibility(INVISIBLE);
+                loading_view.showShimmer();
                 ReviewTask reviewTask = new ReviewTask();
                 ArrayList<ReviewInfo> list = null;
                 try {
-                    list = reviewTask.execute(choose_box.getSelectedItem().toString()).get();
+                    reviewTask.execute(choose_box.getSelectedItem().toString());
                     Log.i("size : ", list.size() + "");
                 } catch (Exception e) {
                     Log.i("Review get Error!", "True");
-                }
-
-                if(list != null) {
-                    Log.i("total length : ", list.size() + "");
-                    ReviewRecyclerAdapter adapter = new ReviewRecyclerAdapter(list);
-                    RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-
-                    community.setLayoutManager(manager);
-                    community.setAdapter(adapter);
-                }else{ // null인 경우 보이지 않는다.
-                    list = new ArrayList<>();
-                    ReviewRecyclerAdapter adapter = new ReviewRecyclerAdapter(list);
-                    RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-
-                    community.setLayoutManager(manager);
-                    community.setAdapter(adapter);
                 }
 
             }
@@ -150,7 +140,7 @@ public class CommunityFragment extends Fragment {
     }
 
     // 서버로부터 게시글 사진 및 정보 가져오기
-    private static class ReviewTask extends AsyncTask<String, Void, ArrayList<ReviewInfo>>{
+    private class ReviewTask extends AsyncTask<String, Void, ArrayList<ReviewInfo>>{
 
         @Override
         protected ArrayList<ReviewInfo> doInBackground(String ... args) {
@@ -171,10 +161,23 @@ public class CommunityFragment extends Fragment {
             conn.closeAll();
             return result;
         }
+
+        @Override
+        protected void onPostExecute(ArrayList<ReviewInfo> reviewInfos) {
+            ReviewRecyclerAdapter adapter = new ReviewRecyclerAdapter(reviewInfos);
+            RecyclerView.LayoutManager manager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+
+            community.setLayoutManager(manager);
+            if(adapter != null)
+                community.setAdapter(adapter);
+            loading_view.hideShimmer();
+            community.setVisibility(VISIBLE);
+            // 여기에 ui작업
+            super.onPostExecute(reviewInfos);
+        }
     }
 
     public class ReviewRecyclerAdapter extends RecyclerView.Adapter<ReviewRecyclerAdapter.ReviewViewHolder>{
-
         ArrayList<ReviewInfo> reviews;
 
         public ReviewRecyclerAdapter(ArrayList<ReviewInfo> reviews){
@@ -361,6 +364,14 @@ public class CommunityFragment extends Fragment {
             list = gson.fromJson(result, new TypeToken<ArrayList<String>>() {}.getType());
 
             return list;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<String> strings) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext().getApplicationContext(), android.R.layout.simple_spinner_item, strings);
+            if(adapter != null)
+                choose_box.setAdapter(adapter);
+            super.onPostExecute(strings);
         }
     }
 

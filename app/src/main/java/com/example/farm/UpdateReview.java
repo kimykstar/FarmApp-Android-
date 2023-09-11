@@ -49,10 +49,7 @@ public class UpdateReview extends AppCompatActivity{
             ArrayList<ReviewInfo> reviews = task.execute(user_id.getSessionId()).get();
             Gson gson = new Gson();
             Log.i("result : ", gson.toJson(reviews));
-            PostListRecyclerAdapter adapter = new PostListRecyclerAdapter(reviews);
-            RecyclerView.LayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            post_list.setLayoutManager(manager);
-            post_list.setAdapter(adapter);
+
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -87,6 +84,16 @@ public class UpdateReview extends AppCompatActivity{
             }
 
             return reviews;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<ReviewInfo> reviewInfos) {
+            PostListRecyclerAdapter adapter = new PostListRecyclerAdapter(reviewInfos);
+            if(adapter != null) {
+                RecyclerView.LayoutManager manager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+                post_list.setLayoutManager(manager);
+                post_list.setAdapter(adapter);
+            }
         }
     }
 
@@ -150,6 +157,7 @@ public class UpdateReview extends AppCompatActivity{
                 content.setText(review.getContent());
                 time.setText(review.getReview_time());
                 review_id.setText(review.getReview_id());
+                Log.i("review_id", review_id.getText().toString());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                     fruit_img.setImageBitmap(getImageBitmap(Base64.getDecoder().decode(reviewInfo.getImage())));
 
@@ -214,12 +222,13 @@ public class UpdateReview extends AppCompatActivity{
             Review review = reviews[0];
             String result = "false";
 
+            String time[] = review.getReview_time().split(" ");
+            String datetime = time[0] + "-" + time[1];
             HttpUrl url = new HttpUrl();
-            HttpConnection conn = new HttpConnection(url.getUrl() + "deletereview?fruit_name=" + review.getFruit_name() + "&user_id=" + review.getUser_id() + "&reviewtime=" + review.getReview_time());
+            HttpConnection conn = new HttpConnection(url.getUrl() + "deletereview?fruit_name=" + review.getFruit_name() + "&user_id=" + review.getUser_id().split(":")[1] + "&reviewtime=" + datetime);
             conn.setHeader(1000, "DELETE", true, true);
 
             conn.setProperty("Content-Type", "application/json; charset=" + StandardCharsets.UTF_8);
-
 
             Gson gson = new Gson();
             conn.writeData(gson.toJson(reviews[0]));
