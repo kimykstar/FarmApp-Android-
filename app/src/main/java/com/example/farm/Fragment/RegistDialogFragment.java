@@ -159,6 +159,12 @@ public class RegistDialogFragment extends DialogFragment {
         window.setAttributes(params);
     }
 
+    private void sendResult(String newData){
+        if(getTargetFragment() == null)
+            return;
+        Intent intent = new Intent();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){ // 갤러리로부터 사진을 선택하면 실행되는 메소드
         if(requestCode == 1){
@@ -180,7 +186,6 @@ public class RegistDialogFragment extends DialogFragment {
                     }else{
                         Log.e("Image URI Null", "need uri");
                     }
-
                 }catch(Exception e){
                     Log.e("갤러리 불러오기 오류", "");
                     e.printStackTrace();

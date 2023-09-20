@@ -9,27 +9,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-<!--스토리기능-->
-<!--
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal">
-
-
-        <include layout="@layout/layout_profile" />
-
-        <include layout="@layout/layout_profile" />
-
-        <include layout="@layout/layout_profile" />
-
-        <include layout="@layout/layout_profile" />
-
-        <include layout="@layout/layout_profile" />
-
-    </LinearLayout>
--->
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="677dp">

@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -37,6 +38,10 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.ChartTouchListener;
+import com.github.mikephil.charting.listener.OnChartGestureListener;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -81,20 +86,32 @@ public class FruitInformationActivity extends AppCompatActivity {
         f_name.setText(fruit.getFruit_name());
 
         ArrayList<PieEntry> list = new ArrayList<>();
-        list.add(new PieEntry(Float.parseFloat(fruit.getCarbohydrate()), "탄수화물"));
-        list.add(new PieEntry(Float.parseFloat(fruit.getProtein()), "단백질"));
-        list.add(new PieEntry(Float.parseFloat(fruit.getFat()), "지방"));
-        list.add(new PieEntry(Float.parseFloat(fruit.getSugar()), "당"));
+        if(Float.parseFloat(fruit.getCarbohydrate()) >= 1f)
+            list.add(new PieEntry(Float.parseFloat(fruit.getCarbohydrate()), "탄수화물"));
+        if(Float.parseFloat(fruit.getProtein()) >= 1f)
+            list.add(new PieEntry(Float.parseFloat(fruit.getProtein()), "단백질"));
+        if(Float.parseFloat(fruit.getFat()) >= 1f)
+            list.add(new PieEntry(Float.parseFloat(fruit.getFat()), "지방"));
+        if(Float.parseFloat(fruit.getSugar()) >= 1f)
+            list.add(new PieEntry(Float.parseFloat(fruit.getSugar()), "당"));
 
         PieDataSet pieDataSet = new PieDataSet(list, "기본 영양정보");
+        pieDataSet.setXValuePosition(PieDataSet.ValuePosition.OUTSIDE_SLICE);
         pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
         pieDataSet.setValueTextColor(Color.BLACK);
+        pieDataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return (int)value + "mg";
+            }
+        });
         pieDataSet.setValueTextSize(12f);
 
         PieData pieData = new PieData(pieDataSet);
 
         pie_chart.setData(pieData);
         pie_chart.setCenterText("기본 영양정보");
+        pie_chart.setEntryLabelColor(Color.BLACK);
         pie_chart.animateXY(1000, 1000);
 
         fruit_name = findViewById(R.id.fruit_name);
@@ -135,9 +152,6 @@ public class FruitInformationActivity extends AppCompatActivity {
 
             }
         });
-
-        // 함유 영양정보 보여주는 DialogFragment생성 버튼
-
 
         fruit_name.setText(fruit.getFruit_name());
         // 효능 : type을 분류하고 그 안에서 가장 많은 3개를 분별하여 사용

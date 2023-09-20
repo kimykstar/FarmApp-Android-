@@ -14,6 +14,7 @@ import com.example.farm.R;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -65,9 +66,13 @@ public class NutritionDialog extends Dialog {
         }
         xAxis.setGranularity(1f);
         xAxis.setValueFormatter(new IndexAxisValueFormatter(vitamin_names));
-
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
+
         vitamin_chart.setFitBars(true);
+        vitamin_chart.setScaleEnabled(false);
+        vitamin_chart.setClickable(false);
+        vitamin_chart.setTouchEnabled(false);
         vitamin_chart.animateXY(1000, 1000);
 
 
@@ -88,7 +93,12 @@ public class NutritionDialog extends Dialog {
         xAxisEtc.setGranularity(1f);
         xAxisEtc.setValueFormatter(new IndexAxisValueFormatter(etc_names));
         xAxisEtc.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxisEtc.setDrawGridLines(false);
+
         etc_chart.setFitBars(true);
+        etc_chart.setScaleEnabled(false);
+        etc_chart.setClickable(false);
+        etc_chart.setTouchEnabled(false);
         etc_chart.animateXY(1000, 1000);
 
     }
@@ -114,6 +124,12 @@ public class NutritionDialog extends Dialog {
         barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
         barDataSet.setValueTextColor(Color.BLACK);
         barDataSet.setValueTextSize(12f);
+        barDataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return (int)value + "mg";
+            }
+        });
 
         BarData barData = new BarData(barDataSet);
 

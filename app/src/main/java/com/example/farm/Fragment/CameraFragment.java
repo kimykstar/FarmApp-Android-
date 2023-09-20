@@ -27,11 +27,14 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.example.farm.Connection.AISocket;
 import com.example.farm.FruitFreshActivity;
 import android.Manifest;
 import com.example.farm.R;
 import com.example.farm.TFlite;
 import com.example.farm.VideoActivity;
+
+import org.checkerframework.checker.units.qual.A;
 import org.tensorflow.lite.Interpreter;
 import java.io.BufferedReader;
 import java.io.File;
@@ -54,6 +57,8 @@ public class CameraFragment extends Fragment {
 
     public CameraFragment() {}
 
+    byte maturity = -1;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,6 +67,7 @@ public class CameraFragment extends Fragment {
         video_btn = view.findViewById(R.id.video_open);
 
         int screenWidth = (int)(getResources().getDisplayMetrics().widthPixels) - 50;
+
         camera_btn.getLayoutParams().width = screenWidth / 2;
         camera_btn.getLayoutParams().height = screenWidth / 2;
         video_btn.getLayoutParams().width = screenWidth / 2;
@@ -128,9 +134,9 @@ public class CameraFragment extends Fragment {
                 case REQUEST_TAKE_PHOTO:{
                     if(resultCode == RESULT_OK){
                         File file = new File(mCurrentPhotoPath);
-                        Drawable drawable = getContext().getResources().getDrawable(R.drawable.koreamelon2);
+                        Drawable drawable = getContext().getResources().getDrawable(R.drawable.koreamelon3);
 
-                        Bitmap image1 = drawableToBitmap(drawable);
+//                        Bitmap bitmap = drawableToBitmap(drawable);
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
                         if(bitmap != null){
                             ExifInterface ei = new ExifInterface(mCurrentPhotoPath);
@@ -151,7 +157,8 @@ public class CameraFragment extends Fragment {
 
                             // 크기 변환
                             rotatedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 224, 224, true);
-//                            image.setImageBitmap(rotatedBitmap);
+//                            rotatedBitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
+
                             // TFlite객체 생성
                             TFlite lite = new TFlite(getContext());
 
@@ -185,12 +192,12 @@ public class CameraFragment extends Fragment {
                             // tflite를 실행 인자(인자1 : 전달할 데이터, 인자2 : 출력된 데이터를 받을 데이터)
                             tflite.run(inputBuffer, outputs2);
                             String temp = findFruitName(outputs2);
+
                             // 전달값 : 과일의 이름, 사진, 신선도 수치(float)
-
-
                             Intent intent2 = new Intent(getContext().getApplicationContext(), FruitFreshActivity.class);
                             intent2.putExtra("imageURI", mCurrentPhotoPath);
                             intent2.putExtra("freshInfo", temp);
+                            intent2.putExtra("maturity", maturity);
                             startActivity(intent2);
 
                             Log.i("fruit_name : ", temp.split(" ")[1]);
@@ -208,6 +215,16 @@ public class CameraFragment extends Fragment {
         }catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    private byte getMaturity(Bitmap image){
+        byte result = 0;
+
+        Log.i("socket start", "OK");
+        AISocket socket = new AISocket();
+        result = socket.communication(image);
+
+        return result;
     }
 
     // 식별된 과일의 Label을 찾는 함수

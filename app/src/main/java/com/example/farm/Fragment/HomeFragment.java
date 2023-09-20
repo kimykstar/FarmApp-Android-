@@ -4,6 +4,7 @@ import android.content.AsyncQueryHandler;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -203,24 +204,27 @@ public class HomeFragment extends Fragment {
 
             switch(size){
                 case 1:
-                    hotFruit1.setText("1. " + names[0]);
+                    hotFruit1.setText(names[0]);
                     hotFruit1.setOnClickListener(new HotClickListener(names[0]));
-                    hotFruit2.setText("2. " + "추천과일이 없어요 ㅠㅠ");
-                    hotFruit3.setText("2. " + "추천과일이 없어요 ㅠㅠ");
+                    hotFruit2.setText("추천과일이 없어요 ㅠㅠ");
+                    hotFruit2.setTextColor(Color.GRAY);
+                    hotFruit3.setText("추천과일이 없어요 ㅠㅠ");
+                    hotFruit3.setTextColor(Color.GRAY);
                     break;
                 case 2:
-                    hotFruit1.setText("1. " + names[0]);
+                    hotFruit1.setText(names[0]);
                     hotFruit1.setOnClickListener(new HotClickListener(names[0]));
-                    hotFruit2.setText("2. " + names[1]);
+                    hotFruit2.setText(names[1]);
                     hotFruit2.setOnClickListener(new HotClickListener(names[1]));
-                    hotFruit3.setText("2. " + "추천과일이 없어요 ㅠㅠ");
+                    hotFruit3.setText("추천과일이 없어요 ㅠㅠ");
+                    hotFruit3.setTextColor(Color.GRAY);
                     break;
                 case 3:
-                    hotFruit1.setText("1. " + names[0]);
+                    hotFruit1.setText(names[0]);
                     hotFruit1.setOnClickListener(new HotClickListener(names[0]));
-                    hotFruit2.setText("2. " + names[1]);
+                    hotFruit2.setText(names[1]);
                     hotFruit2.setOnClickListener(new HotClickListener(names[1]));
-                    hotFruit3.setText("3. " + names[2]);
+                    hotFruit3.setText(names[2]);
                     hotFruit3.setOnClickListener(new HotClickListener(names[2]));
                     break;
             }

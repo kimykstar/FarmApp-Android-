@@ -77,7 +77,6 @@ public class CommunityFragment extends Fragment {
         community = view.findViewById(R.id.community);
         loading_view = view.findViewById(R.id.loading_view);
 
-        loading_view.showShimmer();
 
         // choose_box adapter코드 추가
         ChooseTask task = new ChooseTask();
@@ -127,7 +126,6 @@ public class CommunityFragment extends Fragment {
                 } catch (Exception e) {
                     Log.i("Review get Error!", "True");
                 }
-
             }
 
             @Override

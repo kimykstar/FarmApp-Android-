@@ -7,13 +7,13 @@ public class HttpUrl {
 
     private String url;
 
-//    public HttpUrl(){
-//        this.url = "http://52.78.125.197:8082/";
-//    }
-
     public HttpUrl(){
-        this.url = "http://192.168.35.73:8082/";
+        this.url = "http://52.78.125.197:8082/";
     }
+
+//    public HttpUrl(){
+//        this.url = "http://192.168.35.73:8082/";
+//    }
 
     public String getUrl(){
         return url;

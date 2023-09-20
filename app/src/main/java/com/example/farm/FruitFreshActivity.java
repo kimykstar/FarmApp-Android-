@@ -5,10 +5,12 @@ import static com.example.farm.Fragment.CameraFragment.rotateImage;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -20,7 +22,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.farm.Connection.AISocket;
 import com.example.farm.Connection.SearchTask;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -28,6 +32,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.io.File;
@@ -37,10 +42,11 @@ import java.util.concurrent.ExecutionException;
 
 public class FruitFreshActivity extends AppCompatActivity {
     private ImageView fruit_image;
-    private TextView fruit_name, fruit_fresh;
-    private HorizontalBarChart fresh_graph;
-    private ImageButton back_btn;
-    private Button info_btn;
+    private TextView fruit_name, fruit_fresh, fruit_maturity, maturity_tv, maturity_tv2;
+    private HorizontalBarChart fresh_graph, matuity_graph;
+    private ImageButton back_btn, info_btn;
+    private ShimmerFrameLayout shimmerFrameLayout1, shimmerFrameLayout2;
+//    private Button ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +54,7 @@ public class FruitFreshActivity extends AppCompatActivity {
         setContentView(R.layout.fruitfresh_layout);
 
         Intent intent = getIntent();
-        String info = intent.getStringExtra("freshInfo");;
+        String info = intent.getStringExtra("freshInfo");
         String[] temp = info.split(" ");
         String f_name = temp[1];
         String fresh_grade = temp[2];
@@ -60,6 +66,17 @@ public class FruitFreshActivity extends AppCompatActivity {
         fresh_graph = findViewById(R.id.fresh_graph);
         back_btn = findViewById(R.id.back_btn);
         info_btn = findViewById(R.id.info_btn);
+        fruit_maturity = findViewById(R.id.fruit_maturity);
+        shimmerFrameLayout1 = findViewById(R.id.simmer_layout1);
+        maturity_tv = findViewById(R.id.maturity_tv);
+        matuity_graph = findViewById(R.id.matuiry_graph);
+        shimmerFrameLayout2 = findViewById(R.id.shimmer_layout2);
+        maturity_tv2 = findViewById(R.id.maturity_tv2);
+
+        shimmerFrameLayout1.startShimmer();
+        shimmerFrameLayout2.startShimmer();
+
+        fruit_maturity.setText("00");
 
         Bitmap photo = null;
 
@@ -72,8 +89,14 @@ public class FruitFreshActivity extends AppCompatActivity {
         }
         Log.i("Image URI : ", imageURI.toString());
 
-//        Drawable drawable = this.getResources().getDrawable(R.drawable.koreamelon2);
-//        photo = ((BitmapDrawable)drawable).getBitmap();
+        // photo를 AI서버에 전달하여 Socket통신으로 결과값을 받는다.
+        SocketTask task = new SocketTask();
+        try{
+            task.execute(photo);
+//            task.execute(((BitmapDrawable)getDrawable(R.drawable.koreamelon3)).getBitmap());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
 
         if(photo != null) {
@@ -97,12 +120,19 @@ public class FruitFreshActivity extends AppCompatActivity {
                     rotatedBitmap = rotateImage(photo, 270);
                     break;
             }
-
+//            fruit_image.setImageBitmap(((BitmapDrawable)getDrawable(R.drawable.koreamelon3)).getBitmap());
             fruit_image.setImageBitmap(rotatedBitmap);
         }
 
         fruit_name.setText(f_name);
-        fruit_fresh.setText("상태 : " + fresh_grade);
+        switch(fresh_grade){
+            case "normal":
+                fruit_fresh.setText("상태 : 보통");
+            case "rotten":
+                fruit_fresh.setText("상태 : 썩음");
+            case "fresh":
+                fruit_fresh.setText("상태 : 신선함");
+        }
 
         back_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,11 +141,15 @@ public class FruitFreshActivity extends AppCompatActivity {
             }
         });
 
+        // 신선도 그래프 설정
         fresh_graph.setDrawBarShadow(true);
+        fresh_graph.setScaleEnabled(false);
+        fresh_graph.setClickable(false);
 
         ArrayList<Float> li = new ArrayList<>();
         li.add(fresh_num);
         BarDataSet dataSet = getBarDataSet(li);
+        dataSet.setColor(Color.rgb(147, 247, 250));
         BarData data = new BarData(dataSet);
         fresh_graph.setData(data);
         fresh_graph.setDrawValueAboveBar(false);
@@ -134,7 +168,9 @@ public class FruitFreshActivity extends AppCompatActivity {
         yRight.setDrawGridLines(false);
         yRight.setDrawAxisLine(true);
         yRight.setEnabled(false);
+        yRight.setDrawLabels(false);
 
+        fresh_graph.setTouchEnabled(false);
         fresh_graph.animateY(1000);
 
         info_btn.setOnClickListener(new View.OnClickListener() {
@@ -160,10 +196,74 @@ public class FruitFreshActivity extends AppCompatActivity {
         ArrayList<BarEntry> list = new ArrayList<>();
 
         list.add(new BarEntry(0f, data.get(0)));
-        BarDataSet dataSet = new BarDataSet(list, "Grade");
+        BarDataSet dataSet = new BarDataSet(list, "");
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        dataSet.setLabel("신선도");
         dataSet.setValueTextSize(10f);
+        dataSet.setDrawIcons(false);
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return (int)value + "%";
+            }
+        });
         return dataSet;
+    }
+
+    private class SocketTask extends AsyncTask<Bitmap, Void, String>{
+        @Override
+        protected String doInBackground(Bitmap... bitmaps) {
+            AISocket socket = new AISocket();
+            byte result = socket.communication(bitmaps[0]);
+            Log.i("Activity Result : ", result + "");
+            return result + "";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            // 성숙도 textView 제어
+            shimmerFrameLayout1.stopShimmer();
+            maturity_tv.setVisibility(View.INVISIBLE);
+            fruit_maturity.setVisibility(View.VISIBLE);
+            shimmerFrameLayout1.setVisibility(View.INVISIBLE);
+            fruit_maturity.setText("성숙도 : " + s + "%");
+
+            // 성숙도 Barchart제어
+            shimmerFrameLayout2.stopShimmer();
+            maturity_tv2.setVisibility(View.INVISIBLE);
+            shimmerFrameLayout2.setVisibility(View.INVISIBLE);
+            matuity_graph.setVisibility(View.VISIBLE);
+
+            matuity_graph.setDrawBarShadow(true);
+            matuity_graph.setScaleEnabled(false);
+            matuity_graph.setClickable(false);
+            matuity_graph.setTouchEnabled(false);
+
+            ArrayList<Float> li = new ArrayList<>();
+            li.add(Float.parseFloat(s));
+            BarDataSet dataSet = getBarDataSet(li);
+            dataSet.setColors(Color.rgb(248, 236, 135));
+            BarData data = new BarData(dataSet);
+            matuity_graph.setData(data);
+            matuity_graph.setDrawValueAboveBar(false);
+
+            XAxis xAxis = matuity_graph.getXAxis();
+            xAxis.setDrawGridLines(false);
+            xAxis.setDrawAxisLine(false);
+            xAxis.setEnabled(false);
+
+            YAxis yLeft = matuity_graph.getAxisLeft();
+            yLeft.setAxisMinimum(0f);
+            yLeft.setAxisMaximum(100f);
+            yLeft.setEnabled(false);
+
+            YAxis yRight = matuity_graph.getAxisRight();
+            yRight.setDrawGridLines(false);
+            yRight.setDrawAxisLine(true);
+            yRight.setEnabled(false);
+
+            matuity_graph.animateY(1000);
+        }
     }
 
 }

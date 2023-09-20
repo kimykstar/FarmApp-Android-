@@ -103,36 +103,94 @@
 
                 </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Hot과일!! (Top3)"
-                android:layout_marginTop="20dp"
-                android:textSize="20sp"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:background="@color/representColor"/>
 
-            <Button
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:text="1"
-                android:id="@+id/hotFruit1"/>
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="10dp"
+                android:elevation="5dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hot과일!! (Top3)"
+                    android:id="@+id/tv"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:background="@color/representColor"/>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:text="2"
-                android:id="@+id/hotFruit2"/>
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="@drawable/rank1"
+                    android:layout_below="@+id/tv"
+                    android:scaleType="fitXY"
+                    android:padding="3dp"
+                    android:background="@color/white"
+                    android:id="@+id/rank1"/>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:text="3"
-                android:id="@+id/hotFruit3"/>
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00ff0000"
+                    android:text="1"
+                    android:drawableRight="@drawable/rank_btn"
+                    android:layout_marginLeft="30dp"
+                    android:gravity="left|center"
+                    android:drawablePadding="10dp"
+                    android:layout_below="@+id/tv"
+                    android:layout_toRightOf="@+id/rank1"
+                    android:id="@+id/hotFruit1"/>
+
+
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="@drawable/rank2"
+                    android:scaleType="fitXY"
+                    android:padding="3dp"
+                    android:layout_below="@+id/rank1"
+                    android:background="@color/white"
+                    android:id="@+id/rank2"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00ff0000"
+                    android:text="2"
+                    android:layout_marginLeft="30dp"
+                    android:drawableRight="@drawable/rank_btn"
+                    android:gravity="left|center"
+                    android:layout_below="@+id/hotFruit1"
+                    android:layout_toRightOf="@+id/rank2"
+                    android:id="@+id/hotFruit2"/>
+
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:src="@drawable/rank3"
+                    android:scaleType="fitXY"
+                    android:padding="3dp"
+                    android:layout_below="@+id/rank2"
+                    android:background="@color/white"
+                    android:id="@+id/rank3"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00ff0000"
+                    android:text="3"
+                    android:layout_marginLeft="30dp"
+                    android:gravity="left|center"
+                    android:layout_below="@+id/hotFruit2"
+                    android:drawableRight="@drawable/rank_btn"
+                    android:layout_toRightOf="@+id/rank3"
+                    android:id="@+id/hotFruit3"/>
+
+            </RelativeLayout>
 
 
             <LinearLayout
