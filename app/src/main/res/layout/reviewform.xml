@@ -201,14 +201,13 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/check"
+        android:layout_marginTop="3dp"
         android:scaleType="fitXY"
-        android:background="@color/white"
+        android:background="@drawable/review_background"
         android:layout_toRightOf="@+id/new_comment"
         android:layout_below="@+id/time"
         android:padding="10dp"
         android:id="@+id/check"
         android:layout_marginLeft="-50dp"/>
-
-
 
 </RelativeLayout>

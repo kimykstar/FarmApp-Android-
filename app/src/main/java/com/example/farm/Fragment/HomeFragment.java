@@ -2,6 +2,7 @@ package com.example.farm.Fragment;
 
 import android.content.AsyncQueryHandler;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +25,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -58,6 +62,17 @@ public class HomeFragment extends Fragment {
     private LinearLayout recommend_ll;
     private SearchView search;
     private Button hotFruit1, hotFruit2, hotFruit3, more_btn;
+    private TextView addi_tv;
+    private RelativeLayout recommend_rl;
+    private Fragment currentFragment;
+
+    // fragment 새로고침 함수
+    private void refreshFragment(){
+        FragmentTransaction ft = requireFragmentManager().beginTransaction();
+        HomeFragment fragment = new HomeFragment();
+        ft.replace(R.id.main_layout, fragment);
+        ft.commit();
+    }
 
     @Nullable
     @Override
@@ -72,14 +87,20 @@ public class HomeFragment extends Fragment {
         hotFruit2 = view.findViewById(R.id.hotFruit2);
         hotFruit3 = view.findViewById(R.id.hotFruit3);
         more_btn = view.findViewById(R.id.more_btn);
+        addi_tv = view.findViewById(R.id.addi_tv);
+        recommend_rl = view.findViewById(R.id.setting_rl);
+        currentFragment = this.getParentFragment();
 
         search.setSubmitButtonEnabled(true);
 
         Session session = (Session)((MainActivity)getActivity()).getApplication();
+        // 로그인 안된 경우
         if(session.getSessionId().equals("default")) {
             recommend_ll.setVisibility(View.INVISIBLE);
             recommend_tv.setVisibility(View.INVISIBLE);
-        }else{
+            addi_tv.setVisibility(View.INVISIBLE);
+            recommend_rl.setVisibility(View.INVISIBLE);
+        }else{ // 로그인 된 경우 영양소 설정이 됐는지 안됐는지에 따라 구별
             SharedPreferences preferences = getActivity().getSharedPreferences(session.getSessionId(), Context.MODE_PRIVATE);
             Map<String, String> list = (Map<String, String>) preferences.getAll();
             Iterator<String> it = list.values().iterator();
@@ -89,12 +110,45 @@ public class HomeFragment extends Fragment {
                     flag = true;
                     break;
                 }
-            if(flag == true) {
+            if(flag == true) { // 영양소가 있는 경우
                 recommend_tv.setText(session.getSessionId() + "님을 위한 추천 과일");
                 recommend_ll.setVisibility(View.VISIBLE);
                 recommend_tv.setVisibility(View.VISIBLE);
+                addi_tv.setVisibility(View.VISIBLE);
+                recommend_rl.setVisibility(View.INVISIBLE);
+                recommend.setVisibility(View.VISIBLE);
+                more_btn.setVisibility(View.VISIBLE);
+            }else{
+                recommend_rl.setVisibility(View.VISIBLE);
+                recommend.setVisibility(View.INVISIBLE);
+                addi_tv.setVisibility(View.INVISIBLE);
+                more_btn.setVisibility(View.INVISIBLE);
             }
         }
+
+        recommend_rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomDialog dialog = new  CustomDialog(getContext(), session.getSessionId());
+                // WindowManager의 Layoutparameter변수를 생성하여 copyFrom을 통해 CustomDialog의 Window속성을 가져온다.
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                // layout Parameter의 height와 width를 설정하고 dialog의 Window를 불러와 속성을 재 설정한다.
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                Window window = dialog.getWindow();
+                window.setAttributes(lp);
+                dialog.show();
+                getFragmentManager().executePendingTransactions();
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        Log.i("dismissed : ", "true1");
+                        refreshFragment();
+                    }
+                });
+            }
+        });
 
         more_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +163,13 @@ public class HomeFragment extends Fragment {
                 Window window = dialog.getWindow();
                 window.setAttributes(lp);
                 dialog.show();
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        Log.i("dismissed : ", "true2");
+                        refreshFragment();
+                    }
+                });
             }
         });
 
