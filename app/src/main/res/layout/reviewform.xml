@@ -33,38 +33,95 @@
         android:textSize="20sp"
         android:text="수박"
         android:layout_toRightOf="@+id/fruit_img"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="10sp"
         android:id="@+id/fruit_name"
         android:textColor="@color/black"/>
+
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:layout_below="@+id/fruit_name"-->
+<!--        android:layout_marginStart="10sp"-->
+<!--        android:layout_marginLeft="10sp"-->
+<!--        android:layout_marginTop="10sp"-->
+<!--        android:layout_marginEnd="10sp"-->
+<!--        android:layout_marginRight="10sp"-->
+<!--        android:layout_marginBottom="10sp"-->
+<!--        android:layout_toRightOf="@+id/fruit_img"-->
+<!--        android:background="#CCCACA" />-->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="작성자"
+        android:layout_marginTop="15dp"
+        android:padding="3dp"
+        android:textColor="@color/black"
         android:layout_below="@+id/fruit_name"
         android:layout_toRightOf="@+id/fruit_img"
+        android:id="@+id/id_tag"
+        android:background="@drawable/round_tag"
+        android:layout_marginLeft="10sp"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/fruit_name"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_toRightOf="@+id/id_tag"
         android:layout_marginLeft="20dp"
-        android:text="작성자:"
+        android:textSize="16sp"
         android:id="@+id/user_id"
         android:textColor="@color/black"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="맛"
+        android:layout_marginTop="10dp"
+        android:padding="3dp"
+        android:textColor="@color/black"
         android:layout_below="@+id/user_id"
         android:layout_toRightOf="@+id/fruit_img"
-        android:text="맛 : "
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:id="@+id/taste_tag"
+        android:background="@drawable/round_tag"
+        android:layout_marginLeft="10sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_id"
+        android:maxLines="1"
+        android:layout_marginRight="10dp"
+        android:ellipsize="end"
+        android:layout_toRightOf="@+id/taste_tag"
+        android:layout_marginLeft="10dp"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
         android:id="@+id/flavor"
         android:textColor="@color/black"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
+        android:background="#CCCACA"
+        android:layout_below="@+id/fruit_img" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fruit_img"
+        android:maxLines="3"
+        android:ellipsize="end"
         android:layout_marginTop="20dp"
+        android:layout_marginRight="10dp"
         android:id="@+id/content"
         android:layout_marginLeft="20dp"
         android:textColor="@color/black"/>
@@ -78,7 +135,7 @@
         android:id="@+id/time"
         android:textSize="10sp"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"/>
 
     <ImageButton
@@ -87,7 +144,7 @@
         android:layout_height="30dp"
         android:layout_below="@+id/content"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:background="@color/white"
         android:scaleType="fitXY"
@@ -97,6 +154,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/content"
+        android:layout_marginTop="10dp"
         android:layout_toLeftOf="@+id/dialog">
 
         <ImageButton
@@ -105,7 +163,6 @@
             android:layout_below="@+id/content"
             android:background="@color/white"
             android:src="@drawable/heart"
-            android:layout_marginTop="20dp"
             android:layout_toLeftOf="@+id/dialog"
             android:layout_marginRight="10dp"
             android:scaleType="fitXY"
@@ -117,7 +174,6 @@
             android:layout_below="@+id/content"
             android:background="@color/white"
             android:src="@drawable/colorheart"
-            android:layout_marginTop="20dp"
             android:visibility="invisible"
             android:layout_toLeftOf="@+id/dialog"
             android:layout_marginRight="10dp"
@@ -133,7 +189,7 @@
         android:id="@+id/update_btn"
         android:textSize="12sp"
         android:textColor="#F44336"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/content"
         android:layout_marginRight="10dp"
         android:visibility="invisible"
@@ -148,7 +204,7 @@
         android:textColor="#F44336"
         android:textSize="12sp"
         android:visibility="invisible"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
         android:layout_below="@+id/content"
         android:layout_alignParentRight="true"
@@ -158,29 +214,10 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#D1CDCD"
+        android:layout_marginLeft="10sp"
+        android:layout_marginRight="10sp"
         android:layout_below="@+id/time"
         android:id="@+id/line"/>
-
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="해피"-->
-<!--        android:layout_marginLeft="20dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:textSize="15sp"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:id="@+id/user_id_comment"-->
-<!--        android:layout_below="@+id/time"/>-->
-
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:id="@+id/comment"-->
-<!--        android:layout_below="@+id/user_id_comment"-->
-<!--        android:text="내용"-->
-<!--        android:layout_marginLeft="20dp"-->
-<!--        android:layout_marginTop="7dp"-->
-<!--        android:textColor="@color/black"/>-->
 
 <!--    스크롤 가능한 edittext xml-->
     <EditText

@@ -27,8 +27,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 
 public class UpdateReview extends AppCompatActivity{
 
@@ -100,9 +102,18 @@ public class UpdateReview extends AppCompatActivity{
     private class PostListRecyclerAdapter extends RecyclerView.Adapter<PostListRecyclerAdapter.ReviewHolder>{
 
         ArrayList<ReviewInfo> reviews;
+        String now;
+        int[] current_time = new int[6];
 
         public PostListRecyclerAdapter(ArrayList<ReviewInfo> reviews){
             this.reviews = reviews;
+            // 현재시간 구하기
+            SimpleDateFormat formatter = new SimpleDateFormat("yy:MM:dd:HH:mm:ss");
+            now = formatter.format(new Date());
+            // 년, 월, 일, 시, 분, 초로 나눈다.
+            String[] temp = now.split(":");
+            for(int i = 0; i < temp.length; i++)
+                current_time[i] = Integer.parseInt(temp[i]);
         }
 
         @NonNull
@@ -120,6 +131,21 @@ public class UpdateReview extends AppCompatActivity{
         @Override
         public int getItemCount() {
             return reviews.size();
+        }
+
+        public String calcTime(int[] current_time, int[] review_time){
+            String[] unit = {"년", "달", "일", "시", "분", "초"};
+            String result = "";
+
+            int length = 6;
+            for(int i = 0; i < length; i++){
+                if(current_time[i] - review_time[i] > 0){
+                    result = current_time[i] - review_time[i] + unit[i] + "전";
+                    break;
+                }
+            }
+
+            return result;
         }
 
         private class ReviewHolder extends RecyclerView.ViewHolder{
@@ -155,7 +181,18 @@ public class UpdateReview extends AppCompatActivity{
                 fruit_name.setText(review.getFruit_name());
                 flavor.append(review.getFlavor());
                 content.setText(review.getContent());
-                time.setText(review.getReview_time());
+
+                // review의 시간 데이터 추출
+                int[] review_time = new int[6];
+                String temp1 = review.getReview_time();
+                temp1 = temp1.replace("-", ":");
+                temp1 = temp1.replace(" ", ":");
+                String[] temp2 = temp1.split(":");
+                for(int i = 0; i < 6; i++)
+                    review_time[i] = Integer.parseInt(temp2[i]);
+
+                Log.i("Review Time : ", temp1);
+                time.setText(calcTime(current_time, review_time));
                 review_id.setText(review.getReview_id());
                 Log.i("review_id", review_id.getText().toString());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
