@@ -27,8 +27,8 @@ public class AISocket {
     public AISocket(){
         try {
             // Socket및 input, outputstream 생성
-//            socket = new Socket("13.124.254.49", 5800);
-            socket = new Socket("172.16.37.214", 5800);
+            socket = new Socket("43.200.3.29", 5800);
+//            socket = new Socket("172.16.24.223", 5800);
 
             outputStream = new DataOutputStream(socket.getOutputStream());
             inputStream = new DataInputStream(socket.getInputStream());
@@ -61,10 +61,14 @@ public class AISocket {
 
             Log.i("소켓 이미지 전송 시작 : ", "start");
             bos.write(bytes);
+
+            Thread.sleep(10000);
+
             bos.flush();
             Log.i("소켓 이미지 전송 완료 : ", "complete");
 
             result = (byte)inputStream.read();
+            Log.i("소켓 통신 결과 데이터 : ", result + "");
             bos.close();
             disconnect();
             Log.i("Input Data : ", result + " ");

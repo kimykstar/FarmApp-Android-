@@ -25,7 +25,7 @@
             android:gravity="center"
             android:text="비타민A"
             android:textColor="@color/white"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:background="#4D000000"
             android:id="@+id/nutrition_tv"/>
 
