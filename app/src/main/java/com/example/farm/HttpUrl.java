@@ -10,7 +10,7 @@ public class HttpUrl {
     public HttpUrl(){
         this.url = "http://54.180.31.26:8082/";
     }
-
+//
 //    public HttpUrl(){
 //        this.url = "http://192.168.35.73:8082/";
 //    }

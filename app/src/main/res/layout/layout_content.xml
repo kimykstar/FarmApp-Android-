@@ -4,7 +4,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -52,42 +51,76 @@
 
             </RelativeLayout>
 
-
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
 
-                <androidx.appcompat.widget.SearchView
-                    android:id="@+id/searchFruit"
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:src="@drawable/fruitbackground"
+                    android:scaleType="fitXY"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/gray_background"/>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:background="@color/white"
-                    android:elevation="5dp"
-                    app:iconifiedByDefault="false"
-                    app:queryHint="과일 이름을 입력하세요"
-                    app:searchIcon="@drawable/search_icon">
-                </androidx.appcompat.widget.SearchView>
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="과일 검색"
+                        android:textColor="@color/white"
+                        android:textSize="30sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginLeft="10dp"
-                    android:text="이 달의 추천과일!"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
-            </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        android:text="과일의 이름을 입력하여 검색해주세요"
+                        android:textSize="16sp"
+                        android:layout_gravity="center"/>
 
+                    <androidx.appcompat.widget.SearchView
+                        android:id="@+id/searchFruit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/transparent_round"
+                        android:elevation="5dp"
+                        app:iconifiedByDefault="false"
+                        app:queryHint="과일 이름을 입력하세요"
+                        app:searchIcon="@drawable/search_icon">
+                    </androidx.appcompat.widget.SearchView>
+
+                </LinearLayout>
+            </FrameLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="10dp"
+                android:text="이 달의 추천과일!"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/view_ll"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:background="@color/white"
                 android:elevation="5dp"
                 android:padding="20dp"
