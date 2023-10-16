@@ -48,7 +48,7 @@ public class CustomDialog extends Dialog {
         close_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
+                cancel();
             }
         });
 
