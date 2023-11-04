@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.farm.Dialog.CustomDialog;
 import com.example.farm.Connection.HttpConnection;
+import com.example.farm.Dialog.InstructionDialog;
 import com.example.farm.HttpUrl;
 import com.example.farm.LoginActivity;
 import com.example.farm.MainActivity;
@@ -39,18 +40,19 @@ import com.example.farm.UpdateReview;
 public class MyInfoFragment extends Fragment {
 
     private View view;
-    private Button login_btn, guide_btn, logout_btn, category_btn, delete_btn, review_btn;
+    private Button login_btn, guide_btn, guide_btn2, logout_btn, category_btn, delete_btn, review_btn;
     private LinearLayout login_ll, info_ll, fruit_setting_ll, mypost_ll, info_ll2;
     private ImageView user_img;
     private TextView name_tv, user_id;
-    private ImageButton login_img, paper_btn1, setting_img, mypost_img, paper_btn2;
+    private ImageButton login_img, setting_img, mypost_img;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.myinfo_fragment, container, false);
 
         login_btn = view.findViewById(R.id.login_btn);
-        guide_btn = view.findViewById(R.id.guide_btn);
+        guide_btn = view.findViewById(R.id.guide_btn1);
+        guide_btn2 = view.findViewById(R.id.guide_btn2);
         category_btn = view.findViewById(R.id.category_btn);
         logout_btn = view.findViewById(R.id.logout_btn);
         delete_btn = view.findViewById(R.id.delete_user);
@@ -64,8 +66,6 @@ public class MyInfoFragment extends Fragment {
         mypost_ll = view.findViewById(R.id.mypost_ll);
         info_ll2 = view.findViewById(R.id.info_ll2);
         login_img = view.findViewById(R.id.login_img);
-        paper_btn1 = view.findViewById(R.id.paper_btn1);
-        paper_btn2 = view.findViewById(R.id.paper_btn2);
         setting_img = view.findViewById(R.id.setting_img);
         mypost_img = view.findViewById(R.id.mypost_img);
 
@@ -108,7 +108,12 @@ public class MyInfoFragment extends Fragment {
             // 로그인 버튼 및 이미지 버튼 listener끝
 
             // 이용안내
-
+            guide_btn2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    instruction_show();
+                }
+            });
 
         }else { // 로그인 한 경우
             login_ll.setVisibility(INVISIBLE);
@@ -230,6 +235,14 @@ public class MyInfoFragment extends Fragment {
                 }
             });
         }
+
+        guide_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                instruction_show();
+            }
+        });
+
         return view;
     }
 
@@ -244,5 +257,19 @@ public class MyInfoFragment extends Fragment {
             Log.i("delete Result : ", result);
             return result;
         }
+    }
+
+    // 주의사항 dialog띄우기
+    public void instruction_show(){
+        // 주의사항 띄우기
+        InstructionDialog dialog = new InstructionDialog(getContext());
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        Window window = dialog.getWindow();
+        window.setAttributes(lp);
+        dialog.show();
     }
 }

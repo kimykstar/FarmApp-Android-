@@ -34,7 +34,7 @@ android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="150dp">
 
@@ -50,7 +50,7 @@ android:background="@color/white">
                 android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:background="@drawable/transparent_round"
+                android:background="@drawable/transparent_round2"
                 android:padding="40dp"
                 android:elevation="5dp"
                 android:scaleType="fitXY"
@@ -78,7 +78,7 @@ android:background="@color/white">
                 android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:background="@drawable/transparent_round"
+                android:background="@drawable/transparent_round2"
                 android:padding="40dp"
                 android:scaleType="fitXY"
                 android:elevation="5dp"
@@ -93,9 +93,35 @@ android:background="@color/white">
                 android:textSize="20sp"
                 android:textColor="@color/black"/>
 
-        </LinearLayout>
 
+
+        </LinearLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginRight="20dp"
+        android:id="@+id/instruction_ll"
+        android:layout_marginTop="170dp"
+        android:layout_gravity="right|bottom">
+        <ImageButton
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/help"
+            android:id="@+id/instruction_btn"
+            android:background="@color/white"
+            android:scaleType="fitXY"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="주의사항"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:gravity="center"/>
+    </LinearLayout>
+
 
 
 </LinearLayout>

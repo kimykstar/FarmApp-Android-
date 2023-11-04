@@ -8,7 +8,7 @@ public class HttpUrl {
     private String url;
 
     public HttpUrl(){
-        this.url = "http://54.180.31.26:8082/";
+        this.url = "http://54.180.113.188:8082/";
     }
 //
 //    public HttpUrl(){

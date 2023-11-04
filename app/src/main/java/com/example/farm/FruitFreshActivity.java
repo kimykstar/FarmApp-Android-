@@ -89,15 +89,6 @@ public class FruitFreshActivity extends AppCompatActivity {
         }
         Log.i("Image URI : ", imageURI.toString());
 
-        // photo를 AI서버에 전달하여 Socket통신으로 결과값을 받는다.
-        SocketTask task = new SocketTask();
-        try{
-            task.execute(photo);
-//            task.execute(((BitmapDrawable)getDrawable(R.drawable.koreamelon3)).getBitmap());
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
 
         if(photo != null) {
             ExifInterface ei = null;
@@ -122,6 +113,15 @@ public class FruitFreshActivity extends AppCompatActivity {
             }
 //            fruit_image.setImageBitmap(((BitmapDrawable)getDrawable(R.drawable.koreamelon3)).getBitmap());
             fruit_image.setImageBitmap(rotatedBitmap);
+
+            // photo를 AI서버에 전달하여 Socket통신으로 결과값을 받는다.
+            SocketTask task = new SocketTask();
+            try{
+                task.execute(rotatedBitmap);
+//            task.execute(((BitmapDrawable)getDrawable(R.drawable.koreamelon3)).getBitmap());
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
 
         fruit_name.setText(f_name);

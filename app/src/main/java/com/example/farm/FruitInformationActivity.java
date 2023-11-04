@@ -56,7 +56,7 @@ public class FruitInformationActivity extends AppCompatActivity {
 
     private TextView f_name;
     TextView fruit_name, effective1, effective2, effective3, nutrition1, nutrition2, nutrition3, slide_tv;
-    ImageButton back_btn, chart_btn;
+    ImageButton back_btn, chart_btn, fruit_cut_img;
     private PieChart pie_chart;
     private ImageView fruit_img;
     private Button nutrition_btn;
@@ -80,6 +80,7 @@ public class FruitInformationActivity extends AppCompatActivity {
         nutrition2 = findViewById(R.id.nutrition_name2);
         nutrition3 = findViewById(R.id.nutrition_name3);
         slide = findViewById(R.id.slide);
+        fruit_cut_img = findViewById(R.id.fruit_cut_img);
 
         int img_resource = getResources().getIdentifier(fruit.getFile_name().toLowerCase(), "drawable", getPackageName());
         fruit_img.setImageResource(img_resource);
@@ -217,8 +218,26 @@ public class FruitInformationActivity extends AppCompatActivity {
             }
         });
 
-        // AR화면을 볼 수 있는 버튼
+        // AR화면을 볼 수 있는 버튼(과일 전체)
         ar_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
+                HttpUrl url = new HttpUrl();
+                String fruit_file = fruit.getFile_name();
+                String serverPath = url.getUrl();
+                Uri intentUri =
+                        Uri.parse("https://arvr.google.com/scene-viewer/1.0").buildUpon()
+                                .appendQueryParameter("file", serverPath + "arwholeimage?fruit_name=" + fruit_file)
+                                .appendQueryParameter("mode", "3D_preferred")
+                                .build();
+                sceneViewerIntent.setData(intentUri);
+                sceneViewerIntent.setPackage("com.google.ar.core");
+                startActivity(sceneViewerIntent);
+            }
+        });
+
+        fruit_cut_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent sceneViewerIntent = new Intent(Intent.ACTION_VIEW);
@@ -229,15 +248,14 @@ public class FruitInformationActivity extends AppCompatActivity {
                         Uri.parse("https://arvr.google.com/scene-viewer/1.0").buildUpon()
                                 .appendQueryParameter("file", serverPath + "arimage?fruit_name=" + fruit_file)
                                 .appendQueryParameter("mode", "3D_preferred")
-
                                 .build();
                 sceneViewerIntent.setData(intentUri);
                 sceneViewerIntent.setPackage("com.google.ar.core");
                 startActivity(sceneViewerIntent);
             }
         });
-
     }
+
 
     // 여러 단위(g, mg, ug)을 mg으로 변환하여 반환해주는 단위 변환기 (함유량을 정렬하기 위해 사용)
     public double unitConvertMg(Nutrition nutrition){

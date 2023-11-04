@@ -20,7 +20,7 @@
         android:text="과일이름"
         android:textSize="20sp"
         android:layout_gravity="left"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="20dp"
         android:textColor="#373636"/>
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:text="제철시기: "
         android:id="@+id/fruit_period"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="20dp"
         android:layout_gravity="left"
         android:layout_marginTop="10dp"
         android:textColor="#373636"/>
@@ -39,7 +39,7 @@
         android:text="* 제철시기는 기온에 따라 달라질 수 있습니다"
         android:textSize="8sp"
         android:layout_gravity="left"
-        android:layout_marginLeft="30dp"/>
+        android:layout_marginLeft="20dp"/>
 
 
 </LinearLayout>

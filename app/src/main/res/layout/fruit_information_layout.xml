@@ -45,7 +45,7 @@
                 <ImageButton
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:text="과일 단면"
+                    android:text="과일AR"
                     android:layout_gravity="right|bottom"
                     android:layout_marginRight="70dp"
                     android:layout_marginBottom="20dp"
@@ -278,36 +278,72 @@
                             android:textColor="@color/black"
                             android:textSize="15sp"
                             android:layout_marginTop="20dp"/>
-
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginRight="15dp"
-                            android:background="@drawable/transparent_round"
-                            android:layout_gravity="right">
+                            android:orientation="horizontal">
 
-                            <ImageButton
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"
-                                android:id="@+id/chart_btn"
-                                android:scaleType="fitXY"
-                                android:src="@drawable/chart"
-                                android:padding="5dp"
-                                android:background="#00ff0000"/>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/btn_ll1"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginLeft="15dp"
+                                android:orientation="vertical">
+                                <ImageButton
+                                    android:layout_width="100dp"
+                                    android:layout_height="100dp"
+                                    android:id="@+id/fruit_cut_img"
+                                    android:scaleType="fitXY"
+                                    android:src="@drawable/fruit_cut"
+                                    android:padding="5dp"
+                                    android:background="#00ff0000"/>
 
-                            <Button
-                                android:layout_gravity="right"
-                                android:layout_width="match_parent"
-                                android:layout_height="50dp"
-                                android:background="#00ff0000"
-                                android:text="함유 영양소 보기"
-                                android:textSize="13sp"
-                                android:gravity="center"
-                                android:id="@+id/nutrition_btn"/>
-                        </LinearLayout>
+                                <Button
+                                    android:layout_gravity="right"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="#00ff0000"
+                                    android:text="과일 단면 보기"
+                                    android:textSize="13sp"
+                                    android:gravity="center"
+                                    android:id="@+id/fruit_cut_btn"/>
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_marginTop="15dp"
+                                android:layout_marginRight="15dp"
+                                android:layout_alignParentRight="true"
+                                android:background="@drawable/transparent_round"
+                                android:layout_gravity="right">
+
+                                <ImageButton
+                                    android:layout_width="100dp"
+                                    android:layout_height="100dp"
+                                    android:id="@+id/chart_btn"
+                                    android:scaleType="fitXY"
+                                    android:src="@drawable/chart"
+                                    android:padding="5dp"
+                                    android:background="#00ff0000"/>
+
+                                <Button
+                                    android:layout_gravity="right"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="#00ff0000"
+                                    android:text="함유 영양소 보기"
+                                    android:textSize="13sp"
+                                    android:gravity="center"
+                                    android:id="@+id/nutrition_btn"/>
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+
                     </LinearLayout>
                 </LinearLayout>
             </ScrollView>

@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,8 +30,11 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.example.farm.Connection.AISocket;
+import com.example.farm.Dialog.InstructionDialog;
 import com.example.farm.FruitFreshActivity;
 import android.Manifest;
+import android.widget.LinearLayout;
+
 import com.example.farm.R;
 import com.example.farm.TFlite;
 import com.example.farm.VideoActivity;
@@ -54,6 +59,8 @@ public class CameraFragment extends Fragment {
     String mCurrentPhotoPath = null;
     static final int REQUEST_TAKE_PHOTO = 1;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
+    ImageButton instruction_btn;
+    LinearLayout instruction_ll;
 
     public CameraFragment() {}
 
@@ -65,6 +72,11 @@ public class CameraFragment extends Fragment {
         view = inflater.inflate(R.layout.start_camera_layout, container, false);
         camera_btn = view.findViewById(R.id.camera_open);
         video_btn = view.findViewById(R.id.video_open);
+        instruction_ll = view.findViewById(R.id.instruction_ll);
+        instruction_btn = view.findViewById(R.id.instruction_btn);
+
+        // 주의사항 dialog띄우기
+        instruction_show();
 
         int screenWidth = (int)(getResources().getDisplayMetrics().widthPixels) - 50;
 
@@ -81,6 +93,20 @@ public class CameraFragment extends Fragment {
                 }else {
                     dispatchTakePictureIntent();
                 }
+            }
+        });
+
+        instruction_ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                instruction_show();
+            }
+        });
+
+        instruction_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                instruction_show();
             }
         });
 
@@ -134,9 +160,9 @@ public class CameraFragment extends Fragment {
                 case REQUEST_TAKE_PHOTO:{
                     if(resultCode == RESULT_OK){
                         File file = new File(mCurrentPhotoPath);
-                        Drawable drawable = getContext().getResources().getDrawable(R.drawable.koreamelon3);
-
+//                        Drawable drawable = getContext().getResources().getDrawable(R.drawable.koreamelon3);
 //                        Bitmap bitmap = drawableToBitmap(drawable);
+
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), Uri.fromFile(file));
                         if(bitmap != null){
                             ExifInterface ei = new ExifInterface(mCurrentPhotoPath);
@@ -155,9 +181,12 @@ public class CameraFragment extends Fragment {
                                     break;
                             }
 
-                            // 크기 변환
+//                             크기 변환
                             rotatedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 224, 224, true);
 //                            rotatedBitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
+
+//                            // Socket통신 객체 받기
+
 
                             // TFlite객체 생성
                             TFlite lite = new TFlite(getContext());
@@ -273,6 +302,20 @@ public class CameraFragment extends Fragment {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+
+    // 주의사항 dialog띄우기
+    public void instruction_show(){
+        // 주의사항 띄우기
+        InstructionDialog dialog = new InstructionDialog(getContext());
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+        Window window = dialog.getWindow();
+        window.setAttributes(lp);
+        dialog.show();
     }
 
 }

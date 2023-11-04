@@ -27,8 +27,8 @@ public class AISocket {
     public AISocket(){
         try {
             // Socket및 input, outputstream 생성
-            socket = new Socket("43.200.3.29", 5800);
-//            socket = new Socket("172.16.24.223", 5800);
+//            socket = new Socket("43.200.3.29", 5800);
+            socket = new Socket("192.168.35.73", 8081);
 
             outputStream = new DataOutputStream(socket.getOutputStream());
             inputStream = new DataInputStream(socket.getInputStream());
@@ -53,16 +53,12 @@ public class AISocket {
             image.compress(Bitmap.CompressFormat.PNG, 100, imageOutputStream);
             byte[] bytes = imageOutputStream.toByteArray(); // 바이트 배열로 변환
             int buffsize = bytes.length;
+            Log.i("image Length : ", buffsize + "");
             BufferedOutputStream bos = new BufferedOutputStream(outputStream, buffsize);
             Log.i("이미지 압축 및 저장", "끝 파일 길이 전달");
 
-            outputStream.writeUTF(Integer.toString(bytes.length));
-            outputStream.flush();
-
             Log.i("소켓 이미지 전송 시작 : ", "start");
             bos.write(bytes);
-
-            Thread.sleep(10000);
 
             bos.flush();
             Log.i("소켓 이미지 전송 완료 : ", "complete");
