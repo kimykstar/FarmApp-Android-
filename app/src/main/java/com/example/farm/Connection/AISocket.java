@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.example.farm.HttpUrl;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -18,6 +20,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class AISocket {
     private static Socket socket;
@@ -44,8 +47,8 @@ public class AISocket {
 
 
     // 서버 소켓으로부터 출력데이터를 받아온다.
-    public byte communication(Bitmap image){
-        byte result = 1;
+    public List<String> communication(Bitmap image){
+        List<String> list = null;
         ByteArrayOutputStream imageOutputStream = new ByteArrayOutputStream();
 
         try {
@@ -63,25 +66,34 @@ public class AISocket {
             bos.flush();
             Log.i("소켓 이미지 전송 완료 : ", "complete");
 
-            result = (byte)inputStream.read();
-            Log.i("소켓 통신 결과 데이터 : ", result + "");
+            list = readString(inputStream);
             bos.close();
             disconnect();
-            Log.i("Input Data : ", result + " ");
+
         }catch(Exception e){
             disconnect();
             e.printStackTrace();
         }
 
-        return result;
+        return list;
     }
 
-    public String readString(DataInputStream dis) throws IOException{
-        int length = dis.readInt();
-        byte[] data = new byte[length];
-        dis.readFully(data, 0, length);
+    public List<String> readString(DataInputStream dis) throws IOException{
+//        int length = dis.readInt();
+//        byte[] data = new byte[length];
+//        dis.readFully(data, 0, length);
+
+        byte[] data = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            data = dis.readAllBytes();
+        }
+        for(int i = 0; i < data.length; i++){
+            Log.i("byte list : ", data[i] + "");
+        }
         String text = new String(data, StandardCharsets.UTF_8);
-        return text;
+        List<String> list = new Gson().fromJson(text, new TypeToken<List<String>>(){}.getType());
+        Log.i("text: ", text);
+        return list;
     }
 
     // socket통신 해제

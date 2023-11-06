@@ -51,6 +51,7 @@ import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class CameraFragment extends Fragment {
 
@@ -246,8 +247,8 @@ public class CameraFragment extends Fragment {
         }
     }
 
-    private byte getMaturity(Bitmap image){
-        byte result = 0;
+    private List<String> getMaturity(Bitmap image){
+        List<String> result = null;
 
         Log.i("socket start", "OK");
         AISocket socket = new AISocket();
