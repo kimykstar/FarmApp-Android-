@@ -34,6 +34,7 @@ import android.Manifest;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.example.farm.FruitFreshUploadActivity;
 import com.example.farm.R;
 import java.io.BufferedReader;
 import java.io.File;
@@ -195,7 +196,6 @@ public class CameraFragment extends Fragment {
                             Intent intent2 = new Intent(getContext().getApplicationContext(), FruitFreshActivity.class);
                             intent2.putExtra("imageURI", mCurrentPhotoPath);
                             intent2.putExtra("maturity", maturity);
-                            intent2.putExtra("type", "camera");
                             startActivity(intent2);
                         }
                     }
@@ -213,10 +213,9 @@ public class CameraFragment extends Fragment {
                             cursor.close();
                         }
 //                        Log.i("갤러리로부터 불러온 이미지 URI", mCurrentPhotoPath);
-                        Intent intent2 = new Intent(getContext().getApplicationContext(), FruitFreshActivity.class);
+                        Intent intent2 = new Intent(getContext().getApplicationContext(), FruitFreshUploadActivity.class);
                         intent2.putExtra("imageURI", mCurrentPhotoPath);
                         intent2.putExtra("maturity", maturity);
-                        intent2.putExtra("type", "upload");
                         startActivity(intent2);
 
                     }

@@ -55,7 +55,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class FruitFreshActivity extends AppCompatActivity {
+public class FruitFreshUploadActivity extends AppCompatActivity {
     private ImageView fruit_image;
     private TextView fruit_name, fruit_fresh, fruit_maturity, maturity_tv, maturity_tv2;
     private HorizontalBarChart fresh_graph, matuity_graph;
@@ -67,7 +67,7 @@ public class FruitFreshActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fruitfresh_layout);
+        setContentView(R.layout.fruitfresh_uploadlayout);
 
         Intent intent = getIntent();
 
@@ -88,64 +88,41 @@ public class FruitFreshActivity extends AppCompatActivity {
         shimmerFrameLayout2.startShimmer();
 
         fruit_maturity.setText("00");
+
         Uri imageURI = null;
-        // ---------------------------- 사진의 경우
 
-        // Intent로부터 Image의 URI를 받아 Bitmap으로 변환한다.
-        imageURI = Uri.parse(intent.getStringExtra("imageURI"));
-        try {
-            photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.fromFile(new File(imageURI.toString())));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Log.i("Image URI : ", imageURI.toString());
+//            imageURI = Uri.parse(intent.getStringExtra("imageURI"));
+        String path = intent.getStringExtra("imageURI");
+        Log.i("Image URI : ", path);
+        Glide.with(getApplicationContext())
+                .asBitmap()
+                .load(path)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                        startActivity(resource);
+                    }
+                });
+    }
 
+    private void startActivity(Bitmap photo){
         if(photo != null) {
-            ExifInterface ei = null;
-            try {
-                ei = new ExifInterface(imageURI.toString());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-            // 카메라로부터 이미지 받음
-            Bitmap rotatedBitmap = null;
+            fruit_image.setImageBitmap(photo);
 
-            // 예시 이미지
-//            Drawable drawable = getResources().getDrawable(R.drawable.koreamelon);
-//            Bitmap rotatedBitmap = drawableToBitmap(drawable);
-
-
-            switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    rotatedBitmap = rotateImage(photo, 90);
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    rotatedBitmap = rotateImage(photo, 180);
-                    break;
-                case ExifInterface.ORIENTATION_ROTATE_270:
-                    rotatedBitmap = rotateImage(photo, 270);
-                    break;
-            }
-//            fruit_image.setImageBitmap(((BitmapDrawable)getDrawable(R.drawable.koreamelon3)).getBitmap());
-            fruit_image.setImageBitmap(rotatedBitmap);
-
-            // photo를 AI서버에 전달하여 Socket통신으로 결과값을 받는다.
             SocketTask task = new SocketTask();
-            try{
-                List<String> result = task.execute(rotatedBitmap).get();
-                Log.i("소켓통신 결과 배열 길이 : ", result.size() + "");
+            try {
+                List<String> result = task.execute(photo).get();
                 //---------------------------------------------------------------------------- case 1 : 객체가 1개 인식되는 경우
-                if(result.size() == 1) {
+                if (result.size() == 1) {
                     setMaturityChart("100");
                     // 과일이름(한글), 신선도정도, 신선도 수치
-                    String results = freshGuess(rotatedBitmap, this, result.get(0));
+                    String results = freshGuess(photo, this, result.get(0));
                     String[] nameAndStatus = results.split(" ");
                     String f_name = nameAndStatus[0];
                     float fresh_num = Float.parseFloat(nameAndStatus[2]);
                     fruit_name.setText(nameAndStatus[0]);
 
-                    switch(nameAndStatus[1]){
+                    switch (nameAndStatus[1]) {
                         case "normal":
                             fruit_fresh.setText("상태 : 보통");
                         case "rotten":
@@ -211,18 +188,18 @@ public class FruitFreshActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     });
-                //---------------------------------------------------------------------------- case 2 : 객체가 1개 이상 인식되는 경우
-                }else if(result.size() > 1){
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(FruitFreshActivity.this);
+                    //---------------------------------------------------------------------------- case 2 : 객체가 1개 이상 인식되는 경우
+                } else if (result.size() > 1) {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(FruitFreshUploadActivity.this);
                     dialog.setIcon(R.drawable.logo).setMessage("하나의 과일만 촬영해주세요.").setPositiveButton("다시 촬영하기", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             finish();
                         }
                     }).show();
-                //---------------------------------------------------------------------------- case 3 : 객체가 인식되지 않는 경우
-                }else{
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(FruitFreshActivity.this);
+                    //---------------------------------------------------------------------------- case 3 : 객체가 인식되지 않는 경우
+                } else {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(FruitFreshUploadActivity.this);
                     dialog.setIcon(R.drawable.logo).setMessage("과일이 인식되지 않았습니다.").setPositiveButton("다시 촬영하기", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -230,12 +207,12 @@ public class FruitFreshActivity extends AppCompatActivity {
                         }
                     }).show();
                 }
-//            task.execute(((BitmapDrawable)getDrawable(R.drawable.koreamelon3)).getBitmap());
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
+        }else{
+            Log.i("안됨안됨", "Null임");
         }
-
     }
 
     private String freshGuess(Bitmap bitmap, Context context, String fruit_name){
@@ -334,12 +311,6 @@ public class FruitFreshActivity extends AppCompatActivity {
         }
         Log.i("전달 Fresh_data : ", fresh_data + "");
         return kor_name + " " + status + " " + fresh_data;
-    }
-
-    private Bitmap drawableToBitmap(Drawable drawable){
-        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
-
-        return bitmap;
     }
 
     private class SocketTask extends AsyncTask<Bitmap, Void, List<String>>{

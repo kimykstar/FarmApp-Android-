@@ -56,6 +56,7 @@
         <activity android:name=".UpdateReview"/>
         <activity android:name=".FruitFreshActivity"/>
         <activity android:name=".CameraActivity"/>
+        <activity android:name=".FruitFreshUploadActivity"/>
     </application>
 
 </manifest>
