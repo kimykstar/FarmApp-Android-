@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
@@ -19,35 +20,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-
 import com.example.farm.Connection.AISocket;
 import com.example.farm.Dialog.InstructionDialog;
 import com.example.farm.FruitFreshActivity;
 import android.Manifest;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.farm.R;
-import com.example.farm.TFlite;
-import com.example.farm.VideoActivity;
-
-import org.checkerframework.checker.units.qual.A;
-import org.tensorflow.lite.Interpreter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -56,12 +48,14 @@ import java.util.List;
 public class CameraFragment extends Fragment {
 
     private View view;
-    private ImageButton camera_btn, video_btn;
+    private ImageButton camera_btn, image_upload_btn;
     String mCurrentPhotoPath = null;
     static final int REQUEST_TAKE_PHOTO = 1;
+    static final int REQUEST_UPLOAD_PHOTO = 0;
     private static final int REQUEST_CAMERA_PERMISSION = 200;
     ImageButton instruction_btn;
     LinearLayout instruction_ll;
+    ImageView test;
 
     public CameraFragment() {}
 
@@ -72,9 +66,10 @@ public class CameraFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.start_camera_layout, container, false);
         camera_btn = view.findViewById(R.id.camera_open);
-        video_btn = view.findViewById(R.id.video_open);
+        image_upload_btn = view.findViewById(R.id.image_load);
         instruction_ll = view.findViewById(R.id.instruction_ll);
         instruction_btn = view.findViewById(R.id.instruction_btn);
+        test = view.findViewById(R.id.test);
 
         // 주의사항 dialog띄우기
         instruction_show();
@@ -83,8 +78,8 @@ public class CameraFragment extends Fragment {
 
         camera_btn.getLayoutParams().width = screenWidth / 2;
         camera_btn.getLayoutParams().height = screenWidth / 2;
-        video_btn.getLayoutParams().width = screenWidth / 2;
-        video_btn.getLayoutParams().height = screenWidth / 2;
+        image_upload_btn.getLayoutParams().width = screenWidth / 2;
+        image_upload_btn.getLayoutParams().height = screenWidth / 2;
 
         camera_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,18 +106,20 @@ public class CameraFragment extends Fragment {
             }
         });
 
-        video_btn.setOnClickListener(new View.OnClickListener() {
+        image_upload_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext().getApplicationContext(), VideoActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//                intent.setType("image/");
+//                startActivityForResult(intent, REQUEST_UPLOAD_PHOTO);
+                dispatchUploadPictureIntent();
             }
         });
 
         return view;
     }
 
-    // 카메라로 촬영한 이미지를 파일로 저장
+    // image를 저장할 Temp파일을 생성하여 File객체로 반환받는다.
     private File createImageFile() throws IOException{
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
@@ -152,14 +149,22 @@ public class CameraFragment extends Fragment {
         }
     }
 
+    private void dispatchUploadPictureIntent(){
+        Intent uploadPhotoIntent = new Intent();
+        uploadPhotoIntent.setType("image/*");
+        uploadPhotoIntent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(uploadPhotoIntent, REQUEST_UPLOAD_PHOTO);
+    }
+
     // 카메라로부터 찍은 사진을 imageView에 설정
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent){
         super.onActivityResult(requestCode, resultCode, intent);
+        Log.i("Start onActivityResult메소드 : ", "true");
         try{
             switch(requestCode){ // 카메라로 촬영한 사진을 모델링파일에 전달하여 결과값을 받는다.
-                case REQUEST_TAKE_PHOTO:{
-                    if(resultCode == RESULT_OK){
+                case REQUEST_TAKE_PHOTO:
+                    if(resultCode == RESULT_OK) {
                         File file = new File(mCurrentPhotoPath);
 //                        Drawable drawable = getContext().getResources().getDrawable(R.drawable.koreamelon3);
 //                        Bitmap bitmap = drawableToBitmap(drawable);
@@ -184,78 +189,44 @@ public class CameraFragment extends Fragment {
 
 //                             크기 변환
                             rotatedBitmap = Bitmap.createScaledBitmap(rotatedBitmap, 224, 224, true);
-//                            rotatedBitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true);
 
-//                            // Socket통신 객체 받기
-
-
-                            // TFlite객체 생성
-                            TFlite lite = new TFlite(getContext());
-
-                            // 4byte(float)크기의 3채널 224, 224배열 자료형
-                            ByteBuffer inputBuffer = ByteBuffer.allocateDirect(224 * 224 * 3 * 4);  // 224 X 224크기 3채널 이미지 4바이트
-                            inputBuffer.order(ByteOrder.nativeOrder());
-
-                            int[] pixels = new int[224 * 224];
-                            rotatedBitmap.getPixels(pixels, 0, 224, 0, 0, 224, 224);
-
-                            int pixelIndex = 0;
-                            for (int row = 0; row < 224; row++) {
-                                for (int col = 0; col < 224; col++) {
-                                    final int pixel = pixels[pixelIndex++];
-                                    float r = ((pixel >> 16) & 0xFF) / 255.0f;
-                                    float g = ((pixel >> 8) & 0xFF) / 255.0f;
-                                    float b = (pixel & 0xFF) / 255.0f;
-
-                                    inputBuffer.putFloat(r);
-                                    inputBuffer.putFloat(g);
-                                    inputBuffer.putFloat(b);
-                                }
-                            }
-
-                            // Interpreter를 통해 tflite파일 모델을 불러옴
-                            Interpreter tflite = lite.getTfliteInterpreter("model_unquant.tflite");
-                            Log.i("TensorFlow count : ", tflite.getOutputTensorCount() + "");
-
-                            float[][] outputs2 = new float[1][6];
-
-                            // tflite를 실행 인자(인자1 : 전달할 데이터, 인자2 : 출력된 데이터를 받을 데이터)
-                            tflite.run(inputBuffer, outputs2);
-                            String temp = findFruitName(outputs2);
 
                             // 전달값 : 과일의 이름, 사진, 신선도 수치(float)
                             Intent intent2 = new Intent(getContext().getApplicationContext(), FruitFreshActivity.class);
                             intent2.putExtra("imageURI", mCurrentPhotoPath);
-                            intent2.putExtra("freshInfo", temp);
                             intent2.putExtra("maturity", maturity);
+                            intent2.putExtra("type", "camera");
                             startActivity(intent2);
-
-                            Log.i("fruit_name : ", temp.split(" ")[1]);
-                            Log.i("AI Result1 : ", String.format("%.2f", outputs2[0][0]) + "");
-                            Log.i("AI Result2 : ", String.format("%.2f", outputs2[0][1]) + "");
-                            Log.i("AI Result3 : ", String.format("%.2f", outputs2[0][2]) + "");
-                            Log.i("AI Result4 : ", String.format("%.2f", outputs2[0][3]) + "");
-                            Log.i("AI Result5 : ", String.format("%.2f", outputs2[0][4]) + "");
-                            Log.i("AI Result6 : ", String.format("%.2f", outputs2[0][5]) + "");
                         }
                     }
                     break;
-                }
+                // ------------------------------ upload photo
+                case REQUEST_UPLOAD_PHOTO:
+                    Log.i("REQUEST_UPLOAD_PHOTO", "true");
+                    if(resultCode == RESULT_OK && intent.getData() != null){
+
+                        Cursor cursor = getContext().getContentResolver().query(intent.getData(), null, null, null, null);
+                        if (cursor != null) {
+                            cursor.moveToFirst();
+                            int index = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                            mCurrentPhotoPath = cursor.getString(index); // "/media/external/images/media/7215"
+                            cursor.close();
+                        }
+//                        Log.i("갤러리로부터 불러온 이미지 URI", mCurrentPhotoPath);
+                        Intent intent2 = new Intent(getContext().getApplicationContext(), FruitFreshActivity.class);
+                        intent2.putExtra("imageURI", mCurrentPhotoPath);
+                        intent2.putExtra("maturity", maturity);
+                        intent2.putExtra("type", "upload");
+                        startActivity(intent2);
+
+                    }
+                    break;
             }
         }catch(Exception e){
             e.printStackTrace();
         }
     }
 
-    private List<String> getMaturity(Bitmap image){
-        List<String> result = null;
-
-        Log.i("socket start", "OK");
-        AISocket socket = new AISocket();
-        result = socket.communication(image);
-
-        return result;
-    }
 
     // 식별된 과일의 Label을 찾는 함수
     private String findFruitName(float[][] result){

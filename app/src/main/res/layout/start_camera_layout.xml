@@ -54,7 +54,7 @@ android:background="@color/white">
                 android:padding="40dp"
                 android:elevation="5dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/camera" />
+                android:src="@drawable/camera2" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -73,7 +73,7 @@ android:background="@color/white">
             android:orientation="vertical">
 
             <ImageButton
-                android:id="@+id/video_open"
+                android:id="@+id/image_load"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_gravity="center"
@@ -82,7 +82,7 @@ android:background="@color/white">
                 android:padding="40dp"
                 android:scaleType="fitXY"
                 android:elevation="5dp"
-                android:src="@drawable/video"
+                android:src="@drawable/gallery"
                 android:textSize="30sp" />
 
             <TextView
@@ -106,6 +106,10 @@ android:background="@color/white">
         android:id="@+id/instruction_ll"
         android:layout_marginTop="170dp"
         android:layout_gravity="right|bottom">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/test"/>
         <ImageButton
             android:layout_width="40dp"
             android:layout_height="40dp"

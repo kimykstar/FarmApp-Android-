@@ -7,9 +7,10 @@ public class HttpUrl {
 
     private String url;
 
-    public HttpUrl(){
-        this.url = "http://54.180.113.188:8082/";
-    }
+//    public HttpUrl(){
+//        this.url = "http://54.180.113.188:8082/";
+//    }
+    public HttpUrl() {this.url = "http://15.164.229.216:8082/";}
 //
 //    public HttpUrl(){
 //        this.url = "http://192.168.35.73:8082/";

@@ -2,6 +2,7 @@ package com.example.farm;
 
 import static com.example.farm.Fragment.CameraFragment.rotateImage;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,6 +25,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.farm.Connection.AISocket;
 import com.example.farm.Connection.SearchTask;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -38,8 +42,15 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.gson.Gson;
 
+import org.tensorflow.lite.Interpreter;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -49,6 +60,7 @@ public class FruitFreshActivity extends AppCompatActivity {
     private TextView fruit_name, fruit_fresh, fruit_maturity, maturity_tv, maturity_tv2;
     private HorizontalBarChart fresh_graph, matuity_graph;
     private ImageButton back_btn, info_btn;
+    private Bitmap photo;
     private ShimmerFrameLayout shimmerFrameLayout1, shimmerFrameLayout2;
 //    private Button ;
 
@@ -58,11 +70,6 @@ public class FruitFreshActivity extends AppCompatActivity {
         setContentView(R.layout.fruitfresh_layout);
 
         Intent intent = getIntent();
-        String info = intent.getStringExtra("freshInfo");
-        String[] temp = info.split(" ");
-        String f_name = temp[1];
-        String fresh_grade = temp[2];
-        float fresh_num = Math.round((Float.parseFloat(temp[3]) * 100));
 
         fruit_image = findViewById(R.id.fruit_img);
         fruit_name = findViewById(R.id.fruit_name);
@@ -82,16 +89,34 @@ public class FruitFreshActivity extends AppCompatActivity {
 
         fruit_maturity.setText("00");
 
-        Bitmap photo = null;
+        String type = intent.getStringExtra("type");
+        Uri imageURI = null;
+        // ---------------------------- 사진의 경우
+        if(type.equals("camera")) {
+            // Intent로부터 Image의 URI를 받아 Bitmap으로 변환한다.
+            imageURI = Uri.parse(intent.getStringExtra("imageURI"));
+            try {
+                photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.fromFile(new File(imageURI.toString())));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Log.i("Image URI : ", imageURI.toString());
 
-        // Intent로부터 Image의 URI를 받아 Bitmap으로 변환한다.
-        Uri imageURI = Uri.parse(intent.getStringExtra("imageURI"));
-        try {
-            photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.fromFile(new File(imageURI.toString())));
-        } catch (IOException e) {
-            e.printStackTrace();
+            // --------------------------------- 사진 업로드의 경우
+        }else if(type.equals("upload")){
+//            imageURI = Uri.parse(intent.getStringExtra("imageURI"));
+            String path = intent.getStringExtra("imageURI");
+            Log.i("Image URI : ", path);
+            Glide.with(getApplicationContext())
+                    .asBitmap()
+                    .load(path)
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                            fruit_image.setImageBitmap(resource);
+                        }
+                    });
         }
-        Log.i("Image URI : ", imageURI.toString());
 
         if(photo != null) {
             ExifInterface ei = null;
@@ -101,8 +126,14 @@ public class FruitFreshActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
-
+            // 카메라로부터 이미지 받음
             Bitmap rotatedBitmap = null;
+
+            // 예시 이미지
+//            Drawable drawable = getResources().getDrawable(R.drawable.koreamelon);
+//            Bitmap rotatedBitmap = drawableToBitmap(drawable);
+
+
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_90:
                     rotatedBitmap = rotateImage(photo, 90);
@@ -121,12 +152,18 @@ public class FruitFreshActivity extends AppCompatActivity {
             SocketTask task = new SocketTask();
             try{
                 List<String> result = task.execute(rotatedBitmap).get();
+                Log.i("소켓통신 결과 배열 길이 : ", result.size() + "");
                 //---------------------------------------------------------------------------- case 1 : 객체가 1개 인식되는 경우
                 if(result.size() == 1) {
-                    setMaturityChart("17");
-                    fruit_name.setText(result.get(0));
+                    setMaturityChart("100");
+                    // 과일이름(한글), 신선도정도, 신선도 수치
+                    String results = freshGuess(rotatedBitmap, this, result.get(0));
+                    String[] nameAndStatus = results.split(" ");
+                    String f_name = nameAndStatus[0];
+                    float fresh_num = Float.parseFloat(nameAndStatus[2]);
+                    fruit_name.setText(nameAndStatus[0]);
 
-                    switch(fresh_grade){
+                    switch(nameAndStatus[1]){
                         case "normal":
                             fruit_fresh.setText("상태 : 보통");
                         case "rotten":
@@ -148,6 +185,7 @@ public class FruitFreshActivity extends AppCompatActivity {
                     fresh_graph.setClickable(false);
 
                     ArrayList<Float> li = new ArrayList<>();
+                    Log.i("추론 데이터(신선도) : ", fresh_num + "");
                     li.add(fresh_num);
                     BarDataSet dataSet = getBarDataSet(li);
                     dataSet.setColor(Color.rgb(147, 247, 250));
@@ -218,6 +256,53 @@ public class FruitFreshActivity extends AppCompatActivity {
 
     }
 
+    private String freshGuess(Bitmap bitmap, Context context, String fruit_name){
+        // TFlite객체 생성
+        TFlite lite = new TFlite(context);
+
+        // 4byte(float)크기의 3채널 224, 224배열 자료형
+        ByteBuffer inputBuffer = ByteBuffer.allocateDirect(224 * 224 * 3 * 4);  // 224 X 224크기 3채널 이미지 4바이트
+        inputBuffer.order(ByteOrder.nativeOrder());
+
+        int[] pixels = new int[224 * 224];
+        bitmap.getPixels(pixels, 0, 224, 0, 0, 224, 224);
+
+        int pixelIndex = 0;
+        for (int row = 0; row < 224; row++) {
+            for (int col = 0; col < 224; col++) {
+                final int pixel = pixels[pixelIndex++];
+                float r = ((pixel >> 16) & 0xFF) / 255.0f;
+                float g = ((pixel >> 8) & 0xFF) / 255.0f;
+                float b = (pixel & 0xFF) / 255.0f;
+
+                inputBuffer.putFloat(r);
+                inputBuffer.putFloat(g);
+                inputBuffer.putFloat(b);
+            }
+        }
+
+        // Interpreter를 통해 tflite파일 모델을 불러옴
+        Interpreter tflite = lite.getTfliteInterpreter("model_unquant.tflite");
+        Log.i("TensorFlow count : ", tflite.getOutputTensorCount() + "");
+
+        float[][] outputs2 = new float[1][6];
+
+        // tflite를 실행 인자(인자1 : 전달할 데이터, 인자2 : 출력된 데이터를 받을 데이터)
+        tflite.run(inputBuffer, outputs2);
+        String temp = findFruitName(outputs2, fruit_name);
+
+        Log.i("fruit_name : ", temp.split(" ")[1]);
+        Log.i("AI Result1 : ", String.format("%.2f", outputs2[0][0]) + "");
+        Log.i("AI Result2 : ", String.format("%.2f", outputs2[0][1]) + "");
+        Log.i("AI Result3 : ", String.format("%.2f", outputs2[0][2]) + "");
+        Log.i("AI Result4 : ", String.format("%.2f", outputs2[0][3]) + "");
+        Log.i("AI Result5 : ", String.format("%.2f", outputs2[0][4]) + "");
+        Log.i("AI Result6 : ", String.format("%.2f", outputs2[0][5]) + "");
+
+        // 과일 이름(한글), 신선도 판별결과
+        return temp;
+    }
+
     private BarDataSet getBarDataSet(ArrayList<Float> data){
         ArrayList<BarEntry> list = new ArrayList<>();
 
@@ -236,6 +321,45 @@ public class FruitFreshActivity extends AppCompatActivity {
         return dataSet;
     }
 
+    // 식별된 과일의 Label을 찾는 함수
+    private String findFruitName(float[][] result, String en_name){
+        int index = 5;
+        float max_value = 0;
+        String status = "판별 불가";
+        String kor_name = "과일";
+        String fresh_data = "0";
+
+        try{
+            InputStream labelInput = getResources().getAssets().open("labels.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(labelInput));
+            String line;
+            int cnt = 0;
+            while(cnt <= index){
+                line = br.readLine();
+                Log.i("label.txt파일 읽어오기(한줄) : ", line + "");
+                String[] words = line.split(" ");
+                if(words[1].equals(en_name) && max_value < result[0][cnt]) {
+                    status = words[3];
+                    kor_name = words[2];
+                    max_value = result[0][cnt];
+                    fresh_data = result[0][cnt] * 100 + "";
+                    Log.i("Fresh_data 출력 : ", fresh_data);
+                }
+                cnt++;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        Log.i("전달 Fresh_data : ", fresh_data + "");
+        return kor_name + " " + status + " " + fresh_data;
+    }
+
+    private Bitmap drawableToBitmap(Drawable drawable){
+        Bitmap bitmap = ((BitmapDrawable)drawable).getBitmap();
+
+        return bitmap;
+    }
+
     private class SocketTask extends AsyncTask<Bitmap, Void, List<String>>{
         @Override
         protected List<String> doInBackground(Bitmap... bitmaps) {
@@ -244,6 +368,8 @@ public class FruitFreshActivity extends AppCompatActivity {
             Log.i("Activity Result : ", new Gson().toJson(result));
             return result;
         }
+
+
 
         // 스레드의 반환값을 이용하여 수행
         @Override
