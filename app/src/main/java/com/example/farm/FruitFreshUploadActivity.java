@@ -2,6 +2,7 @@ package com.example.farm;
 
 import static com.example.farm.Fragment.CameraFragment.rotateImage;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,6 +63,7 @@ public class FruitFreshUploadActivity extends AppCompatActivity {
     private ImageButton back_btn, info_btn;
     private Bitmap photo;
     private ShimmerFrameLayout shimmerFrameLayout1, shimmerFrameLayout2;
+    private ProgressDialog loadingDialog;
 //    private Button ;
 
     @Override
@@ -89,9 +91,6 @@ public class FruitFreshUploadActivity extends AppCompatActivity {
 
         fruit_maturity.setText("00");
 
-        Uri imageURI = null;
-
-//            imageURI = Uri.parse(intent.getStringExtra("imageURI"));
         String path = intent.getStringExtra("imageURI");
         Log.i("Image URI : ", path);
         Glide.with(getApplicationContext())
@@ -100,6 +99,7 @@ public class FruitFreshUploadActivity extends AppCompatActivity {
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+                        fruit_image.setImageBitmap(resource);
                         startActivity(resource);
                     }
                 });
@@ -107,112 +107,121 @@ public class FruitFreshUploadActivity extends AppCompatActivity {
 
     private void startActivity(Bitmap photo){
         if(photo != null) {
-            fruit_image.setImageBitmap(photo);
-
             SocketTask task = new SocketTask();
             try {
-                List<String> result = task.execute(photo).get();
-                //---------------------------------------------------------------------------- case 1 : 객체가 1개 인식되는 경우
-                if (result.size() == 1) {
-                    setMaturityChart("100");
-                    // 과일이름(한글), 신선도정도, 신선도 수치
-                    String results = freshGuess(photo, this, result.get(0));
-                    String[] nameAndStatus = results.split(" ");
-                    String f_name = nameAndStatus[0];
-                    float fresh_num = Float.parseFloat(nameAndStatus[2]);
-                    fruit_name.setText(nameAndStatus[0]);
-
-                    switch (nameAndStatus[1]) {
-                        case "normal":
-                            fruit_fresh.setText("상태 : 보통");
-                        case "rotten":
-                            fruit_fresh.setText("상태 : 썩음");
-                        case "fresh":
-                            fruit_fresh.setText("상태 : 신선함");
-                    }
-
-                    back_btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            finish();
-                        }
-                    });
-
-                    // 신선도 그래프 설정
-                    fresh_graph.setDrawBarShadow(true);
-                    fresh_graph.setScaleEnabled(false);
-                    fresh_graph.setClickable(false);
-
-                    ArrayList<Float> li = new ArrayList<>();
-                    Log.i("추론 데이터(신선도) : ", fresh_num + "");
-                    li.add(fresh_num);
-                    BarDataSet dataSet = getBarDataSet(li);
-                    dataSet.setColor(Color.rgb(147, 247, 250));
-                    BarData data = new BarData(dataSet);
-                    fresh_graph.setData(data);
-                    fresh_graph.setDrawValueAboveBar(false);
-
-                    XAxis xAxis = fresh_graph.getXAxis();
-                    xAxis.setDrawGridLines(false);
-                    xAxis.setDrawAxisLine(false);
-                    xAxis.setEnabled(false);
-
-                    YAxis yLeft = fresh_graph.getAxisLeft();
-                    yLeft.setAxisMinimum(0f);
-                    yLeft.setAxisMaximum(100f);
-                    yLeft.setEnabled(false);
-
-                    YAxis yRight = fresh_graph.getAxisRight();
-                    yRight.setDrawGridLines(false);
-                    yRight.setDrawAxisLine(true);
-                    yRight.setEnabled(false);
-                    yRight.setDrawLabels(false);
-
-                    fresh_graph.setTouchEnabled(false);
-                    fresh_graph.animateY(1000);
-
-                    info_btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(getApplicationContext(), FruitInformationActivity.class);
-                            SearchTask task = new SearchTask();
-                            Fruit fruit;
-                            try {
-                                fruit = task.execute(f_name).get();
-                            } catch (ExecutionException e) {
-                                throw new RuntimeException(e);
-                            } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
-                            }
-                            intent.putExtra("info", fruit);
-                            startActivity(intent);
-                        }
-                    });
-                    //---------------------------------------------------------------------------- case 2 : 객체가 1개 이상 인식되는 경우
-                } else if (result.size() > 1) {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(FruitFreshUploadActivity.this);
-                    dialog.setIcon(R.drawable.logo).setMessage("하나의 과일만 촬영해주세요.").setPositiveButton("다시 촬영하기", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    }).show();
-                    //---------------------------------------------------------------------------- case 3 : 객체가 인식되지 않는 경우
-                } else {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(FruitFreshUploadActivity.this);
-                    dialog.setIcon(R.drawable.logo).setMessage("과일이 인식되지 않았습니다.").setPositiveButton("다시 촬영하기", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    }).show();
-                }
+                task.execute(photo);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }else{
             Log.i("안됨안됨", "Null임");
         }
+    }
+
+    private void updateUI(List<String> result, Bitmap photo){
+        //---------------------------------------------------------------------------- case 1 : 객체가 1개 인식되는 경우
+        if (result.size() == 1) {
+            setMaturityChart("100");
+            // 과일이름(한글), 신선도정도, 신선도 수치
+            String results = freshGuess(photo, this, result.get(0));
+            String[] nameAndStatus = results.split(" ");
+            String f_name = nameAndStatus[0];
+            float fresh_num = Float.parseFloat(nameAndStatus[2]);
+            fruit_name.setText(nameAndStatus[0]);
+
+            switch (nameAndStatus[1]) {
+                case "normal":
+                    fruit_fresh.setText("상태 : 보통");
+                case "rotten":
+                    fruit_fresh.setText("상태 : 썩음");
+                case "fresh":
+                    fruit_fresh.setText("상태 : 신선함");
+            }
+
+            back_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            // 신선도 그래프 설정
+            fresh_graph.setDrawBarShadow(true);
+            fresh_graph.setScaleEnabled(false);
+            fresh_graph.setClickable(false);
+
+            ArrayList<Float> li = new ArrayList<>();
+            Log.i("추론 데이터(신선도) : ", fresh_num + "");
+            li.add(fresh_num);
+            BarDataSet dataSet = getBarDataSet(li);
+            dataSet.setColor(Color.rgb(147, 247, 250));
+            BarData data = new BarData(dataSet);
+            fresh_graph.setData(data);
+            fresh_graph.setDrawValueAboveBar(false);
+
+            XAxis xAxis = fresh_graph.getXAxis();
+            xAxis.setDrawGridLines(false);
+            xAxis.setDrawAxisLine(false);
+            xAxis.setEnabled(false);
+
+            YAxis yLeft = fresh_graph.getAxisLeft();
+            yLeft.setAxisMinimum(0f);
+            yLeft.setAxisMaximum(100f);
+            yLeft.setEnabled(false);
+
+            YAxis yRight = fresh_graph.getAxisRight();
+            yRight.setDrawGridLines(false);
+            yRight.setDrawAxisLine(true);
+            yRight.setEnabled(false);
+            yRight.setDrawLabels(false);
+
+            fresh_graph.setTouchEnabled(false);
+            fresh_graph.animateY(1000);
+
+            info_btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), FruitInformationActivity.class);
+                    SearchTask task = new SearchTask();
+                    Fruit fruit;
+                    try {
+                        fruit = task.execute(f_name).get();
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    intent.putExtra("info", fruit);
+                    startActivity(intent);
+                }
+            });
+            //---------------------------------------------------------------------------- case 2 : 객체가 1개 이상 인식되는 경우
+        } else if (result.size() > 1) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(FruitFreshUploadActivity.this);
+            dialog.setIcon(R.drawable.logo).setMessage("하나의 과일만 촬영해주세요.").setPositiveButton("다시 촬영하기", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            }).show();
+            //---------------------------------------------------------------------------- case 3 : 객체가 인식되지 않는 경우
+        } else {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(FruitFreshUploadActivity.this);
+            dialog.setIcon(R.drawable.logo).setMessage("과일이 인식되지 않았습니다.").setPositiveButton("다시 촬영하기", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            }).show();
+        }
+    }
+
+    private void startLoading(){
+        loadingDialog = new ProgressDialog(this);
+        loadingDialog.setMessage("과일 신선도 판별중...");
+        loadingDialog.setCancelable(true);
+        loadingDialog.setProgressStyle(android.R.style.Widget_ProgressBar_Horizontal);
+        loadingDialog.show();
     }
 
     private String freshGuess(Bitmap bitmap, Context context, String fruit_name){
@@ -314,61 +323,25 @@ public class FruitFreshUploadActivity extends AppCompatActivity {
     }
 
     private class SocketTask extends AsyncTask<Bitmap, Void, List<String>>{
+        Bitmap bitmap = null;
+        @Override
+        protected void onPreExecute(){
+            startLoading();
+        }
         @Override
         protected List<String> doInBackground(Bitmap... bitmaps) {
+            bitmap = bitmaps[0];
             AISocket socket = new AISocket();
             List<String> result = socket.communication(bitmaps[0]);
             Log.i("Activity Result : ", new Gson().toJson(result));
             return result;
         }
 
-
-
         // 스레드의 반환값을 이용하여 수행
         @Override
         protected void onPostExecute(List<String> s) {
-//            // 성숙도 textView 제어
-//            shimmerFrameLayout1.stopShimmer();
-//            maturity_tv.setVisibility(View.INVISIBLE);
-//            fruit_maturity.setVisibility(View.VISIBLE);
-//            shimmerFrameLayout1.setVisibility(View.INVISIBLE);
-//            fruit_maturity.setText("성숙도 : " + s + "%");
-//
-//            // 성숙도 Barchart제어
-//            shimmerFrameLayout2.stopShimmer();
-//            maturity_tv2.setVisibility(View.INVISIBLE);
-//            shimmerFrameLayout2.setVisibility(View.INVISIBLE);
-//            matuity_graph.setVisibility(View.VISIBLE);
-//
-//            matuity_graph.setDrawBarShadow(true);
-//            matuity_graph.setScaleEnabled(false);
-//            matuity_graph.setClickable(false);
-//            matuity_graph.setTouchEnabled(false);
-//
-//            ArrayList<Float> li = new ArrayList<>();
-////            li.add(Float.parseFloat(s));
-//            BarDataSet dataSet = getBarDataSet(li);
-//            dataSet.setColors(Color.rgb(248, 236, 135));
-//            BarData data = new BarData(dataSet);
-//            matuity_graph.setData(data);
-//            matuity_graph.setDrawValueAboveBar(false);
-//
-//            XAxis xAxis = matuity_graph.getXAxis();
-//            xAxis.setDrawGridLines(false);
-//            xAxis.setDrawAxisLine(false);
-//            xAxis.setEnabled(false);
-//
-//            YAxis yLeft = matuity_graph.getAxisLeft();
-//            yLeft.setAxisMinimum(0f);
-//            yLeft.setAxisMaximum(100f);
-//            yLeft.setEnabled(false);
-//
-//            YAxis yRight = matuity_graph.getAxisRight();
-//            yRight.setDrawGridLines(false);
-//            yRight.setDrawAxisLine(true);
-//            yRight.setEnabled(false);
-//
-//            matuity_graph.animateY(1000);
+            loadingDialog.dismiss();
+            updateUI(s, bitmap);
         }
     }
 

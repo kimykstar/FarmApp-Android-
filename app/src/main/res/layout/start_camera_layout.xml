@@ -88,12 +88,10 @@ android:background="@color/white">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="비디오촬영"
+                android:text="사진업로드"
                 android:gravity="center"
                 android:textSize="20sp"
                 android:textColor="@color/black"/>
-
-
 
         </LinearLayout>
     </LinearLayout>
@@ -106,10 +104,6 @@ android:background="@color/white">
         android:id="@+id/instruction_ll"
         android:layout_marginTop="170dp"
         android:layout_gravity="right|bottom">
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/test"/>
         <ImageButton
             android:layout_width="40dp"
             android:layout_height="40dp"
