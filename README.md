@@ -1,8 +1,17 @@
 ## Farm(Fruit AR Vision)
+
+
+<img src="https://github.com/kimykstar/FarmApp-Android-/assets/91407685/14f11a08-5ef3-4d58-b4b2-0a48a573fe7f" width="150px" height="150px" align="left"/>
+
+
   2023년 ICT멘토링 한이음 공모전 프로젝트
 
   
   🗓 Period: 2023/4/17 ~ 2023/11/16
+
+
+<br/>
+<br/>
 
 
 ## Project Introduce
