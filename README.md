@@ -59,4 +59,36 @@
 </div>
 
 
+
+## **Introduce Video**
+
+Link(Youtube): https://youtu.be/AvSMTQTIUkw?feature=shared
+
+
+
+## **Key functions**
+
+
+### 🌟 Provide fruit's informations
+- Informations are fruit's basic nutrition, vitamin nutirition, positive effect, fresh value, AR image etc
+
+
+### 🌟 Taking photo function for provide fruit's fresh value
+- When user taking photo, AI give fresh value from photo.
+
+
+### 🌟 Provide fruit's AR image function
+- Consumers can see various fruits in reality
+- AR image is include across section of fruit
+
+
+### 🌟 Fruit community function
+- Users can communicate with other users.
+- Users can create post about fruits.
+- Users can comment in post.
+
+
+
+
+
   
